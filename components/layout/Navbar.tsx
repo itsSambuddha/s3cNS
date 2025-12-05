@@ -4,13 +4,12 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Menu } from 'lucide-react'
 import { motion, useScroll, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useAuth } from '@/hooks/useAuth'
 import { signOut } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/auth/firebase'
+import MobileNav from './MobileNav'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -34,7 +33,6 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await signOut(firebaseAuth)
-    // clear backend session cookie
     await fetch('/api/auth/session', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -171,59 +169,7 @@ export default function Navbar() {
             </span>
             <span className="text-sm font-semibold">s3cNS</span>
           </div>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label="Open navigation menu">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-64">
-              <div className="mt-4 space-y-4">
-                <div className="flex flex-col">
-                  <span className="text-base font-semibold">s3cNS</span>
-                  <span className="text-xs text-muted-foreground">
-                    SECMUN Platform
-                  </span>
-                </div>
-                <nav className="flex flex-col gap-2 text-sm">
-                  {navLinks.map((link) => {
-                    const active = pathname === link.href
-                    return (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className={
-                          active
-                            ? 'rounded-md bg-muted px-2 py-1.5 font-medium text-foreground'
-                            : 'rounded-md px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground'
-                        }
-                      >
-                        {link.label}
-                      </Link>
-                    )
-                  })}
-
-                  {!loading && (
-                    user ? (
-                      <Button
-                        className="mt-3 w-full"
-                        size="sm"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </Button>
-                    ) : (
-                      <Link href="/login">
-                        <Button className="mt-3 w-full" size="sm">
-                          Sign in
-                        </Button>
-                      </Link>
-                    )
-                  )}
-                </nav>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <MobileNav />
         </div>
       </div>
     </header>

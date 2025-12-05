@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 
 const links = [
   { href: '/dashboard', label: 'Overview' },
+  { href: '/timetable', label: 'Timetable' },
   { href: '/attendance', label: 'Attendance' },
   { href: '/budget', label: 'Budget' },
   { href: '/documents', label: 'Documents' },
@@ -13,6 +14,7 @@ const links = [
   { href: '/achievements', label: 'Achievements' },
   { href: '/directory', label: 'Directory' },
   { href: '/admin', label: 'Admin' },
+  { href: '/admin/attendance', label: 'Attendance Alerts' },
 ]
 
 export default function Sidebar() {

@@ -1,9 +1,9 @@
-# TODO: Fix Firebase Import Errors
+# TODO: Move User Model to lib/db/models/User.ts
 
-## Steps to Complete
-
-- [x] Edit `lib/auth/firebase.ts` to add Firebase exports (firebaseAuth and googleProvider)
-- [ ] Update import in `hooks/useAuth.ts` to use '@/lib/auth/firebase'
-- [ ] Update import in `app/(root)/page.tsx` to use '@/lib/auth/firebase'
-- [ ] Update import in `app/(auth)/login/page.tsx` to use '@/lib/auth/firebase'
-- [ ] Test the application to ensure import errors are resolved
+- [x] Create lib/db/models/User.ts with User model definition
+- [x] Edit lib/db/models.ts to remove User definition and add re-export from ./models/User
+- [x] Update import in lib/auth/getCurrentUser.ts to import User from @/lib/db/models/User
+- [x] Update import in lib/attendance/generateSessionsForDate.ts to import User from @/lib/db/models/User
+- [x] Update import in app/api/auth/sync/route.ts to import User from @/lib/db/models/User
+- [x] Update import in app/api/attendance/session/route.ts to import User from @/lib/db/models/User
+- [ ] Verify all changes and ensure no build errors

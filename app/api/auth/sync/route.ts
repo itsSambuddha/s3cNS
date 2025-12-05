@@ -1,7 +1,7 @@
 // app/api/auth/sync/route.ts
 import { NextResponse } from 'next/server'
 import { connectToDatabase } from '@/lib/db/mongodb'
-import { User } from '@/lib/db/models'
+import { User } from '@/lib/db/models/User'
 
 export async function POST(req: Request) {
   try {

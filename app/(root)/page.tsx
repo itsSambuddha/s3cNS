@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
+import { signOut } from 'firebase/auth'
+import { firebaseAuth } from '@/lib/auth/firebase'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 16 },
@@ -34,6 +36,16 @@ export default function LandingPage() {
     }
   }
 
+  const handleLogout = async () => {
+    await signOut(firebaseAuth)
+    await fetch('/api/auth/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid: '' }),
+    })
+    window.location.href = '/'
+  }
+
   return (
     <div className="space-y-16 pb-16 sm:space-y-24 sm:pb-24">
       {/* HERO */}
@@ -54,7 +66,7 @@ export default function LandingPage() {
 
           <motion.div className="space-y-4" variants={fadeInUp}>
             <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-              One platform for every
+              Your one‑stop platform for smooth&nbsp;
               <span className="block text-primary">SECMUN operation.</span>
             </h1>
             <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
@@ -239,11 +251,20 @@ export default function LandingPage() {
                 Sign in with your SECMUN account and explore the dashboard.
               </p>
             </div>
-            <Link href="/login">
-              <Button size="lg" className="w-full sm:w-auto">
-                Sign in now
-              </Button>
-            </Link>
+
+            {!loading && (
+              user ? (
+                <Button onClick={handleLogout}>
+                  Logout
+                </Button>
+              ) : (
+                <Link href="/login">
+                  <Button size="lg" className="w-full sm:w-auto">
+                    Sign in now
+                  </Button>
+                </Link>
+              )
+            )}
           </div>
         </div>
       </motion.section>
