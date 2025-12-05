@@ -8,6 +8,9 @@ import { Menu } from 'lucide-react'
 import { motion, useScroll, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { useAuth } from '@/hooks/useAuth'
+import { signOut } from 'firebase/auth'
+import { firebaseAuth } from '@/lib/auth/firebase'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -20,6 +23,7 @@ export default function Navbar() {
   const pathname = usePathname()
   const { scrollY } = useScroll()
   const [scrolled, setScrolled] = useState(false)
+  const { user, loading } = useAuth()
 
   useEffect(() => {
     const unsub = scrollY.on('change', (y) => {
@@ -27,6 +31,17 @@ export default function Navbar() {
     })
     return () => unsub()
   }, [scrollY])
+
+  const handleLogout = async () => {
+    await signOut(firebaseAuth)
+    // clear backend session cookie
+    await fetch('/api/auth/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid: '' }),
+    })
+    window.location.href = '/'
+  }
 
   return (
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-sm">
@@ -71,11 +86,20 @@ export default function Navbar() {
                       </Link>
                     )
                   })}
-                  <Link href="/login">
-                    <Button size="sm" variant="outline">
-                      Sign in
-                    </Button>
-                  </Link>
+
+                  {!loading && (
+                    user ? (
+                      <Button size="sm" variant="outline" onClick={handleLogout}>
+                        Logout
+                      </Button>
+                    ) : (
+                      <Link href="/login">
+                        <Button size="sm" variant="outline">
+                          Sign in
+                        </Button>
+                      </Link>
+                    )
+                  )}
                 </nav>
               </motion.div>
             )}
@@ -118,11 +142,20 @@ export default function Navbar() {
                         </Link>
                       )
                     })}
-                    <Link href="/login">
-                      <Button size="sm">
-                        Sign in
-                      </Button>
-                    </Link>
+
+                    {!loading && (
+                      user ? (
+                        <Button size="sm" onClick={handleLogout}>
+                          Logout
+                        </Button>
+                      ) : (
+                        <Link href="/login">
+                          <Button size="sm">
+                            Sign in
+                          </Button>
+                        </Link>
+                      )
+                    )}
                   </nav>
                 </div>
               </motion.div>
@@ -169,11 +202,24 @@ export default function Navbar() {
                       </Link>
                     )
                   })}
-                  <Link href="/login">
-                    <Button className="mt-3 w-full" size="sm">
-                      Sign in
-                    </Button>
-                  </Link>
+
+                  {!loading && (
+                    user ? (
+                      <Button
+                        className="mt-3 w-full"
+                        size="sm"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </Button>
+                    ) : (
+                      <Link href="/login">
+                        <Button className="mt-3 w-full" size="sm">
+                          Sign in
+                        </Button>
+                      </Link>
+                    )
+                  )}
                 </nav>
               </div>
             </SheetContent>

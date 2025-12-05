@@ -2,8 +2,10 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/useAuth'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 16 },
@@ -20,6 +22,18 @@ const staggerContainer = {
 }
 
 export default function LandingPage() {
+  const router = useRouter()
+  const { user, loading } = useAuth()
+
+  const handlePrimaryClick = () => {
+    if (loading) return
+    if (user) {
+      router.push('/dashboard')
+    } else {
+      router.push('/login')
+    }
+  }
+
   return (
     <div className="space-y-16 pb-16 sm:space-y-24 sm:pb-24">
       {/* HERO */}
@@ -54,11 +68,19 @@ export default function LandingPage() {
             className="flex flex-wrap gap-3"
             variants={fadeInUp}
           >
-            <Link href="/login">
-              <Button size="lg" className="w-full sm:w-auto">
-                Sign in to dashboard
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              className="w-full sm:w-auto"
+              onClick={handlePrimaryClick}
+              disabled={loading}
+            >
+              {loading
+                ? 'Checking session…'
+                : user
+                ? 'Go to dashboard'
+                : 'Sign in to dashboard'}
+            </Button>
+
             <Button
               size="lg"
               variant="outline"
