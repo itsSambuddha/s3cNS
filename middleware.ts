@@ -1,46 +1,10 @@
-
+// middleware.ts
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { jwtVerify } from 'jose'
 
-const secret = new TextEncoder().encode(process.env.JWT_SECRET)
-
+// For now, do not enforce auth at the edge.
+// Dashboard and other pages will guard themselves with useAuth.
 export async function middleware(req: NextRequest) {
-  const session = req.cookies.get('s3cns_session')?.value
-
-  const protectedPaths = [
-    '/dashboard',
-    '/budget',
-    '/documents',
-    '/news',
-    '/achievements',
-    '/directory',
-    '/admin',
-  ]
-
-  const isProtected = protectedPaths.some((path) =>
-    req.nextUrl.pathname.startsWith(path)
-  )
-
-  if (isProtected) {
-    if (!session) {
-      const url = req.nextUrl.clone()
-      url.pathname = '/login'
-      url.searchParams.set('from', req.nextUrl.pathname)
-      return NextResponse.redirect(url)
-    }
-
-    try {
-      await jwtVerify(session, secret)
-    } catch (error) {
-      console.error('JWT Verification failed:', error)
-      const url = req.nextUrl.clone()
-      url.pathname = '/login'
-      url.searchParams.set('from', req.nextUrl.pathname)
-      return NextResponse.redirect(url)
-    }
-  }
-
   return NextResponse.next()
 }
 
