@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 import Footer from '@/components/layout/Footer'
+import { RoleOnboarding } from '@/components/secretariat/RoleOnBoarding'
 
 const pageStagger = {
   hidden: {},
@@ -43,10 +44,22 @@ export default function DashboardPage() {
         <p className="text-sm text-muted-foreground">
           Go back to the home page and sign in to access the dashboard.
         </p>
-        <Link href="/">
-          <Button size="sm">Return to home</Button>
+        <Link href="/login">
+          <Button size="sm">Go to login</Button>
         </Link>
       </div>
+    )
+  }
+
+  // TODO: replace with real condition once your Mongo user has role info
+  const needsOnboarding = true // e.g. !user.displayName or custom claim later
+
+  if (needsOnboarding) {
+    return (
+      <RoleOnboarding
+        initialName={user.displayName ?? user.email ?? 'Secretariat member'}
+        initialEmail={user.email ?? undefined}
+      />
     )
   }
 
@@ -89,7 +102,6 @@ export default function DashboardPage() {
         variants={pageStagger}
       >
         {[
-
           {
             label: 'Events',
             value: '3',
@@ -185,13 +197,12 @@ export default function DashboardPage() {
               <span className="rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
                 Protected
               </span>
-              
             </div>
           </motion.div>
         ))}
       </motion.div>
+
       <Footer />
     </motion.div>
-    
   )
 }
