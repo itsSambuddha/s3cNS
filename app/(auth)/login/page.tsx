@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth'
 import { firebaseAuth, googleProvider } from '@/lib/auth/firebase'
 import { Login04 } from '@/components/ui/login-04'
 
@@ -11,8 +11,22 @@ export default function LoginPage() {
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [checkingAuth, setCheckingAuth] = useState(true)
 
   const redirectTo = searchParams.get('from') || '/dashboard'
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) {
+        // User is already logged in, redirect to dashboard
+        router.push(redirectTo)
+      } else {
+        setCheckingAuth(false)
+      }
+    })
+
+    return () => unsubscribe()
+  }, [router, redirectTo])
 
   const setAuthCookieAndRedirect = async () => {
     const user = firebaseAuth.currentUser
@@ -58,6 +72,17 @@ export default function LoginPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (checkingAuth) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="w-full max-w-md text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-sm text-muted-foreground">Checking authentication...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
