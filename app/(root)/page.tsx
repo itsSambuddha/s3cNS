@@ -2,12 +2,16 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 import { signOut } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/auth/firebase'
+import { SeniorSecretariatCarousel } from '@/components/secretariat/SeniorSecretariatCarousel'
+import { SecretariatMembersShowcase } from '@/components/secretariat/SecretariatMembersShowcase'
+import { LandingNavbar } from '@/components/layout/LandingNavbar'
+import { LampSection } from '@/components/landing/LampSection'
+import { Hero } from '@/components/landing/Hero'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 16 },
@@ -24,17 +28,7 @@ const staggerContainer = {
 }
 
 export default function LandingPage() {
-  const router = useRouter()
   const { user, loading } = useAuth()
-
-  const handlePrimaryClick = () => {
-    if (loading) return
-    if (user) {
-      router.push('/dashboard')
-    } else {
-      router.push('/login')
-    }
-  }
 
   const handleLogout = async () => {
     await signOut(firebaseAuth)
@@ -47,105 +41,12 @@ export default function LandingPage() {
   }
 
   return (
+    
     <div className="space-y-16 pb-16 sm:space-y-24 sm:pb-24">
-      {/* HERO */}
-      <section className="mx-auto flex max-w-6xl flex-col gap-10 px-3 pt-10 sm:px-4 sm:pt-16 lg:flex-row lg:items-center">
-        <motion.div
-          className="flex-1 space-y-5"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          <motion.div
-            className="inline-flex items-center gap-2 rounded-full border bg-background/80 px-3 py-1 text-[11px] text-muted-foreground sm:text-xs"
-            variants={fadeInUp}
-          >
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Mobile‑first · PWA‑ready · Built for SECMUN
-          </motion.div>
-
-          <motion.div className="space-y-4" variants={fadeInUp}>
-            <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-              Your one‑stop platform for smooth&nbsp;
-              <span className="block text-primary">SECMUN operation.</span>
-            </h1>
-            <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
-              s3cNS centralizes attendance, events, finances, documents, and
-              secretariat workflows into a single, secure dashboard that works
-              beautifully on phones and desktops.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="flex flex-wrap gap-3"
-            variants={fadeInUp}
-          >
-            <Button
-              size="lg"
-              className="w-full sm:w-auto"
-              onClick={handlePrimaryClick}
-              disabled={loading}
-            >
-              {loading
-                ? 'Checking session…'
-                : user
-                ? 'Go to dashboard'
-                : 'Sign in to dashboard'}
-            </Button>
-
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto"
-              disabled
-            >
-              Explore public modules (soon)
-            </Button>
-          </motion.div>
-
-          <motion.div
-            className="flex flex-wrap gap-4 text-xs text-muted-foreground sm:text-sm"
-            variants={fadeInUp}
-          >
-            <span>• Fast on low‑end devices</span>
-            <span>• Works great as a PWA</span>
-            <span>• Designed for non‑technical users</span>
-          </motion.div>
-        </motion.div>
-
-        <motion.div
-          className="flex-1"
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="mx-auto w-full max-w-md rounded-2xl border bg-card/80 p-4 shadow-sm sm:p-6">
-            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              Today&apos;s snapshot
-            </p>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center justify-between rounded-lg bg-muted px-3 py-2">
-                <span>Attendance marked</span>
-                <span className="font-semibold">78%</span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg bg-muted px-3 py-2">
-                <span>Budgets on track</span>
-                <span className="font-semibold text-emerald-500">12 / 14</span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg bg-muted px-3 py-2">
-                <span>Active events</span>
-                <span className="font-semibold">3</span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg bg-muted px-3 py-2">
-                <span>Pending approvals</span>
-                <span className="font-semibold text-amber-500">5</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
+      <Hero />
+      
       {/* BEFORE / AFTER SECTION */}
+      
       <motion.section
         className="border-y bg-muted/40"
         initial="hidden"
@@ -153,7 +54,9 @@ export default function LandingPage() {
         viewport={{ once: true, amount: 0.25 }}
         variants={staggerContainer}
       >
+       {/* <LampSection />  */}
         <div className="mx-auto grid max-w-6xl gap-8 px-3 py-10 sm:px-4 sm:py-14 md:grid-cols-2">
+          
           <motion.div variants={fadeInUp}>
             <h2 className="text-2xl font-semibold sm:text-3xl">
               Before s3cNS
@@ -163,7 +66,7 @@ export default function LandingPage() {
               between secretariats.
             </p>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <li>• Separate sheets for attendance, budgets, and events</li>
+              <li>• Separate sheets for budgets, and events</li>
               <li>• No shared record of member performance</li>
               <li>• Manual reminders and error‑prone approvals</li>
             </ul>
@@ -178,14 +81,41 @@ export default function LandingPage() {
               audit trail and clear ownership.
             </p>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-              <li>• Unified dashboard for attendance, events, and finance</li>
+              <li>• Unified dashboard for events, and finance</li>
               <li>• Secretariat‑level insights across years</li>
-              <li>• Automated flows for routine, approvals, and reporting</li>
+              <li>• Automated flows for approvals, and reporting</li>
             </ul>
           </motion.div>
         </div>
       </motion.section>
-
+      
+      {/* LEADERSHIP CAROUSEL */}
+<section className="mt-12 px-4 sm:px-6 lg:px-8">
+  <motion.div
+  
+    className="mx-auto max-w-5xl"
+    initial={{ opacity: 0, y: 24, scale: 0.96 }}
+    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+    viewport={{ once: true, amount: 0.4 }}
+    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+  >
+    
+    <SeniorSecretariatCarousel />
+    
+  </motion.div>
+  <div className="mt-8 flex justify-center">
+    <Link href="/secretariat">
+      <Button variant="outline" size="lg">
+        Click here to see the complete secretariat
+      </Button>
+    </Link>
+  </div>
+</section>
+{/* <section className="mt-10 px-4 sm:px-6 lg:px-8">
+  <div className="mx-auto max-w-5xl">
+    <SecretariatMembersShowcase />
+  </div>
+</section> */}
       {/* MODULE GROUPS SECTION */}
       <motion.section
         className="mx-auto max-w-6xl px-3 sm:px-4"
@@ -206,7 +136,7 @@ export default function LandingPage() {
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {[
-            { title: 'Operations', desc: 'Attendance, tasks, meetings, and feedback workflows.' },
+            { title: 'Operations', desc: 'Tasks, meetings, and feedback workflows.' },
             { title: 'Events', desc: 'SEC‑NEXUS events and delegate CRM.' },
             { title: 'Finance', desc: 'Budgets, expenses, and club assets.' },
             { title: 'Secretariat', desc: 'Members, directory, and training resources.' },

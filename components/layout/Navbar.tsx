@@ -15,7 +15,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/events', label: 'Events' },   // placeholder
-  { href: '/finance', label: 'Finance' }, // placeholder
+  { href: '/secretariat', label: 'Secretariat' }, // placeholder
 ]
 
 export default function Navbar() {

@@ -1,13 +1,15 @@
-// middleware.ts
+
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { jwtVerify } from 'jose'
 
-export function middleware(req: NextRequest) {
+const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+
+export async function middleware(req: NextRequest) {
   const session = req.cookies.get('s3cns_session')?.value
 
   const protectedPaths = [
     '/dashboard',
-    '/attendance',
     '/budget',
     '/documents',
     '/news',
@@ -20,11 +22,23 @@ export function middleware(req: NextRequest) {
     req.nextUrl.pathname.startsWith(path)
   )
 
-  if (isProtected && !session) {
-    const url = req.nextUrl.clone()
-    url.pathname = '/login'
-    url.searchParams.set('from', req.nextUrl.pathname)
-    return NextResponse.redirect(url)
+  if (isProtected) {
+    if (!session) {
+      const url = req.nextUrl.clone()
+      url.pathname = '/login'
+      url.searchParams.set('from', req.nextUrl.pathname)
+      return NextResponse.redirect(url)
+    }
+
+    try {
+      await jwtVerify(session, secret)
+    } catch (error) {
+      console.error('JWT Verification failed:', error)
+      const url = req.nextUrl.clone()
+      url.pathname = '/login'
+      url.searchParams.set('from', req.nextUrl.pathname)
+      return NextResponse.redirect(url)
+    }
   }
 
   return NextResponse.next()
@@ -33,7 +47,6 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     '/dashboard/:path*',
-    '/attendance/:path*',
     '/budget/:path*',
     '/documents/:path*',
     '/news/:path*',

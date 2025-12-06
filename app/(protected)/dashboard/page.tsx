@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
+import Footer from '@/components/layout/Footer'
 
 const pageStagger = {
   hidden: {},
@@ -71,8 +72,7 @@ export default function DashboardPage() {
             Welcome back, {displayName}.
           </h1>
           <p className="text-xs text-muted-foreground sm:text-sm">
-            This overview will soon reflect your real attendance, events,
-            finances, and approvals based on your role.
+            This overview will soon reflect your real events, finances, and approvals based on your role.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -89,12 +89,7 @@ export default function DashboardPage() {
         variants={pageStagger}
       >
         {[
-          {
-            label: 'Attendance',
-            value: '78%',
-            subtitle: 'Members marked today',
-            href: '/attendance',
-          },
+
           {
             label: 'Events',
             value: '3',
@@ -146,8 +141,8 @@ export default function DashboardPage() {
         {[
           {
             title: 'Operations',
-            desc: 'Attendance, tasks, meetings, and feedback workflows.',
-            href: '/attendance',
+            desc: 'Tasks, meetings, and feedback workflows.',
+            href: '#',
           },
           {
             title: 'Events',
@@ -190,10 +185,13 @@ export default function DashboardPage() {
               <span className="rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
                 Protected
               </span>
+              
             </div>
           </motion.div>
         ))}
       </motion.div>
+      <Footer />
     </motion.div>
+    
   )
 }

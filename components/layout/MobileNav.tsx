@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 import { signOut } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/auth/firebase'
-import * as Dialog from '@radix-ui/react-dialog'   // ← import Radix dialog
+import * as Dialog from '@radix-ui/react-dialog'
+import type { IUser } from '@/lib/db/models/User'
 
 // Top navbar items
 const topLinks = [
@@ -21,18 +22,25 @@ const topLinks = [
 ]
 
 // Sidebar items (from Sidebar.tsx)
-const sidebarItems = [
-  { href: '/dashboard', label: 'Overview' },
-  { href: '/timetable', label: 'Timetable' },
-  { href: '/attendance', label: 'Attendance' },
-  { href: '/budget', label: 'Budget' },
-  { href: '/documents', label: 'Documents' },
-  { href: '/news', label: 'News' },
-  { href: '/achievements', label: 'Achievements' },
-  { href: '/directory', label: 'Directory' },
-  { href: '/admin', label: 'Admin' },
-  { href: '/admin/attendance', label: 'Attendance Alerts' },
-]
+const baseLinks = [
+  { href: '/dashboard', label: 'Overview', type: 'base' },
+  { href: '/timetable', label: 'Timetable', type: 'base' },
+  { href: '/budget', label: 'Budget', type: 'base' },
+  { href: '/documents', label: 'Documents', type: 'base' },
+  { href: '/news', label: 'News', type: 'base' },
+  { href: '/achievements', label: 'Achievements', type: 'base' },
+  { href: '/directory', label: 'Directory', type: 'base' },
+];
+
+const secretariatLinks = [
+  { href: '/secretariat/directory', label: 'Secretariat Directory', type: 'secretariat' },
+  { href: '/secretariat/usg-approvals', label: 'USG Approvals', type: 'secretariat', requiresApprove: true },
+  { href: '/secretariat/onboarding', label: 'Set up profile', type: 'secretariat', requiresDefaultRole: true },
+];
+
+const adminLinks = [
+  { href: '/admin', label: 'Admin', type: 'admin' },
+];
 
 export default function MobileNav() {
   const pathname = usePathname()
@@ -54,6 +62,25 @@ export default function MobileNav() {
     active
       ? 'block rounded-md bg-muted px-2 py-1.5 font-medium text-foreground'
       : 'block rounded-md px-2 py-1.5 text-muted-foreground hover:bg-muted hover:text-foreground'
+
+  // Combine links, filtering based on user permissions
+  const dbUser = user as IUser | null
+  const allLinks = [
+    ...baseLinks,
+    ...(dbUser?.secretariatRole ? secretariatLinks.filter(link => {
+      if (link.requiresApprove && (!dbUser?.canApproveUSG && !['LEADERSHIP', 'TEACHER'].includes(dbUser?.role))) {
+        return false;
+      }
+      if (link.requiresDefaultRole && !dbUser?.displayName) {
+        return true; // Show "Set up profile" if profile not set up
+      }
+      if (link.requiresDefaultRole) { // If it requires default role but conditions above not met, hide it
+        return false;
+      }
+      return true;
+    }) : []),
+    ...(dbUser?.role === 'ADMIN' ? adminLinks : [])
+  ];
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -117,7 +144,7 @@ export default function MobileNav() {
               Navigation
             </p>
             <nav className="space-y-1 text-sm">
-              {sidebarItems.map((item) => {
+              {allLinks.map((item) => {
                 const active = pathname === item.href
                 return (
                   <Link
