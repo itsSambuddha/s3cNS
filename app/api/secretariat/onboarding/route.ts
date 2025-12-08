@@ -2,103 +2,97 @@
 import { NextResponse } from 'next/server'
 import { connectToDatabase } from '@/lib/db/connect'
 import { User } from '@/lib/db/models/User'
-import { getCurrentUser } from '@/lib/auth/getCurrentUser'
-import { applyRolePermissions } from '@/lib/secretariat/permissions'
 
 export async function POST(req: Request) {
-  await connectToDatabase()
-  const current = await getCurrentUser()
-  if (!current) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  try {
+    const body = await req.json()
 
-  const {
-    displayName,
-    phone,
-    rollNo,
-    year,
-    academicDepartment,
-    secretariatRole,
-    office,
-  } = await req.json()
-
-  if (
-    ![
-      'PRESIDENT',
-      'SECRETARY_GENERAL',
-      'DIRECTOR_GENERAL',
-      'USG',
-      'TEACHER',
-      'MEMBER',
-    ].includes(secretariatRole)
-  ) {
-    return NextResponse.json({ error: 'Invalid role' }, { status: 400 })
-  }
-
-  // leadership / teacher constraints
-  if (
-    ['PRESIDENT', 'SECRETARY_GENERAL', 'DIRECTOR_GENERAL'].includes(
-      secretariatRole
-    )
-  ) {
-    const count = await User.countDocuments({
+    const {
+      uid,
+      email,
+      displayName,
+      phone,
+      rollNo,
+      academicDepartment,
+      year,
       secretariatRole,
-      memberStatus: 'ACTIVE',
-      _id: { $ne: current._id },
-    })
-    if (count >= 1) {
+      office,
+      officeRank, // 'HEAD' | 'DEPUTY' or similar
+      tagline,
+      avatarUrl,
+    } = body
+
+    if (!uid || !email || !displayName || !secretariatRole) {
       return NextResponse.json(
-        { error: `${secretariatRole} slot already filled` },
-        { status: 400 }
+        { error: 'Missing required fields' },
+        { status: 400 },
       )
     }
-  }
 
-  if (secretariatRole === 'TEACHER') {
-    const count = await User.countDocuments({
-      secretariatRole: 'TEACHER',
-      memberStatus: 'ACTIVE',
-      _id: { $ne: current._id },
-    })
-    if (count >= 3) {
+    await connectToDatabase()
+
+    // Derive app-level role from secretariatRole
+    let appRole: 'ADMIN' | 'LEADERSHIP' | 'TEACHER' | 'OFFICE_BEARER' | 'MEMBER' =
+      'MEMBER'
+
+    if (
+      ['PRESIDENT', 'SECRETARY_GENERAL', 'DIRECTOR_GENERAL'].includes(
+        secretariatRole,
+      )
+    ) {
+      appRole = 'ADMIN'
+    } else if (secretariatRole === 'TEACHER') {
+      appRole = 'TEACHER'
+    } else if (secretariatRole === 'USG') {
+      appRole = 'OFFICE_BEARER'
+    }
+
+    const user = await User.findOneAndUpdate(
+      { uid },
+      {
+        $set: {
+          email,
+          displayName,
+          phone,
+          rollNo,
+          academicDepartment,
+          year,
+          secretariatRole,
+          office: secretariatRole === 'USG' ? office : null,
+          role: appRole,
+          memberStatus: 'ACTIVE',
+          photoURL: avatarUrl || undefined,
+          // simple permissions – you can refine later
+          canManageMembers:
+            secretariatRole === 'PRESIDENT' ||
+            secretariatRole === 'SECRETARY_GENERAL',
+          canApproveUSG:
+            secretariatRole === 'PRESIDENT' ||
+            secretariatRole === 'SECRETARY_GENERAL',
+          canManageFinance:
+            secretariatRole === 'DIRECTOR_GENERAL' ||
+            office === 'FINANCE',
+          canManageEvents:
+            secretariatRole === 'DIRECTOR_GENERAL' ||
+            office === 'CONFERENCE_MANAGEMENT',
+        },
+      },
+      { new: true, upsert: true },
+    ).lean()
+
+    if (!user) {
       return NextResponse.json(
-        { error: 'Teacher limit reached (3)' },
-        { status: 400 }
+        { error: 'User not found after update' },
+        { status: 404 },
       )
     }
-  }
 
-  const user = await User.findById(current._id)
-  if (!user) {
-    return NextResponse.json({ error: 'User not found' }, { status: 404 })
-  }
-
-  if (displayName) user.displayName = displayName
-  user.phone = phone
-  user.rollNo = rollNo
-  user.year = year
-  user.academicDepartment = academicDepartment
-  user.secretariatRole = secretariatRole
-  user.office =
-    secretariatRole === 'USG'
-      ? office || null
-      : null // leadership/teachers have no office
-
-  // status: leadership & teachers auto-approved; USG = applicant; others = active
-  if (
-    ['PRESIDENT', 'SECRETARY_GENERAL', 'DIRECTOR_GENERAL', 'TEACHER'].includes(
-      secretariatRole
+    return NextResponse.json({ ok: true, user })
+  } catch (err: any) {
+    console.error('onboarding error', err?.message ?? err)
+    return NextResponse.json(
+      { error: 'Could not save profile. Please try again.' },
+      { status: 500 },
     )
-  ) {
-    user.memberStatus = 'ACTIVE'
-  } else if (secretariatRole === 'USG') {
-    user.memberStatus = 'APPLICANT'
-  } else {
-    user.memberStatus = 'ACTIVE'
   }
-
-  applyRolePermissions(user)
-  await user.save()
-
-  return NextResponse.json({ ok: true })
 }

@@ -1,3 +1,5 @@
+// lib/auth/firebase.ts
+import { initializeApp } from 'firebase/app'
 import {
   getAuth,
   GoogleAuthProvider,
@@ -5,9 +7,9 @@ import {
   updateProfile,
   signInWithPopup,
 } from 'firebase/auth'
-import { initializeApp } from 'firebase/app'
+import { getStorage } from 'firebase/storage'
 
-// Firebase configuration (replace with your actual config)
+// Make sure these env vars are set, especially STORAGE_BUCKET = "<project-id>.appspot.com"
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -17,24 +19,21 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig)
 
-// Initialize Firebase Authentication and get a reference to the service
 export const firebaseAuth = getAuth(app)
-
-// Initialize Google Auth Provider
+export const firebaseStorage = getStorage(app)
 export const googleProvider = new GoogleAuthProvider()
 
 export async function signUpWithEmail(
   name: string,
   email: string,
-  password: string
+  password: string,
 ) {
   const userCredential = await createUserWithEmailAndPassword(
     firebaseAuth,
     email,
-    password
+    password,
   )
   const user = userCredential.user
   await updateProfile(user, { displayName: name })

@@ -2,11 +2,12 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { useAuth } from '@/hooks/useAuth'
 import Footer from '@/components/layout/Footer'
-import { RoleOnboarding } from '@/components/secretariat/RoleOnBoarding'
+import { useAuth } from '@/hooks/useAuth'
+import { useAppUser } from '@/hooks/useAppUser'
 
 const pageStagger = {
   hidden: {},
@@ -26,9 +27,11 @@ const scaleIn = {
 }
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth()
+  const router = useRouter()
+  const { user: fbUser, loading: authLoading } = useAuth()
+  const { user: appUser, loading: appLoading } = useAppUser()
 
-  if (loading) {
+  if (authLoading || appLoading) {
     return (
       <div className="space-y-2">
         <div className="h-6 w-40 animate-pulse rounded bg-muted" />
@@ -37,7 +40,7 @@ export default function DashboardPage() {
     )
   }
 
-  if (!user) {
+  if (!fbUser || !appUser) {
     return (
       <div className="space-y-2">
         <h1 className="text-xl font-semibold">You are not signed in</h1>
@@ -51,19 +54,13 @@ export default function DashboardPage() {
     )
   }
 
-  // TODO: replace with real condition once your Mongo user has role info
-  const needsOnboarding = true // e.g. !user.displayName or custom claim later
-
-  if (needsOnboarding) {
-    return (
-      <RoleOnboarding
-        initialName={user.displayName ?? user.email ?? 'Secretariat member'}
-        initialEmail={user.email ?? undefined}
-      />
-    )
+  // If the user is still MEMBER, send them to onboarding page
+  if (appUser.secretariatRole === 'MEMBER') {
+    router.replace('/onboarding')
+    return null
   }
 
-  const displayName = user.displayName ?? user.email ?? 'Secretariat member'
+  const displayName = appUser.displayName ?? appUser.email ?? 'Secretariat member'
 
   return (
     <motion.div
@@ -89,9 +86,12 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button size="sm" variant="outline">
-            View my profile
-          </Button>
+            <Link href="/profile">
+              <Button size="sm" variant="outline">
+                View my profile
+              </Button>
+            </Link>
+
           <Button size="sm">Create quick note</Button>
         </div>
       </motion.div>
