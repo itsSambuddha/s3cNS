@@ -1,18 +1,9 @@
 
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import admin from 'firebase-admin'
+import { initFirebaseAdmin } from '@/lib/firebase/admin'
+import { getAuth } from 'firebase-admin/auth'
 import { SignJWT, jwtVerify } from 'jose'
-
-const serviceAccount = JSON.parse(
-  process.env.FIREBASE_SERVICE_ACCOUNT_JSON as string
-)
-
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  })
-}
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET)
 
@@ -32,7 +23,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken)
+    initFirebaseAdmin()
+    const decodedToken = await getAuth().verifyIdToken(idToken)
     const { uid, email } = decodedToken
 
     const jwt = await new SignJWT({ uid, email })
