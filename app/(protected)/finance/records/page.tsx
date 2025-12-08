@@ -11,6 +11,8 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { BudgetDesigner } from '@/components/finance/BudgetDesigner'
+
 
 type FinanceRecord = {
   _id: string
@@ -371,18 +373,11 @@ export default function FinanceRecordsPage() {
         })}
       </motion.div>
 
-      {/* Only Expenses fully implemented for now */}
-      {activeTab !== 'expenses' && (
+      {activeTab === 'budgets' && (
         <motion.div variants={fadeInUp}>
-          <Card className="rounded-2xl border bg-card/80 p-4 shadow-sm">
-            <p className="text-sm font-medium">
-              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} ledger
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              This tab will mirror the Expenses workspace with its own filters
-              and entry form once you are ready to expand it.
-            </p>
-          </Card>
+          <BudgetDesigner
+            eventName="SEC-MUN 2026"
+          />
         </motion.div>
       )}
 
