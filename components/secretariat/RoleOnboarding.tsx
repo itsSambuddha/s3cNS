@@ -299,9 +299,10 @@ export function RoleOnboarding({
     )
   }
 
-  const previewRole = secretariatRole
-    ? roleLabel(secretariatRole)
-    : 'Not set yet'
+  const previewRole =
+    secretariatRole
+      ? roleLabel(secretariatRole)
+      : 'Not set yet'
 
   return (
     <div className="min-h-[520px] bg-muted/40">

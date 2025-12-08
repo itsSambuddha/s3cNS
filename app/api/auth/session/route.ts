@@ -18,7 +18,7 @@ const secret = new TextEncoder().encode(process.env.JWT_SECRET)
 
 export async function POST(req: Request) {
   const { idToken } = await req.json()
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   if (!idToken) {
     cookieStore.set('s3cns_session', '', {
