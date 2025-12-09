@@ -9,7 +9,7 @@ import type { IUser } from '@/lib/db/models/User'
 const baseLinks = [
   { href: '/dashboard', label: 'Overview', type: 'base' },
   { href: '/timetable', label: 'Timetable', type: 'base' },
-  { href: '/budget', label: 'Budget', type: 'base' },
+  { href: '/finance/records?tab=budgets', label: 'Budget', type: 'base' },
   { href: '/documents', label: 'Documents', type: 'base' },
   { href: '/news', label: 'News', type: 'base' },
   { href: '/achievements', label: 'Achievements', type: 'base' },

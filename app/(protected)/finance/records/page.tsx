@@ -346,8 +346,7 @@ export default function FinanceRecordsPage() {
         {[
           { id: 'budgets', label: 'Budgets' },
           { id: 'expenses', label: 'Expenses' },
-          { id: 'reimbursements', label: 'Reimbursements' },
-          { id: 'dues', label: 'Dues' },
+          // { id: 'reimbursements', label: 'Reimbursements' },
         ].map((tab) => {
           const active = activeTab === tab.id
           return (
