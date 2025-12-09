@@ -6,6 +6,8 @@ export type ProposalStatus = 'DRAFT' | 'SENT' | 'APPROVED' | 'REJECTED'
 export interface IProposalLineItem {
   label: string
   category: string
+  units: number
+  pricePerUnit: number
   amount: number
 }
 
@@ -33,6 +35,8 @@ const LineItemSchema = new Schema<IProposalLineItem>(
   {
     label: { type: String, required: true },
     category: { type: String, default: 'MISC' },
+    units: { type: Number, required: true, min: 0 },
+    pricePerUnit: { type: Number, required: true, min: 0 },
     amount: { type: Number, required: true, min: 0 },
   },
   { _id: false },
