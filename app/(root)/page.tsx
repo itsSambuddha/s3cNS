@@ -12,6 +12,8 @@ import { SecretariatMembersShowcase } from '@/components/secretariat/Secretariat
 import { LandingNavbar } from '@/components/layout/LandingNavbar'
 import { LampSection } from '@/components/landing/LampSection'
 import { Hero } from '@/components/landing/Hero'
+import { SecmunFeatures } from '@/components/landing/secmunFeatures'
+import { SecmunGlobe } from '@/components/landing/secmunGlobe'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 16 },
@@ -162,7 +164,9 @@ export default function LandingPage() {
           ))}
         </div>
       </motion.section>
-
+          <SecmunFeatures />
+          <SecmunGlobe />
+      
       {/* FINAL CTA */}
       <motion.section
         className="mx-auto max-w-6xl px-3 sm:px-4"
