@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import Footer from '@/components/layout/Footer'
 import { useAuth } from '@/hooks/useAuth'
 import { useAppUser } from '@/hooks/useAppUser'
+import { FinanceCard } from './FinanceCard'
 
 const pageStagger = {
   hidden: {},
@@ -101,48 +102,49 @@ export default function DashboardPage() {
         className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
         variants={pageStagger}
       >
-        {[
-          {
-            label: 'Events',
-            value: '3',
-            subtitle: 'Active SEC‑NEXUS events',
-            href: '/events',
-          },
-          {
-            label: 'Finance',
-            value: '12 / 14',
-            subtitle: 'Budgets currently on track',
-            href: '/finance',
-          },
-          {
-            label: 'Approvals',
-            value: '5',
-            subtitle: 'Pending across all modules',
-            href: '/admin',
-          },
-        ].map((card) => (
-          <motion.div
-            key={card.label}
-            variants={fadeInUp}
-            whileHover={{ y: -4, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.08)' }}
-            transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-            className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
+        <motion.div
+          variants={fadeInUp}
+          whileHover={{ y: -4, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.08)' }}
+          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
+        >
+          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            Events
+          </p>
+          <p className="mt-2 text-2xl font-semibold">3</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Active SEC‑NEXUS events
+          </p>
+          <Link
+            href="/events"
+            className="mt-3 inline-block text-xs font-medium text-primary"
           >
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-              {card.label}
-            </p>
-            <p className="mt-2 text-2xl font-semibold">{card.value}</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {card.subtitle}
-            </p>
-            <Link
-              href={card.href}
-              className="mt-3 inline-block text-xs font-medium text-primary"
-            >
-              Open {card.label.toLowerCase()} →
-            </Link>
-          </motion.div>
-        ))}
+            Open events →
+          </Link>
+        </motion.div>
+
+        <FinanceCard />
+
+        <motion.div
+          variants={fadeInUp}
+          whileHover={{ y: -4, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.08)' }}
+          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
+        >
+          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+            Approvals
+          </p>
+          <p className="mt-2 text-2xl font-semibold">5</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Pending across all modules
+          </p>
+          <Link
+            href="/admin"
+            className="mt-3 inline-block text-xs font-medium text-primary"
+          >
+            Open approvals →
+          </Link>
+        </motion.div>
       </motion.div>
 
       {/* Module groups quick access */}
