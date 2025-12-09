@@ -91,6 +91,7 @@ export default function FinanceRecordsPage() {
     return senior || financeOffice
   }, [appUser])
 
+  // Read directly from URL; default to "expenses" if not set
   const activeTab = searchParams.get('tab') || 'expenses'
 
   useEffect(() => {

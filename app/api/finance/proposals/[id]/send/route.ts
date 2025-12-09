@@ -47,9 +47,9 @@ export async function POST(_req: Request, { params }: RouteParams) {
 
     const html = await render(
       FinanceProposalEmail({
-        eventName: proposal.eventName || 'SEC-MUN event',
+        eventName: proposal.eventName || 'SECMUN event',
         title: proposal.title,
-        sections: (proposal.sections || []).map((s: any) => `${s.heading}: ${s.body}`),
+        sections: proposal.sections || [],
         lineItems: proposal.lineItems.map((li: any) => ({
           label: li.label,
           category: li.category,

@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
+import { BudgetActions } from './BudgetActions'
 
 type BudgetItemRow = {
   id: string
@@ -425,17 +426,7 @@ export function BudgetDesigner({
           >
             Print Budget
           </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => {
-              alert(
-                'Email sending will be wired to the Finance Proposals module (React Email + Resend).',
-              )
-            }}
-          >
-            Send via email
-          </Button>
+          <BudgetActions items={items} eventName={eventName || 'SEC-MUN Event'} />
         </div>
         <div className="mt-4 flex items-center justify-end gap-2 text-xs">
           <Button
