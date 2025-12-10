@@ -1,11 +1,9 @@
-// app/(protected)/dashboard/page.tsx
 'use client'
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import Footer from '@/components/layout/Footer'
 import { useAuth } from '@/hooks/useAuth'
 import { useAppUser } from '@/hooks/useAppUser'
 import { FinanceCard } from './FinanceCard'
@@ -203,8 +201,6 @@ export default function DashboardPage() {
           </motion.div>
         ))}
       </motion.div>
-
-      <Footer />
     </motion.div>
   )
 }

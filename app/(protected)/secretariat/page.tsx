@@ -1,7 +1,6 @@
 // app/(protected)/secretariat/page.tsx
 import { SeniorSecretariatCarousel } from '@/components/secretariat/SeniorSecretariatCarousel'
 import { SecretariatMembersShowcase } from '@/components/secretariat/SecretariatMembersShowcase'
-import Footer from '@/components/layout/Footer'
 
 export default function SecretariatPage() {
   return (
@@ -19,7 +18,6 @@ export default function SecretariatPage() {
       </div>
 
 
-    <Footer />
     </div>
   )
 }

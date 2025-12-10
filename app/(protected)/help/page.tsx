@@ -1,4 +1,3 @@
-// app/(protected)/help/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -7,7 +6,6 @@ import Image from 'next/image'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import Footer from '@/components/layout/Footer'
 
 type Section = {
   id: string
@@ -309,7 +307,6 @@ export default function HelpPage() {
           </Card>
         </motion.div>
       </motion.div>
-          <Footer />
     </motion.div>
     
   )

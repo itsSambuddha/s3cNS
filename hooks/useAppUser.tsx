@@ -50,7 +50,7 @@ export function useAppUser(): State {
       setState((s) => ({ ...s, loading: true }))
       try {
         // no admin verification yet – just pass uid/email
-        const res = await fetch('/api/users/me', {
+        const res = await fetch('/api/me', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -59,12 +59,19 @@ export function useAppUser(): State {
             displayName: fbUser.displayName,
             photoURL: fbUser.photoURL,
           }),
-        })
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}))
-          throw new Error(data.error || 'Failed to load user')
+        });
+
+        let data;
+        try {
+          data = await res.json();
+        } catch (error) {
+          throw new Error('Failed to parse server response.');
         }
-        const data = await res.json()
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to load user');
+        }
+        
         if (!cancelled) {
           setState({ user: data.user as AppUser, loading: false, error: null })
         }
