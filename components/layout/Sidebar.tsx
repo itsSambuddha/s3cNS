@@ -7,8 +7,6 @@ import { usePathname } from "next/navigation"
 import { motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
-import { useAuth } from "@/hooks/useAuth"
-
 import {
   IconLayoutDashboard,
   IconCalendarTime,
@@ -19,8 +17,7 @@ import {
   IconUsersGroup,
   IconShield,
 } from "@tabler/icons-react"
-
-// ----- link definitions -----
+import { SidebarUserPillRemote } from "@/components/layout/SidebarUserPillRemote"
 
 const baseLinks = [
   { href: "/dashboard", label: "Overview", icon: IconLayoutDashboard },
@@ -32,24 +29,19 @@ const baseLinks = [
   { href: "/directory", label: "Directory", icon: IconUsersGroup },
 ]
 
+// Secretariat and admin links are static; visibility is handled on the pages
 const secretariatLinks = [
   {
     href: "/secretariat/directory",
     label: "Secretariat Directory",
-    requiresApprove: false,
-    requiresDefaultRole: false,
   },
   {
     href: "/secretariat/usg-approvals",
     label: "USG Approvals",
-    requiresApprove: true,
-    requiresDefaultRole: false,
   },
   {
-    href: "/secretariat/onboarding",
-    label: "Set up profile",
-    requiresApprove: false,
-    requiresDefaultRole: true,
+    href: "/profile",
+    label: "Edit Profile",
   },
 ]
 
@@ -62,33 +54,19 @@ type AnyLink = {
   section?: "Navigation" | "Secretariat" | "Admin"
 }
 
-// ----- main sidebar -----
-
 export default function Sidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
-  const dbUser = user
-
   const [hovered, setHovered] = useState(false)
   const open = hovered
 
-  // if you also store secretariatRole in the merged user, you can gate links on it:
-  const hasSecretariatRole = !!dbUser?.secretariatRole
-
-  const computedSecretariatLinks = hasSecretariatRole
-    ? secretariatLinks // simple: allow all when secretariatRole exists
-    : []
-
   const allLinks: AnyLink[] = [
     ...baseLinks.map((l) => ({ ...l, section: "Navigation" as const })),
-    ...computedSecretariatLinks.map((l) => ({
+    ...secretariatLinks.map((l) => ({
       ...l,
       icon: IconUsersGroup,
       section: "Secretariat" as const,
     })),
-    ...(dbUser?.role === "ADMIN"
-      ? adminLinks.map((l) => ({ ...l, section: "Admin" as const }))
-      : []),
+    ...adminLinks.map((l) => ({ ...l, section: "Admin" as const })),
   ]
 
   if (!allLinks.length) return null
@@ -107,12 +85,10 @@ export default function Sidebar() {
       >
         <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-slate-400/40 to-transparent dark:via-slate-500/60" />
 
-        {/* logo */}
         <div className="px-3 pt-4">
           {open ? <Logo /> : <LogoIcon />}
         </div>
 
-        {/* links */}
         <div className="mt-4 flex-1 overflow-y-auto px-2 pb-4">
           <Section
             title="Navigation"
@@ -134,7 +110,7 @@ export default function Sidebar() {
 
           {allLinks.some((l) => l.section === "Admin") && (
             <Section
-              title="Admin"
+              title="Admin Controls"
               showTitle={open}
               links={allLinks.filter((l) => l.section === "Admin")}
               pathname={pathname}
@@ -143,18 +119,14 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* user pill */}
-        {dbUser && (
-          <div className="border-t border-slate-200/70 px-2 py-3 dark:border-slate-700/70">
-            <SidebarUserPill dbUser={dbUser} open={open} />
-          </div>
-        )}
+        {/* footer: isolated pill that fetches its own data */}
+        <div className="border-t border-slate-200/70 px-2 py-3 dark:border-slate-700/70">
+          <SidebarUserPillRemote />
+        </div>
       </motion.div>
     </aside>
   )
 }
-
-// ----- sections & items -----
 
 function Section({
   title,
@@ -170,6 +142,7 @@ function Section({
   open: boolean
 }) {
   if (!links.length) return null
+
   return (
     <div className="mb-4 space-y-1 text-xs">
       {showTitle && (
@@ -226,53 +199,6 @@ function SidebarItem({
     </Link>
   )
 }
-
-// ----- user pill -----
-
-function SidebarUserPill({ dbUser, open }: { dbUser: any; open: boolean }) {
-  const name = dbUser.displayName || "Secretariat user"
-  const initials = name
-    .split(" ")
-    .map((p: string) => p[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase()
-
-  const avatarUrl = dbUser.photoURL
-  const role = dbUser.role
-  const secRole = dbUser.secretariatRole
-
-  return (
-    <Link
-      href="/profile"
-      className="group flex items-center gap-2 rounded-2xl bg-white/80 px-2 py-1.5 text-xs text-slate-800 shadow-sm hover:bg-white dark:bg-slate-800/90 dark:text-slate-100 dark:hover:bg-slate-700"
-    >
-      {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt={name}
-          className="h-7 w-7 shrink-0 rounded-full object-cover"
-        />
-      ) : (
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-500 text-[11px] font-semibold text-white">
-          {initials}
-        </div>
-      )}
-
-      {open && (
-        <div className="flex flex-col">
-          <span className="truncate text-[11px] font-medium">{name}</span>
-          <span className="text-[10px] uppercase tracking-wide text-slate-500 dark:text-slate-400">
-            {role}
-            {secRole ? ` • ${secRole}` : ""}
-          </span>
-        </div>
-      )}
-    </Link>
-  )
-}
-
-// ----- logo -----
 
 const Logo = () => (
   <a

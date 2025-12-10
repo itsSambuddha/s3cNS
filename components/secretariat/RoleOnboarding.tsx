@@ -1,25 +1,27 @@
 // components/secretariat/RoleOnBoarding.tsx
-'use client'
+"use client"
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useUploadThing } from '@/lib/uploadthing'
-import { useAuth } from '@/hooks/useAuth'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Progress } from '@/components/ui/progress'
-import { cn } from '@/lib/utils'
+import React, { useState } from "react"
+import { useRouter } from "next/navigation"
+import { AnimatePresence, motion } from "framer-motion"
+import { useUploadThing } from "@/lib/uploadthing"
+import { useAuth } from "@/hooks/useAuth"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Progress } from "@/components/ui/progress"
+import { cn } from "@/lib/utils"
+import type { OfficeKey } from "@/lib/secretariat/data"
+import { officeLabels } from "@/lib/secretariat/data"
 
 type StepId = 1 | 2 | 3 | 4
 
 const steps: { id: StepId; label: string; chip: string }[] = [
-  { id: 1, label: 'About you', chip: '1' },
-  { id: 2, label: 'Academics', chip: '2' },
-  { id: 3, label: 'Role', chip: '3' },
-  { id: 4, label: 'Finish', chip: '4' },
+  { id: 1, label: "About you", chip: "1" },
+  { id: 2, label: "Academics", chip: "2" },
+  { id: 3, label: "Role", chip: "3" },
+  { id: 4, label: "Finish", chip: "4" },
 ]
 
 const stepVariants = {
@@ -28,16 +30,28 @@ const stepVariants = {
   exit: { opacity: 0, x: -32 },
 }
 
-const leadershipRoles = ['PRESIDENT', 'SECRETARY_GENERAL', 'DIRECTOR_GENERAL'] as const
-const teacherRole = 'TEACHER'
-const usgRole = 'USG'
-const memberRole = 'MEMBER'
+const leadershipRoles = ["PRESIDENT", "SECRETARY_GENERAL", "DIRECTOR_GENERAL"] as const
+const teacherRole = "TEACHER"
+const usgRole = "USG"
+const memberRole = "MEMBER"
 
 type SecretariatRole =
   | (typeof leadershipRoles)[number]
   | typeof teacherRole
   | typeof usgRole
   | typeof memberRole
+
+const officeOptions: OfficeKey[] = [
+  "DELEGATION_AFFAIRS",
+  "SPONSORSHIP",
+  "MARKETING",
+  "FINANCE",
+  "IT_DESIGN",
+  "IT_SOCIAL_MEDIA",
+  "PUBLIC_RELATIONS",
+  "CONFERENCE_MANAGEMENT",
+  "LOGISTICS",
+]
 
 const MAX_SIZE_MB = 2
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024
@@ -63,25 +77,28 @@ export function RoleOnboarding({
 }) {
   const router = useRouter()
   const { user: fbUser } = useAuth()
-  const uploadThing = useUploadThing('avatarUploader')
+  const uploadThing = useUploadThing("avatarUploader")
 
   const [currentStep, setCurrentStep] = useState<StepId>(1)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const [fullName, setFullName] = useState(initialName ?? '')
-  const [phone, setPhone] = useState(initialPhone ?? '')
-  const [rollNo, setRollNo] = useState(initialRollNo ?? '')
+  const [fullName, setFullName] = useState(initialName ?? "")
+  const [phone, setPhone] = useState(initialPhone ?? "")
+  const [rollNo, setRollNo] = useState(initialRollNo ?? "")
 
-  const [year, setYear] = useState(initialYear ?? '')
-  const [department, setDepartment] = useState(initialDepartment ?? '')
+  const [year, setYear] = useState(initialYear ?? "")
+  const [department, setDepartment] = useState(initialDepartment ?? "")
 
-  const [secretariatRole, setSecretariatRole] = useState<SecretariatRole | ''>(
-    (initialSecretariatRole as SecretariatRole | undefined) || '',
+  const [secretariatRole, setSecretariatRole] = useState<SecretariatRole | "">(
+    (initialSecretariatRole as SecretariatRole | undefined) || "",
   )
-  const [office, setOffice] = useState(initialOffice ?? '')
-  const [officeRank, setOfficeRank] = useState<'HEAD' | 'DEPUTY' | ''>('')
-  const [tagline, setTagline] = useState('')
+
+  const [office, setOffice] = useState<OfficeKey | "">(
+    (initialOffice as OfficeKey | null) || "",
+  )
+  const [officeRank, setOfficeRank] = useState<"HEAD" | "DEPUTY" | "">("")
+  const [tagline, setTagline] = useState("")
 
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
@@ -113,22 +130,22 @@ export function RoleOnboarding({
     setCurrentStep((prev) => (prev - 1) as StepId)
   }
 
-  const roleLabel = (value: SecretariatRole | '') => {
+  const roleLabel = (value: SecretariatRole | "") => {
     switch (value) {
-      case 'PRESIDENT':
-        return 'President'
-      case 'SECRETARY_GENERAL':
-        return 'Secretary General'
-      case 'DIRECTOR_GENERAL':
-        return 'Director General'
-      case 'TEACHER':
-        return 'Teacher in Charge'
-      case 'USG':
-        return 'Under Secretary‑General'
-      case 'MEMBER':
-        return 'Member'
+      case "PRESIDENT":
+        return "President"
+      case "SECRETARY_GENERAL":
+        return "Secretary General"
+      case "DIRECTOR_GENERAL":
+        return "Director General"
+      case "TEACHER":
+        return "Teacher in Charge"
+      case "USG":
+        return "Under Secretary‑General"
+      case "MEMBER":
+        return "Member"
       default:
-        return 'Select role'
+        return "Select role"
     }
   }
 
@@ -149,7 +166,7 @@ export function RoleOnboarding({
 
   const handleSave = async () => {
     if (!fbUser) {
-      setError('You are not signed in.')
+      setError("You are not signed in.")
       return
     }
     if (!canContinueFromStep(3)) {
@@ -170,17 +187,17 @@ export function RoleOnboarding({
             avatarUrl = result[0].url
           }
         } catch (uploadErr: any) {
-          console.error('avatar upload error', uploadErr)
+          console.error("avatar upload error", uploadErr)
           setError(
             uploadErr?.message ||
-              'Could not upload avatar. You can try again or continue without it.',
+              "Could not upload avatar. You can try again or continue without it.",
           )
         }
       }
 
-      const res = await fetch('/api/secretariat/onboarding', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/secretariat/onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           uid: fbUser.uid,
           email: fbUser.email,
@@ -191,7 +208,7 @@ export function RoleOnboarding({
           year,
           secretariatRole: secretariatRole || memberRole,
           office: secretariatRole === usgRole ? office : null,
-          officeRank: secretariatRole === usgRole ? officeRank : '',
+          officeRank: secretariatRole === usgRole ? officeRank : "",
           tagline,
           avatarUrl,
         }),
@@ -199,12 +216,12 @@ export function RoleOnboarding({
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || 'Could not save profile')
+        throw new Error(data.error || "Could not save profile")
       }
 
-      router.push('/dashboard')
+      router.push("/dashboard")
     } catch (e: any) {
-      setError(e?.message || 'Could not save profile')
+      setError(e?.message || "Could not save profile")
     } finally {
       setSaving(false)
     }
@@ -220,12 +237,12 @@ export function RoleOnboarding({
             key={step.id}
             type="button"
             className={cn(
-              'flex items-center gap-2 rounded-full border px-3 py-1 text-xs transition-colors',
+              "flex items-center gap-2 rounded-full border px-3 py-1 text-xs transition-colors",
               isActive
-                ? 'border-sky-500 bg-sky-50 text-sky-900'
+                ? "border-sky-500 bg-sky-50 text-sky-900"
                 : isDone
-                ? 'border-emerald-500/70 bg-emerald-50 text-emerald-900'
-                : 'border-transparent bg-muted/60 text-muted-foreground',
+                ? "border-emerald-500/70 bg-emerald-50 text-emerald-900"
+                : "border-transparent bg-muted/60 text-muted-foreground",
             )}
             onClick={() => {
               if (idx <= steps.findIndex((s) => s.id === currentStep)) {
@@ -265,10 +282,10 @@ export function RoleOnboarding({
       >
         <Card
           className={cn(
-            'h-full cursor-pointer border px-3 py-3 text-xs transition-all',
+            "h-full cursor-pointer border px-3 py-3 text-xs transition-all",
             selected
-              ? 'border-sky-600 bg-sky-50/80 shadow-sm'
-              : 'hover:border-sky-300 hover:bg-slate-50',
+              ? "border-sky-600 bg-sky-50/80 shadow-sm"
+              : "hover:border-sky-300 hover:bg-slate-50",
           )}
         >
           <div className="flex items-start justify-between gap-3">
@@ -280,16 +297,16 @@ export function RoleOnboarding({
             </div>
             <span
               className={cn(
-                'mt-0.5 h-6 w-6 rounded-full border-2',
+                "mt-0.5 h-6 w-6 rounded-full border-2",
                 selected
-                  ? 'border-sky-600 bg-sky-500/10'
-                  : 'border-muted bg-background',
+                  ? "border-sky-600 bg-sky-500/10"
+                  : "border-muted bg-background",
               )}
             >
               <span
                 className={cn(
-                  'ml-1 mt-1 block h-3 w-3 rounded-full',
-                  selected ? accent : 'bg-transparent',
+                  "ml-1 mt-1 block h-3 w-3 rounded-full",
+                  selected ? accent : "bg-transparent",
                 )}
               />
             </span>
@@ -300,9 +317,7 @@ export function RoleOnboarding({
   }
 
   const previewRole =
-    secretariatRole
-      ? roleLabel(secretariatRole)
-      : 'Not set yet'
+    secretariatRole ? roleLabel(secretariatRole) : "Not set yet"
 
   return (
     <div className="min-h-[520px] bg-muted/40">
@@ -315,7 +330,8 @@ export function RoleOnboarding({
                 Secretariat profile setup
               </h1>
               <p className="mt-2 max-w-xl text-xs text-muted-foreground sm:text-sm">
-                Answer a few quick questions so your role, department, and permissions are set up correctly for this SEC‑MUN cycle.
+                Answer a few quick questions so your role, department, and
+                permissions are set up correctly for this SEC‑MUN cycle.
               </p>
             </div>
             <div className="mt-2 sm:mt-0">
@@ -326,7 +342,7 @@ export function RoleOnboarding({
           <div className="mt-4 space-y-2">
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>
-                Step {steps.findIndex((s) => s.id === currentStep) + 1} of{' '}
+                Step {steps.findIndex((s) => s.id === currentStep) + 1} of{" "}
                 {steps.length}
               </span>
               <span>{steps.find((s) => s.id === currentStep)?.label}</span>
@@ -342,7 +358,7 @@ export function RoleOnboarding({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.25, ease: 'easeOut' }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
                 className="space-y-5"
               >
                 {currentStep === 1 && (
@@ -352,7 +368,8 @@ export function RoleOnboarding({
                         How should we address you?
                       </p>
                       <p className="text-xs text-muted-foreground sm:text-sm">
-                        This name appears across the dashboard, directory, and certificates.
+                        This name appears across the dashboard, directory, and
+                        certificates.
                       </p>
                     </div>
 
@@ -367,7 +384,7 @@ export function RoleOnboarding({
                               className="h-16 w-16 rounded-full object-cover"
                             />
                           ) : (
-                            (fullName || 'S')[0]
+                            (fullName || "S")[0]
                           )}
                         </div>
                       </div>
@@ -386,7 +403,8 @@ export function RoleOnboarding({
                           onChange={handleAvatarChange}
                         />
                         <p className="text-[11px] text-muted-foreground">
-                          Max {MAX_SIZE_MB} MB. Square images work best. You can change this later from your profile.
+                          Max {MAX_SIZE_MB} MB. Square images work best. You can
+                          change this later from your profile.
                         </p>
                       </div>
                     </div>
@@ -432,10 +450,11 @@ export function RoleOnboarding({
                         Where are you in college right now?
                       </p>
                       <p className="text-xs text-muted-foreground sm:text-sm">
-                        This helps with allocations, communication, and reporting.
+                        This helps with allocations, communication, and
+                        reporting.
                       </p>
                     </div>
-                    <div className="grid gap-3 sm:grid-cols-2 pt-1">
+                    <div className="grid gap-3 pt-1 sm:grid-cols-2">
                       <div className="space-y-1.5">
                         <Label htmlFor="year">Year</Label>
                         <Input
@@ -465,7 +484,8 @@ export function RoleOnboarding({
                         What kind of responsibilities do you handle?
                       </p>
                       <p className="text-xs text-muted-foreground sm:text-sm">
-                        Choose the role that best matches your Secretariat responsibilities for this SECMUN cycle.
+                        Choose the role that best matches your Secretariat
+                        responsibilities for this SECMUN cycle.
                       </p>
                     </div>
                     <div className="mt-2 grid gap-3 sm:grid-cols-2">
@@ -503,29 +523,46 @@ export function RoleOnboarding({
                       <div className="mt-4 grid gap-3 sm:grid-cols-2">
                         <div className="space-y-1.5">
                           <Label htmlFor="office">USG office</Label>
-                          <Input
+                          <select
                             id="office"
+                            className="h-9 w-full rounded-md border bg-background px-2 text-xs"
                             value={office}
-                            onChange={(e) => setOffice(e.target.value)}
-                            placeholder="e.g. Delegation Affairs, Sponsorship"
-                          />
+                            onChange={(e) =>
+                              setOffice(e.target.value as OfficeKey | "")
+                            }
+                          >
+                            <option value="">Select office</option>
+                            {officeOptions.map((key) => (
+                              <option key={key} value={key}>
+                                {officeLabels[key]}
+                              </option>
+                            ))}
+                          </select>
+                          <p className="mt-1 text-[11px] text-muted-foreground">
+                            Choose the exact office you handle. This is used in
+                            the Secretariat showcase.
+                          </p>
                         </div>
                         <div className="space-y-1.5">
                           <Label>Position</Label>
                           <div className="flex gap-2">
                             <Button
                               type="button"
-                              variant={officeRank === 'HEAD' ? 'default' : 'outline'}
+                              variant={
+                                officeRank === "HEAD" ? "default" : "outline"
+                              }
                               size="sm"
-                              onClick={() => setOfficeRank('HEAD')}
+                              onClick={() => setOfficeRank("HEAD")}
                             >
                               Head
                             </Button>
                             <Button
                               type="button"
-                              variant={officeRank === 'DEPUTY' ? 'default' : 'outline'}
+                              variant={
+                                officeRank === "DEPUTY" ? "default" : "outline"
+                              }
                               size="sm"
-                              onClick={() => setOfficeRank('DEPUTY')}
+                              onClick={() => setOfficeRank("DEPUTY")}
                             >
                               Deputy
                             </Button>
@@ -543,7 +580,8 @@ export function RoleOnboarding({
                         Anything else we should know?
                       </p>
                       <p className="text-xs text-muted-foreground sm:text-sm">
-                        Add a short line about yourself. This appears in the directory and helps others know you better.
+                        Add a short line about yourself. This appears in the
+                        directory and helps others know you better.
                       </p>
                     </div>
                     <div className="space-y-3 pt-1">
@@ -582,7 +620,7 @@ export function RoleOnboarding({
                 <button
                   type="button"
                   className="text-xs text-muted-foreground underline-offset-2 hover:underline"
-                  onClick={() => router.push('/dashboard')}
+                  onClick={() => router.push("/dashboard")}
                   disabled={saving}
                 >
                   Skip for now
@@ -605,7 +643,7 @@ export function RoleOnboarding({
                   onClick={handleSave}
                   disabled={saving}
                 >
-                  {saving ? 'Saving…' : 'Save profile'}
+                  {saving ? "Saving…" : "Save profile"}
                 </Button>
               )}
             </div>
@@ -629,22 +667,23 @@ export function RoleOnboarding({
                       className="h-9 w-9 rounded-full object-cover"
                     />
                   )}
-                  <span>{fullName || 'Your Secretariat name'}</span>
+                  <span>{fullName || "Your Secretariat name"}</span>
                 </h2>
                 <p className="text-xs text-slate-400">
-                  {previewRole} · {year || 'Year not set'} ·{' '}
-                  {department || 'Department not set'}
+                  {previewRole} · {year || "Year not set"} ·{" "}
+                  {department || "Department not set"}
                 </p>
               </div>
               <div className="mt-2 rounded-2xl bg-slate-900/80 p-4 text-xs text-slate-300">
                 <p className="font-medium">Directory card</p>
                 <p className="mt-2 text-[11px] text-slate-400">
                   {tagline ||
-                    'Add a short tagline to show your interests, committee preferences, or responsibilities.'}
+                    "Add a short tagline to show your interests, committee preferences, or responsibilities."}
                 </p>
               </div>
               <div className="mt-2 text-[11px] text-slate-500">
-                This is how you will appear in the Secretariat directory and internal tools.
+                This is how you will appear in the Secretariat directory and
+                internal tools.
               </div>
             </div>
           </Card>
