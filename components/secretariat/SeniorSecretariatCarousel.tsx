@@ -1,15 +1,16 @@
 // components/secretariat/SeniorSecretariatCarousel.tsx
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react"
 import {
   Carousel,
   Card as AppleCard,
-} from '@/components/ui/apple-cards-carousel'
+} from "@/components/ui/apple-cards-carousel"
 import {
   leadershipMembers,
   type LeadershipMember,
-} from '@/lib/secretariat/data'
+} from "@/lib/secretariat/data"
+import { BackgroundGradient } from "@/components/ui/background-gradient"
 
 type LeadershipUser = {
   _id: string
@@ -22,18 +23,18 @@ type LeadershipUser = {
   photoURL?: string
 }
 
-const DEFAULT_AVATAR = 'https://avatars.githubusercontent.com/u/9919?v=4'
+const DEFAULT_AVATAR = "https://avatars.githubusercontent.com/u/9919?v=4"
 
 function roleLabel(role: string) {
   switch (role) {
-    case 'PRESIDENT':
-      return 'President'
-    case 'SECRETARY_GENERAL':
-      return 'Secretary General'
-    case 'DIRECTOR_GENERAL':
-      return 'Director General'
-    case 'TEACHER':
-      return 'Teacher In‑Charge'
+    case "PRESIDENT":
+      return "President"
+    case "SECRETARY_GENERAL":
+      return "Secretary General"
+    case "DIRECTOR_GENERAL":
+      return "Director General"
+    case "TEACHER":
+      return "Teacher In‑Charge"
     default:
       return role
   }
@@ -44,7 +45,7 @@ function mergeMember(
   dbUsers: LeadershipUser[],
 ): LeadershipMember {
   const match = dbUsers.find(
-    (u) => u.secretariatRole === staticMember.role, // static role key e.g. 'SECRETARY_GENERAL'
+    (u) => u.secretariatRole === staticMember.role,
   )
 
   if (!match) return staticMember
@@ -52,7 +53,7 @@ function mergeMember(
   return {
     ...staticMember,
     name: match.displayName || staticMember.name,
-    role: match.secretariatRole as LeadershipMember['role'],
+    role: match.secretariatRole as LeadershipMember["role"],
     email: match.email || staticMember.email,
     phone: match.phone || staticMember.phone,
     academicDepartment:
@@ -62,32 +63,60 @@ function mergeMember(
   }
 }
 
-function toAppleCard(member: LeadershipMember) {
-  return {
-    src: member.photoUrl || DEFAULT_AVATAR,
-    title: member.name,
-    category: roleLabel(member.role),
-    content: (
-      <div className="space-y-2 text-sm text-neutral-800">
-        <p className="font-semibold">{member.name}</p>
-        <p className="text-xs font-medium text-sky-700">
-          {roleLabel(member.role)}
-        </p>
-        <p className="text-[11px] text-neutral-500">
-          {(member.academicDepartment || 'Department') +
-            (member.year ? ` · ${member.year}` : '')}
-        </p>
-        {member.tagline && (
-          <p className="pt-2 text-[11px] text-neutral-600">
-            {member.tagline}
+/**
+ * Detail layout used inside the AppleCard modal.
+ * AppleCard already shows title + category at the top,
+ * so this content starts below that and stays compact.
+ */
+function SeniorDetailContent(member: LeadershipMember) {
+  return (
+    <div className="grid max-h-[70vh] gap-6 overflow-y-auto p-6 md:grid-cols-[minmax(0,1.5fr)_minmax(0,0.9fr)] md:p-8">
+      {/* left: compact text column */}
+      <div className="flex flex-col justify-between space-y-4">
+        <div className="space-y-2">
+          {/* name + role are already rendered by AppleCard via title/category */}
+
+          <p className="text-xs text-slate-500">
+            {member.academicDepartment && <span>{member.academicDepartment}</span>}
+            {member.academicDepartment && member.year && <span> · </span>}
+            {member.year && <span>{member.year}</span>}
           </p>
-        )}
-        <div className="space-y-1 pt-3 text-[11px] text-neutral-600">
+          {member.tagline && (
+            <p className="mt-2 text-xs text-slate-600">
+              {member.tagline}
+            </p>
+          )}
+        </div>
+
+        <div className="mt-2 space-y-1 text-[11px] text-slate-500">
           <p>{member.email}</p>
           {member.phone && <p>{member.phone}</p>}
         </div>
       </div>
-    ),
+
+      {/* right: smaller 3:4 gradient photo card */}
+      <div className="flex items-center justify-center">
+        <BackgroundGradient className="relative h-[260px] w-[190px] rounded-[20px] bg-white p-2.5 dark:bg-zinc-900 sm:h-[280px] sm:w-[205px]">
+          <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-[16px] bg-slate-900/5 dark:bg-zinc-800/40">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={member.photoUrl || DEFAULT_AVATAR}
+              alt={member.name}
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </BackgroundGradient>
+      </div>
+    </div>
+  )
+}
+
+function toAppleCard(member: LeadershipMember) {
+  return {
+    src: member.photoUrl || DEFAULT_AVATAR,
+    title: member.name,                 // top heading in AppleCard
+    category: roleLabel(member.role),   // small label in AppleCard
+    content: <SeniorDetailContent {...member} />,
   }
 }
 
@@ -97,11 +126,11 @@ export function SeniorSecretariatCarousel() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch('/api/secretariat/leadership')
+        const res = await fetch("/api/secretariat/leadership")
         const data = await res.json()
         if (res.ok && Array.isArray(data.users)) setDbUsers(data.users)
       } catch (e) {
-        console.error('leadership fetch error', e)
+        console.error("leadership fetch error", e)
       }
     }
     load()

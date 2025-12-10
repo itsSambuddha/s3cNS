@@ -5,8 +5,8 @@ import React, { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion } from "motion/react"
-
 import { cn } from "@/lib/utils"
+import { useAppUser } from "@/hooks/useAppUser"
 import {
   IconLayoutDashboard,
   IconCalendarTime,
@@ -17,7 +17,6 @@ import {
   IconUsersGroup,
   IconShield,
 } from "@tabler/icons-react"
-import { SidebarUserPillRemote } from "@/components/layout/SidebarUserPillRemote"
 
 const baseLinks = [
   { href: "/dashboard", label: "Overview", icon: IconLayoutDashboard },
@@ -29,23 +28,18 @@ const baseLinks = [
   { href: "/directory", label: "Directory", icon: IconUsersGroup },
 ]
 
-// Secretariat and admin links are static; visibility is handled on the pages
+// Secretariat-only links; shown only when user has a secretariatRole
 const secretariatLinks = [
-  {
-    href: "/secretariat/directory",
-    label: "Secretariat Directory",
-  },
-  {
-    href: "/secretariat/usg-approvals",
-    label: "USG Approvals",
-  },
-  {
-    href: "/profile",
-    label: "Edit Profile",
-  },
+  { href: "/secretariat/directory", label: "Secretariat Directory" },
+
+  { href: "/profile", label: "Edit My profile" },
 ]
 
-const adminLinks = [{ href: "/admin", label: "Admin", icon: IconShield }]
+// Admin-only links; shown only when role === "ADMIN"
+const adminLinks = [
+  { href: "/admin", label: "Admin Controls", icon: IconShield },
+    { href: "/secretariat/usg-approvals", label: "USG Approvals" },
+]
 
 type AnyLink = {
   href: string
@@ -54,19 +48,34 @@ type AnyLink = {
   section?: "Navigation" | "Secretariat" | "Admin"
 }
 
+type DbUser = {
+  role?: string | null
+  secretariatRole?: string | null   // must match your Mongo field name
+}
+
+// dbUser should be null when logged out
 export default function Sidebar() {
   const pathname = usePathname()
   const [hovered, setHovered] = useState(false)
   const open = hovered
+  const { user: appUser, loading } = useAppUser()
+
+  const isLoggedIn = !!appUser
+  const isAdmin = appUser?.role === "ADMIN"
+  const isSecretariat = Boolean(appUser?.secretariatRole)
 
   const allLinks: AnyLink[] = [
     ...baseLinks.map((l) => ({ ...l, section: "Navigation" as const })),
-    ...secretariatLinks.map((l) => ({
-      ...l,
-      icon: IconUsersGroup,
-      section: "Secretariat" as const,
-    })),
-    ...adminLinks.map((l) => ({ ...l, section: "Admin" as const })),
+    ...(isLoggedIn && isSecretariat
+      ? secretariatLinks.map((l) => ({
+          ...l,
+          icon: IconUsersGroup,
+          section: "Secretariat" as const,
+        }))
+      : []),
+    ...(isLoggedIn && isAdmin
+      ? adminLinks.map((l) => ({ ...l, section: "Admin" as const }))
+      : []),
   ]
 
   if (!allLinks.length) return null
@@ -83,12 +92,12 @@ export default function Sidebar() {
           "dark:border-white/10 dark:bg-white/5 dark:shadow-[0_18px_60px_rgba(0,0,0,0.7)]",
         )}
       >
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-slate-400/40 to-transparent dark:via-slate-500/60" />
-
+        {/* logo */}
         <div className="px-3 pt-4">
           {open ? <Logo /> : <LogoIcon />}
         </div>
 
+        {/* links */}
         <div className="mt-4 flex-1 overflow-y-auto px-2 pb-4">
           <Section
             title="Navigation"
@@ -98,7 +107,7 @@ export default function Sidebar() {
             open={open}
           />
 
-          {allLinks.some((l) => l.section === "Secretariat") && (
+          {isLoggedIn && isSecretariat && (
             <Section
               title="Secretariat"
               showTitle={open}
@@ -108,7 +117,7 @@ export default function Sidebar() {
             />
           )}
 
-          {allLinks.some((l) => l.section === "Admin") && (
+          {isLoggedIn && isAdmin && (
             <Section
               title="Admin Controls"
               showTitle={open}
@@ -119,10 +128,7 @@ export default function Sidebar() {
           )}
         </div>
 
-        {/* footer: isolated pill that fetches its own data */}
-        <div className="border-t border-slate-200/70 px-2 py-3 dark:border-slate-700/70">
-          <SidebarUserPillRemote />
-        </div>
+        {/* footer pill intentionally omitted for now */}
       </motion.div>
     </aside>
   )

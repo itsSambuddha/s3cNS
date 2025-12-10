@@ -17,36 +17,35 @@ export function SidebarUserPillRemote() {
   const [user, setUser] = useState<DbUser | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    let cancelled = false
+useEffect(() => {
+  let cancelled = false
 
-    const load = async () => {
-      try {
-        const res = await fetch("/api/users/me", { cache: "no-store" })
-        if (!res.ok) {
-          const text = await res.text().catch(() => "")
-          alert(
-            `SidebarUserPill: /api/users/me failed\nstatus=${res.status}\nbody=${text}`,
-          )
-          if (!cancelled) setUser(null)
-          return
-        }
-        const data = await res.json()
-        alert(`SidebarUserPill: success\n${JSON.stringify(data, null, 2)}`)
-        if (!cancelled) setUser(data.user ?? null)
-      } catch (e: any) {
-        alert(`SidebarUserPill: fetch error\n${e?.message || String(e)}`)
+  const load = async () => {
+    console.log("SidebarUserPill: fetching /api/users/me")
+    try {
+      const res = await fetch("/api/users/me", { cache: "no-store" })
+      console.log("SidebarUserPill: status", res.status)
+      if (!res.ok) {
         if (!cancelled) setUser(null)
-      } finally {
-        if (!cancelled) setLoading(false)
+        return
       }
+      const data = await res.json()
+      console.log("SidebarUserPill: data", data)
+      if (!cancelled) setUser(data.user ?? null)
+    } catch (e) {
+      console.error("SidebarUserPill error", e)
+      if (!cancelled) setUser(null)
+    } finally {
+      if (!cancelled) setLoading(false)
     }
+  }
 
-    load()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+  load()
+  return () => {
+    cancelled = true
+  }
+}, [])
+
 
   if (loading || !user) return null
 
@@ -63,6 +62,9 @@ export function SidebarUserPillRemote() {
   const secRole = user.secretariatRole ?? undefined
   const office = user.office ?? undefined
 
+  // Admin: show role only
+  // Office bearer: show office only
+  // Others: role · secretariatRole (if both)
   let subtitle = ""
   if (role === "ADMIN") {
     subtitle = role
