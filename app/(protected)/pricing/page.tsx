@@ -53,7 +53,7 @@ export default function PricingPage() {
 
           </p>
           <p className="mx-auto max-w-2xl text-sm text-slate-400 md:text-base">
-            One simple free plan for the Secretariat, plus an optional tip jar for
+            BTW this is a simple free plan for the Secretariat, plus an optional tip jar for
             ongoing development.
           </p>
         </motion.div>
