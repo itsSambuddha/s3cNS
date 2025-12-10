@@ -10,13 +10,16 @@ import { firebaseAuth } from '@/lib/auth/firebase'
 import { SeniorSecretariatCarousel } from '@/components/secretariat/SeniorSecretariatCarousel'
 import { SecretariatMembersShowcase } from '@/components/secretariat/SecretariatMembersShowcase'
 import { LandingNavbar } from '@/components/layout/LandingNavbar'
-import { LampSection } from '@/components/landing/LampSection'
+
 import { Hero } from '@/components/landing/Hero'
 import { SecmunFeatures } from '@/components/landing/secmunFeatures'
 import { SecmunGlobe } from '@/components/landing/secmunGlobe'
+import { LampContainer } from '@/components/ui/lamp'
+import { Lamp } from 'lucide-react'
+import { LampSection } from '@/components/landing/LampSection'
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0 },
 }
 
@@ -126,17 +129,10 @@ export default function LandingPage() {
         viewport={{ once: true, amount: 0.25 }}
         variants={staggerContainer}
       >
-        <motion.div className="mb-6 space-y-3" variants={fadeInUp}>
-          <h2 className="text-2xl font-semibold sm:text-3xl">
-            Everything your SECMUN secretariat needs.
-          </h2>
-          <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Clear areas instead of dozens of menus. Each group below expands
-            into focused modules inside the dashboard.
-          </p>
-        </motion.div>
+{/* <LampSection /> */}
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+
+        {/* <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {[
             { title: 'Operations', desc: 'Tasks, meetings, and feedback workflows.' },
             { title: 'Events', desc: 'SEC‑NEXUS events and delegate CRM.' },
@@ -162,7 +158,7 @@ export default function LandingPage() {
               </p>
             </motion.div>
           ))}
-        </div>
+        </div> */}
       </motion.section>
           <SecmunFeatures />
           <SecmunGlobe />
