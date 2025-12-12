@@ -28,7 +28,7 @@ export function Footer({ className }: { className?: string }) {
           {/* brand */}
           <div className="space-y-4 md:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2">
-              <img src="/logo.svg" alt="s3cNS" className="h-10 w-10" />
+              <img src="/logo/s3cnsLogo.svg" alt="s3cNS" className="h-10 w-10" />
               <span className="text-lg font-semibold tracking-tight">s3cNS</span>
             </Link>
             <p className="text-sm text-slate-400">

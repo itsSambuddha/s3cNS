@@ -57,13 +57,15 @@ export default function Navbar() {
                 exit={{ opacity: 0, y: 8 }}
                 transition={{ type: 'spring', stiffness: 360, damping: 30 }}
               >
-                <div className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
+                <div className="mt-2 flex items-center gap-2">
+                  {/* <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
                     S3
-                  </span>
+                    
+                  </span> */}
+                  <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-15 w-25 rounded-lg"/>
                   <div className="flex flex-col leading-tight">
-                    <span className="text-sm font-semibold">s3cNS</span>
-                    <span className="text-[11px] text-muted-foreground">
+                    <span className="text-m font-semibold">s3cNS</span>
+                    <span className="text-[12px] text-muted-foreground">
                       SECMUN Platform
                     </span>
                   </div>
@@ -114,12 +116,10 @@ export default function Navbar() {
               >
                 <div className="flex max-w-xl flex-1 items-center justify-between rounded-full border bg-background px-5 py-2 shadow-sm">
                   <div className="flex items-center gap-2">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
-                      S3
-                    </span>
+<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>
                     <div className="flex flex-col leading-tight">
                       <span className="text-sm font-semibold">s3cNS</span>
-                      <span className="text-[11px] text-muted-foreground">
+                      <span className="text-[10px] text-muted-foreground">
                         SECMUN Platform
                       </span>
                     </div>
