@@ -1,6 +1,7 @@
 # s3cNS - SECMUN Secretariat Management System
 
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/your-org/s3cns)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-s3cns.vercel.app-blue)](https://s3cns.vercel.app/)
 [![Next.js](https://img.shields.io/badge/Next.js-16.0.7-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-7.0-green)](https://www.mongodb.com/)
