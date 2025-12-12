@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Cabin } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/Providers"
+import { Footer } from "@/components/layout/Footer"
 
 const cabin = Cabin({ subsets: ["latin"] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       </head>
       <body className={cabin.className}>
         <Providers>{children}</Providers>
+        <Footer />
       </body>
     </html>
   )
