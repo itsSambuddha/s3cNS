@@ -17,6 +17,7 @@ import { SecmunGlobe } from '@/components/landing/secmunGlobe'
 import { LampContainer } from '@/components/ui/lamp'
 import { Lamp } from 'lucide-react'
 import { LampSection } from '@/components/landing/LampSection'
+import { PwaInstallButton } from '@/components/ui/PwaInstallButton'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 18 },
@@ -188,11 +189,14 @@ export default function LandingPage() {
                   Logout
                 </Button>
               ) : (
-                <Link href="/login">
-                  <Button size="lg" className="w-full sm:w-auto">
-                    Sign in now
-                  </Button>
-                </Link>
+                <div className="flex gap-4">
+                  <Link href="/login">
+                    <Button size="lg" className="w-full sm:w-auto">
+                      Sign in now
+                    </Button>
+                  </Link>
+                  <PwaInstallButton />
+                </div>
               )
             )}
           </div>
