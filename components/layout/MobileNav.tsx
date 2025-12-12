@@ -108,7 +108,7 @@ export default function MobileNav() {
                 S3
               </span>
               <div className="flex flex-col leading-tight">
-                <span className="text-sm font-semibold">s3cNS</span>
+<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>;
                 <span className="text-[11px] text-muted-foreground">
                   SECMUN Platform
                 </span>
