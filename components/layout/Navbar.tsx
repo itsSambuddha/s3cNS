@@ -172,9 +172,7 @@ export default function Navbar() {
         {/* MOBILE */}
         <div className="flex h-14 items-center justify-between sm:hidden">
           <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
-              S3
-            </span>
+<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>
             <span className="text-sm font-semibold">s3cNS</span>
           </div>
           <MobileNav />

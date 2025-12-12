@@ -104,11 +104,9 @@ export default function MobileNav() {
           {/* Brand */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
-                S3
-              </span>
+<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>
               <div className="flex flex-col leading-tight">
-<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>;
+                <span className="text-sm font-semibold">s3cNS</span>
                 <span className="text-[11px] text-muted-foreground">
                   SECMUN Platform
                 </span>
