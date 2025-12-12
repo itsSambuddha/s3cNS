@@ -6,7 +6,10 @@ import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 import { useAppUser } from '@/hooks/useAppUser'
+import { usePushRegistration } from '@/hooks/usePushRegistration'
 import { FinanceCard } from './FinanceCard'
+
+
 
 const pageStagger = {
   hidden: {},
@@ -29,6 +32,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const { user: fbUser, loading: authLoading } = useAuth()
   const { user: appUser, loading: appLoading } = useAppUser()
+  usePushRegistration()
 
   if (authLoading || appLoading) {
     return (

@@ -1,5 +1,6 @@
 // lib/firebase/admin.ts
 import { initializeApp, getApps, cert } from 'firebase-admin/app'
+import { getMessaging } from 'firebase-admin/messaging'
 
 export function initFirebaseAdmin() {
   if (getApps().length) return
@@ -27,3 +28,7 @@ export function initFirebaseAdmin() {
     }),
   })
 }
+
+initFirebaseAdmin()
+
+export const adminMessaging = getMessaging()

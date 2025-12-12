@@ -37,6 +37,7 @@ export interface IUser extends Document {
   email: string
   displayName?: string
   photoURL?: string
+  fcmToken?: string
   role: AppRole
 
   // Academic + personal
@@ -58,6 +59,16 @@ export interface IUser extends Document {
   canManageFinance: boolean
   canManageEvents: boolean
 
+  notificationPreferences?: {
+    pushEnabled?: boolean
+    budget?: boolean
+    approvals?: boolean
+    events?: boolean
+    tasks?: boolean
+    security?: boolean
+    announcements?: boolean
+  },
+
   createdAt: Date
   updatedAt: Date
 }
@@ -70,6 +81,7 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, index: true },
     displayName: { type: String },
     photoURL: { type: String },
+    fcmToken: { type: String },
     role: {
       type: String,
       enum: ['ADMIN', 'LEADERSHIP', 'TEACHER', 'OFFICE_BEARER', 'MEMBER'],
@@ -121,6 +133,16 @@ const UserSchema = new Schema<IUser>(
     canApproveUSG: { type: Boolean, default: false },
     canManageFinance: { type: Boolean, default: false },
     canManageEvents: { type: Boolean, default: false },
+
+    notificationPreferences: {
+      pushEnabled: { type: Boolean, default: true },
+      budget: { type: Boolean, default: true },
+      approvals: { type: Boolean, default: true },
+      events: { type: Boolean, default: true },
+      tasks: { type: Boolean, default: true },
+      security: { type: Boolean, default: true },
+      announcements: { type: Boolean, default: true },
+    },
   },
   { timestamps: true }
 )

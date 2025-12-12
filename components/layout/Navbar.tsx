@@ -10,6 +10,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { signOut } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/auth/firebase'
 import MobileNav from './MobileNav'
+import { NotificationBell } from '@/components/notifications/NotificationBell'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -90,9 +91,12 @@ export default function Navbar() {
 
                   {!loading && (
                     user ? (
-                      <Button size="sm" variant="outline" onClick={handleLogout}>
-                        Logout
-                      </Button>
+                      <>
+                        <NotificationBell />
+                        <Button size="sm" variant="outline" onClick={handleLogout}>
+                          Logout
+                        </Button>
+                      </>
                     ) : (
                       <Link href="/login">
                         <Button size="sm" variant="outline">
@@ -118,10 +122,10 @@ export default function Navbar() {
                   <div className="flex items-center gap-2">
 <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>
                     <div className="flex flex-col leading-tight">
-                      <span className="text-sm font-semibold">s3cNS</span>
+                      {/* <span className="text-sm font-semibold">s3cNS</span>
                       <span className="text-[10px] text-muted-foreground">
                         SECMUN Platform
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                   <nav className="flex items-center gap-4 text-sm">
@@ -144,9 +148,12 @@ export default function Navbar() {
 
                     {!loading && (
                       user ? (
-                        <Button size="sm" onClick={handleLogout}>
-                          Logout
-                        </Button>
+                        <>
+                          <NotificationBell />
+                          <Button size="sm" onClick={handleLogout}>
+                            Logout
+                          </Button>
+                        </>
                       ) : (
                         <Link href="/login">
                           <Button size="sm">

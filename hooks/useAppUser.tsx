@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from './useAuth'
 
 export type AppUser = {
+  _id: string
   uid: string
   email: string
   displayName?: string
