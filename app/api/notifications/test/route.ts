@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
     await sendNotificationToUser(String(userId), {
       category: "ANNOUNCEMENT",
-      title: "SEC-MUN test notification",
+      title: "SECMUN test notification",
       body: "If you see this, push is working.",
       url: "/dashboard",
     });

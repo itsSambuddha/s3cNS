@@ -374,7 +374,7 @@ export function FinanceRecordsPage() {
       {activeTab === 'budgets' && (
         <motion.div variants={fadeInUp}>
           <BudgetDesigner
-            eventName="SEC-MUN 2026"
+            eventName="SECMUN 2026"
           />
         </motion.div>
       )}
@@ -524,7 +524,7 @@ export function FinanceRecordsPage() {
                   New expense
                 </p>
                 <p className="text-sm font-semibold">
-                  Log a transaction for this SEC‑MUN cycle
+                  Log a transaction for this SECMUN cycle
                 </p>
               </div>
               <Button
@@ -543,7 +543,7 @@ export function FinanceRecordsPage() {
                   id="eventName"
                   value={eventName}
                   onChange={(e) => setEventName(e.target.value)}
-                  placeholder="e.g. SEC‑MUN 2026, Training Camp, Intra MUN"
+                  placeholder="e.g. SECMUN 2026, Training Camp, Intra MUN"
                 />
               </div>
 

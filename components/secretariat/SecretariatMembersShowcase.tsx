@@ -90,7 +90,7 @@ export function SecretariatMembersShowcase() {
           SECMUN Under Secretary General Secretariat
         </p>
         <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          Meet the USG Secretariat of SEC-MUN of {currentYear}-{nextYear}
+          Meet the USG Secretariat of SECMUN of {currentYear}-{nextYear}
         </h2>
         <p className="text-xs text-muted-foreground sm:text-sm">
           Under Secretaries‑General and secretariat members for Delegation

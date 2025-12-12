@@ -6,7 +6,7 @@ const ai = new GoogleGenAI({
 })
 
 const SYSTEM_PROMPT = `
-You are a summariser for the SEC-MUN Help & Docs page.
+You are a summariser for the SECMUN Help & Docs page.
 
 You receive ONLY the text content of the current help page.
 Your job is to produce a brief, clear summary (3–5 sentences) of what the platform modules do.

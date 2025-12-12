@@ -35,7 +35,7 @@ type Proposal = {
 
 function emptyProposal(): Proposal {
   return {
-    title: 'New SEC-MUN Finance Proposal',
+    title: 'New SECMUN Finance Proposal',
     eventName: '',
     toEmails: [],
     status: 'DRAFT',
@@ -305,7 +305,7 @@ export default function FinanceProposalsPage() {
               >
                 <p className="line-clamp-1 font-medium">{p.title}</p>
                 <p className="line-clamp-1 text-[11px] text-muted-foreground">
-                  {p.eventName || 'SEC-MUN event'} · {p.status}
+                  {p.eventName || 'SECMUN event'} · {p.status}
                 </p>
               </button>
             ))}
@@ -329,7 +329,7 @@ export default function FinanceProposalsPage() {
               onChange={(e) =>
                 setDraft((prev) => ({ ...prev, eventName: e.target.value }))
               }
-              placeholder="Event name (e.g. SEC-MUN 2026)"
+              placeholder="Event name (e.g. SECMUN 2026)"
               className="h-8 text-xs"
             />
             <Input

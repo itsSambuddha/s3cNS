@@ -426,7 +426,7 @@ export function BudgetDesigner({
           >
             Print Budget
           </Button>
-          <BudgetActions items={items} eventName={eventName || 'SEC-MUN Event'} />
+          <BudgetActions items={items} eventName={eventName || 'SECMUN Event'} />
         </div>
         <div className="mt-4 flex items-center justify-end gap-2 text-xs">
           <Button

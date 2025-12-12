@@ -110,10 +110,10 @@ export function Footer({ className }: { className?: string }) {
               <li className="flex items-start gap-2">
                 <Mail className="mt-[2px] h-4 w-4 text-sky-400" />
                 <a
-                  href="mailto:secretariat@secmun.in"
+                  href="mailto:sidhusamsk@gmail.com"
                   className="hover:text-slate-100"
                 >
-                  secretariat@secmun.in
+                  sidhusamsk@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
@@ -170,26 +170,26 @@ export function Footer({ className }: { className?: string }) {
               </Link>
               <div className="ml-2 flex items-center gap-3 text-slate-400">
                 <a
-                  href="https://instagram.com"
+                  href="https://instagram.com/secmun2024"
                   aria-label="Instagram"
                   className="hover:text-slate-100"
                 >
                   <Instagram className="h-4 w-4" />
                 </a>
-                <a
+                {/* <a
                   href="https://twitter.com"
                   aria-label="Twitter"
                   className="hover:text-slate-100"
                 >
                   <Twitter className="h-4 w-4" />
-                </a>
-                <a
+                </a> */}
+                {/* <a
                   href="https://linkedin.com"
                   aria-label="LinkedIn"
                   className="hover:text-slate-100"
                 >
                   <Linkedin className="h-4 w-4" />
-                </a>
+                </a> */}
               </div>
             </div>
           </div>

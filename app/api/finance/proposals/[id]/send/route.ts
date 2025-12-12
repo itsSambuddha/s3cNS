@@ -62,7 +62,7 @@ export async function POST(_req: Request, { params }: RouteParams) {
 
     const subject =
       proposal.title ||
-      `Finance proposal for ${proposal.eventName || 'SEC-MUN event'}`
+      `Finance proposal for ${proposal.eventName || 'SECMUN event'}`
 
     console.log('Sending email to:', proposal.toEmails, 'subject:', subject)
 

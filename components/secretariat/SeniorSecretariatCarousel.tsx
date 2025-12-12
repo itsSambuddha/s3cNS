@@ -154,7 +154,7 @@ export function SeniorSecretariatCarousel() {
           SECMUN Senior Secretariat
         </p>
         <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          Meet the Senior Secretariat of SEC-MUN of {currentYear}-{nextYear}
+          Meet the Senior Secretariat of SECMUN of {currentYear}-{nextYear}
         </h2>
         <p className="text-xs text-muted-foreground sm:text-sm">
           President, Secretary General, Director General, and Teachers in
