@@ -8,9 +8,11 @@
 
 A comprehensive web application for managing St Edmund's College Model United Nations (SECMUN) secretariat activities, built with modern web technologies.
 
-## What is s3cNS?
+## What is s3cNS?*
 
-s3cNS (SECMUN Secretariat Next-gen System) is a unified platform that transforms how SECMUN secretariat operates. It replaces scattered spreadsheets, manual processes, and disconnected systems with a single, mobile-ready application that captures every action with an audit trail and clear ownership.
+s3cNS *(SECMUN Secretariat Next-gen System)* is a unified platform that transforms how SECMUN secretariat operates within St. Edmund's College. It replaces scattered spreadsheets, manual processes, and disconnected systems with a single, mobile-ready application that captures every action with an audit trail and clear ownership.
+
+![s3cNS](https://socialify.git.ci/itsSambuddha/s3cNS/image?font=Jost&language=1&name=1&owner=1&pattern=Circuit+Board&stargazers=1&theme=Auto)
 
 ### Key Features
 
@@ -21,6 +23,7 @@ s3cNS (SECMUN Secretariat Next-gen System) is a unified platform that transforms
 - **🔔 Notifications**: Push notifications and automated alerts
 - **📱 PWA Support**: Installable web app for mobile access
 - **🔐 Role-Based Access**: Secure authentication with Firebase and granular permissions
+- **And More...**
 
 ## Why s3cNS?
 
@@ -95,6 +98,7 @@ s3cNS (SECMUN Secretariat Next-gen System) is a unified platform that transforms
 5. **Open your browser**
 
    Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+   
 
 ### Database Setup
 
@@ -194,3 +198,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Ready to streamline SECMUN operations?** Sign in to s3cNS and experience the future of secretariat management.
+
+## Demo
+
+https://s3cns.vercel.app/ 
+##### ***Click on the Link Above to get a Demo of the platform*** 
+
