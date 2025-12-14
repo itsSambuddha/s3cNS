@@ -1,4 +1,10 @@
-# TODO
+# TODO: Implement Select Event Dropdown in DA Module
 
-- Install the `mongoose` package by running `npm install mongoose`. This is a required dependency for the new notification feature.
-- Create core data models and helpers for the Delegate Affairs (DA) system: Event, Committee, Portfolio, DelegateRegistration models, DA access helper, WhatsApp helper, allotment email helper.
+## Tasks
+- [x] Update API response format in app/api/events/route.ts to match { success, data, message }
+- [x] Update Event interface in app/(protected)/da/page.tsx to include all fields
+- [x] Add eventsError state in DaPage component
+- [x] Update useEffect to handle new API response, error handling, and auto-select first event
+- [x] Update Select component to display error state
+- [x] Test loading, empty, and error states
+- [x] Verify selectedEventId is passed to child components

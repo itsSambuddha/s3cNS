@@ -67,8 +67,12 @@ export function EventsTab() {
       try {
         const res = await fetch("/api/events")
         if (res.ok) {
-          const data = await res.json()
-          setEvents(data)
+          const apiResponse = await res.json()
+          if (apiResponse.success) {
+            setEvents(apiResponse.data || [])
+          } else {
+            console.error("Failed to fetch events:", apiResponse.message)
+          }
         }
       } catch (err) {
         console.error("Failed to load events", err)

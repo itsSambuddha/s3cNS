@@ -12,6 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AlertCircle, Loader2 } from "lucide-react"
 import { EventsTab } from "@/components/da/EventsTab"
 import { RegistrationsTab } from "@/components/da/RegistrationsTab"
 import { AllotmentsTab } from "@/components/da/AllotmentsTab"
@@ -23,6 +25,11 @@ interface Event {
   code: string
   type: string
   status: string
+  startDate?: string
+  endDate?: string
+  venue?: string
+  owningOffice: string
+  activeCommitteeIds: string[]
 }
 
 // Stub components
@@ -53,18 +60,32 @@ export default function DaPage() {
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("events")
   const [eventsLoading, setEventsLoading] = useState(true)
+  const [eventsError, setEventsError] = useState<string | null>(null)
 
   // Load events
   useEffect(() => {
     async function loadEvents() {
+      setEventsLoading(true)
+      setEventsError(null)
       try {
-        const res = await fetch("/api/events")
-        if (res.ok) {
-          const data = await res.json()
-          setEvents(data)
+        const res = await fetch("/api/events", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        const apiResponse = await res.json()
+        if (apiResponse.success) {
+          const eventArray = apiResponse.data || []
+          setEvents(eventArray)
+          if (eventArray.length > 0) {
+            setSelectedEventId(eventArray[0]._id)
+          }
+        } else {
+          setEventsError(apiResponse.message || "Failed to fetch events")
         }
       } catch (err) {
         console.error("Failed to load events", err)
+        setEventsError("Network error occurred while fetching events")
       } finally {
         setEventsLoading(false)
       }
@@ -107,7 +128,10 @@ export default function DaPage() {
             </SelectTrigger>
             <SelectContent>
               {eventsLoading ? (
-                <div className="px-2 py-1 text-xs text-muted-foreground">Loading...</div>
+                <div className="flex items-center gap-2 px-2 py-1 text-xs text-muted-foreground">
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                  Loading events...
+                </div>
               ) : events.length === 0 ? (
                 <div className="px-2 py-1 text-xs text-muted-foreground">
                   No events found. Create one in the Events tab.
@@ -122,6 +146,21 @@ export default function DaPage() {
             </SelectContent>
           </Select>
         </div>
+
+        {/* Error state */}
+        {eventsError && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{eventsError}</AlertDescription>
+          </Alert>
+        )}
+
+        {/* Event count */}
+        {!eventsLoading && events.length > 0 && (
+          <p className="text-sm text-muted-foreground">
+            Showing {events.length} event(s) available
+          </p>
+        )}
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
