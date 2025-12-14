@@ -4,25 +4,27 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from './useAuth'
 
+import { SecretariatOffice } from '@/lib/db/models/User';
+// ...
 export type AppUser = {
-  _id: string
-  uid: string
-  email: string
-  displayName?: string
-  photoURL?: string
-  role: 'ADMIN' | 'LEADERSHIP' | 'TEACHER' | 'OFFICE_BEARER' | 'MEMBER'
-  phone?: string
-  rollNo?: string
-  year?: string
-  academicDepartment?: string
-  secretariatRole: 'PRESIDENT' | 'SECRETARY_GENERAL' | 'DIRECTOR_GENERAL' | 'USG' | 'TEACHER' | 'MEMBER'
-  office: string | null
-  memberStatus: 'ACTIVE' | 'ALUMNI' | 'APPLICANT' | 'REJECTED'
-  canManageMembers: boolean
-  canApproveUSG: boolean
-  canManageFinance: boolean
-  canManageEvents: boolean
-}
+  _id: string;
+  uid: string;
+  email: string;
+  displayName?: string;
+  photoURL?: string;
+  role: 'ADMIN' | 'LEADERSHIP' | 'TEACHER' | 'OFFICE_BEARER' | 'MEMBER';
+  phone?: string;
+  rollNo?: string;
+  year?: string;
+  academicDepartment?: string;
+  secretariatRole: 'PRESIDENT' | 'SECRETARY_GENERAL' | 'DIRECTOR_GENERAL' | 'USG' | 'TEACHER' | 'MEMBER';
+  office: SecretariatOffice;
+  memberStatus: 'ACTIVE' | 'ALUMNI' | 'APPLICANT' | 'REJECTED';
+  canManageMembers: boolean;
+  canApproveUSG: boolean;
+  canManageFinance: boolean;
+  canManageEvents: boolean;
+};
 
 type State = {
   user: AppUser | null

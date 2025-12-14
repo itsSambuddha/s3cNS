@@ -18,6 +18,7 @@ import { LampContainer } from '@/components/ui/lamp'
 import { Lamp } from 'lucide-react'
 import { LampSection } from '@/components/landing/LampSection'
 import { PwaInstallButton } from '@/components/ui/PwaInstallButton'
+import { ParticipationSection } from '@/components/public/ParticipationSection'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 18 },
@@ -161,8 +162,10 @@ export default function LandingPage() {
           ))}
         </div> */}
       </motion.section>
+      <ParticipationSection />
           <SecmunFeatures />
           <SecmunGlobe />
+
       
       {/* FINAL CTA */}
       <motion.section

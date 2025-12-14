@@ -1,15 +1,14 @@
-'use client'
+"use client"
 
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { useAuth } from '@/hooks/useAuth'
-import { useAppUser } from '@/hooks/useAppUser'
-import { usePushRegistration } from '@/hooks/usePushRegistration'
-import { FinanceCard } from './FinanceCard'
-
-
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { useAuth } from "@/hooks/useAuth"
+import { useAppUser } from "@/hooks/useAppUser"
+import { usePushRegistration } from "@/hooks/usePushRegistration"
+import { FinanceCard } from "./FinanceCard"
+import { canUseDaModule } from "@/lib/da/access"
 
 const pageStagger = {
   hidden: {},
@@ -57,13 +56,18 @@ export default function DashboardPage() {
     )
   }
 
-  // If the user is still MEMBER, send them to onboarding page
-  if (appUser.secretariatRole === 'MEMBER') {
-    router.replace('/onboarding')
+  // Simple onboarding redirect
+  if (appUser.secretariatRole === "MEMBER") {
+    router.replace("/onboarding")
     return null
   }
 
-  const displayName = appUser.displayName ?? appUser.email ?? 'Secretariat member'
+  const displayName =
+    appUser.displayName ?? appUser.email ?? "Secretariat member"
+
+  // SHOW DA CARD ONLY FOR: role === ADMIN AND secretariatOffice === DELEGATION_AFFAIRS
+const showDaCard = canUseDaModule(appUser)
+
 
   return (
     <motion.div
@@ -85,15 +89,16 @@ export default function DashboardPage() {
             Welcome back, {displayName}.
           </h1>
           <p className="text-xs text-muted-foreground sm:text-sm">
-            This overview will soon reflect your real events, finances, and approvals based on your role.
+            This overview will soon reflect your real events, finances, and
+            approvals based on your role.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-            <Link href="/profile">
-              <Button size="sm" variant="outline">
-                View my profile
-              </Button>
-            </Link>
+          <Link href="/profile">
+            <Button size="sm" variant="outline">
+              View my profile
+            </Button>
+          </Link>
 
           <Button size="sm">Create quick note</Button>
         </div>
@@ -106,8 +111,11 @@ export default function DashboardPage() {
       >
         <motion.div
           variants={fadeInUp}
-          whileHover={{ y: -4, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.08)' }}
-          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          whileHover={{
+            y: -4,
+            boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+          }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
           className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
         >
           <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
@@ -129,8 +137,11 @@ export default function DashboardPage() {
 
         <motion.div
           variants={fadeInUp}
-          whileHover={{ y: -4, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.08)' }}
-          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          whileHover={{
+            y: -4,
+            boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+          }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
           className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
         >
           <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
@@ -156,31 +167,31 @@ export default function DashboardPage() {
       >
         {[
           {
-            title: 'Operations',
-            desc: 'Tasks, meetings, and feedback workflows.',
-            href: '#',
+            title: "Operations",
+            desc: "Tasks, meetings, and feedback workflows.",
+            href: "#",
           },
           {
-            title: 'Events',
-            desc: 'SEC‑NEXUS events, delegates, and surveys.',
-            href: '/events',
+            title: "Events",
+            desc: "SEC‑NEXUS events, delegates, and surveys.",
+            href: "/events",
           },
           {
-            title: 'Finance',
-            desc: 'Budgets, expenses, and inventory.',
-            href: '/finance',
+            title: "Finance",
+            desc: "Budgets, expenses, and inventory.",
+            href: "/finance",
           },
           {
-            title: 'Secretariat & Content',
-            desc: 'Members, directory, training, news, and achievements.',
-            href: '/directory',
+            title: "Secretariat & Content",
+            desc: "Members, directory, training, news, and achievements.",
+            href: "/directory",
           },
         ].map((group) => (
           <motion.div
             key={group.title}
             variants={fadeInUp}
             whileHover={{ y: -3, scale: 1.01 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+            transition={{ type: "spring", stiffness: 260, damping: 22 }}
             className="group flex flex-col justify-between rounded-xl border bg-card p-4 shadow-sm"
           >
             <div>
@@ -205,6 +216,34 @@ export default function DashboardPage() {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Delegate Affairs card – only for ADMIN + DELEGATION_AFFAIRS */}
+      {showDaCard && (
+        <motion.div
+          variants={fadeInUp}
+          whileHover={{
+            y: -4,
+            boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+          }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
+          className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
+        >
+          <Link href="/da" className="flex flex-col justify-between">
+            <div className="space-y-1">
+              <h2 className="text-base font-semibold">Delegate Affairs</h2>
+              <p className="text-xs text-muted-foreground">
+                Manage registrations, allotments, and portfolios for SECMUN
+                events.
+              </p>
+            </div>
+            <div className="mt-4">
+              <span className="inline-flex rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
+                Open DA module
+              </span>
+            </div>
+          </Link>
+        </motion.div>
+      )}
     </motion.div>
   )
 }

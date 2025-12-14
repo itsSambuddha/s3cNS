@@ -1,7 +1,13 @@
 // lib/da/access.ts
-import type { IUser } from '../db/models'
+import type { AppRole, SecretariatOffice, SecretariatRole } from '@/lib/db/models/User'
 
-export function canUseDaModule(user: IUser): boolean {
+interface UserWithDaPermissions {
+  role: AppRole
+  secretariatRole: SecretariatRole
+  office: SecretariatOffice
+}
+
+export function canUseDaModule(user: UserWithDaPermissions): boolean {
   if (user.role === 'ADMIN' || user.role === 'LEADERSHIP') {
     return true
   }
