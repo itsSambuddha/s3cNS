@@ -1,400 +1,169 @@
 "use client"
 
 import { useState } from "react"
-import { useSearchParams, useRouter } from "next/navigation"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { cn } from "@/lib/utils"
 
-type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
-type FromSec = "INSIDE_SEC" | "OUTSIDE_SEC"
-type InstituteType = "COLLEGE" | "SCHOOL"
+type EventType =
+  | "INTRA_SECMUN"
+  | "INTER_SECMUN"
+  | "WORKSHOP"
+  | "EDBLAZON_TIMES"
 
-const schema = z.object({
-  eventType: z.enum(["INTRA_SECMUN", "INTER_SECMUN", "WORKSHOP", "EDBLAZON_TIMES"]),
-  fullName: z.string().min(2),
-  email: z.string().email(),
-  whatsAppNumber: z.string().min(8),
-  fromSec: z.enum(["INSIDE_SEC", "OUTSIDE_SEC"]),
-  pastExperience: z.string().min(1),
-  instituteType: z.enum(["COLLEGE", "SCHOOL"]).optional(),
-  collegeName: z.string().optional(),
-  schoolName: z.string().optional(),
-  semester: z.string().optional(),
-  class: z.string().optional(),
-  idDocumentUrl: z.string().url().optional(),
-  insideSemester: z.string().optional(),
-  classRollNo: z.string().optional(),
-  department: z.string().optional(),
-})
+type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR"
 
-type FormValues = z.infer<typeof schema>
+function eventTypeToName(type: EventType): string {
+  switch (type) {
+    case "INTRA_SECMUN":
+      return "Intra SECMUN"
+    case "INTER_SECMUN":
+      return "Inter SECMUN"
+    case "WORKSHOP":
+      return "Workshop"
+    case "EDBLAZON_TIMES":
+      return "EdBlazon Times"
+  }
+}
 
-export function RegisterForm(props: {
-  initialEventType: EventType | null
-  isRegistrationsOpen: boolean
-}) {
+export function RegisterForm({ eventType }: { eventType: EventType }) {
   const router = useRouter()
-  const searchParams = useSearchParams()
+
+  const [interestType, setInterestType] =
+    useState<InterestType>("DELEGATE")
+  const [fullName, setFullName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
   const [submitted, setSubmitted] = useState(false)
-  const [serverError, setServerError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      eventType: props.initialEventType ?? "INTRA_SECMUN",
-      fromSec: "INSIDE_SEC",
-    } as Partial<FormValues>,
-  })
+  async function submit() {
+    if (!fullName || !email || !phone) return
 
-  const fromSec = form.watch("fromSec")
-  const eventType = form.watch("eventType")
+    setLoading(true)
 
-  async function onSubmit(values: FormValues) {
-    setServerError(null)
-    const res = await fetch("/api/delegates/register", {
+    const res = await fetch("/api/registrations/interest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
+      body: JSON.stringify({
+        eventType,
+        interestType,
+        fullName,
+        email,
+        whatsAppNumber: phone,
+      }),
     })
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      setServerError(data.error ?? "Something went wrong. Please try again.")
-      return
-    }
-    setSubmitted(true)
-  }
 
-  if (submitted) {
-    return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
-        <div className="max-w-md rounded-2xl border border-border/60 bg-card/80 p-8 text-center backdrop-blur-xl shadow-lg">
-          <h1 className="text-2xl font-semibold mb-2">Registration submitted</h1>
-          <p className="text-sm text-muted-foreground mb-6">
-            Thank you for applying. Delegate Affairs will review your application and contact you via email or WhatsApp.
-          </p>
-          <Button
-            onClick={() => router.push("/")}
-            className="rounded-full px-6"
-          >
-            Back to home
-          </Button>
-        </div>
-      </main>
-    )
-  }
+    setLoading(false)
 
-  const registrationsClosed =
-    (eventType === "INTRA_SECMUN" || eventType === "INTER_SECMUN") &&
-    !props.isRegistrationsOpen
+    if (res.ok) setSubmitted(true)
+  }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-3xl rounded-2xl border border-border/60 bg-card/80 p-6 sm:p-8 backdrop-blur-xl shadow-lg">
-        <h1 className="text-2xl font-semibold mb-1">Register for SECMUN</h1>
-        <p className="text-sm text-muted-foreground mb-6">
-          Fill in your details carefully. You will receive confirmation and allotment details later from Delegate Affairs.
-        </p>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white px-4">
+      {/* ===== Animated gradient background ===== */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <motion.div
+          className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-blue-500/20 blur-3xl"
+          animate={{ x: [0, 120, 0], y: [0, 60, 0] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-[-6rem] right-[-6rem] h-[24rem] w-[24rem] rounded-full bg-sky-400/15 blur-3xl"
+          animate={{ x: [0, -100, 0], y: [0, -80, 0] }}
+          transition={{ duration: 45, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <div className="absolute left-1/2 top-1/3 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-white/60 blur-3xl" />
+      </div>
 
-        {serverError && (
-          <p className="mb-4 text-sm text-destructive">{serverError}</p>
-        )}
+      {/* ===== Form card ===== */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="relative w-full max-w-lg rounded-2xl border border-border/60 bg-white p-8 shadow-[0_12px_40px_rgba(0,0,0,0.08)]"
+      >
+        {!submitted ? (
+          <>
+            <h1 className="text-xl font-semibold">
+              Register for {eventTypeToName(eventType)}
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Submit your interest. Delegate Affairs will contact you shortly.
+            </p>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Event type */}
-            <FormField
-              control={form.control}
-              name="eventType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Event type</FormLabel>
-                  <FormControl>
-                    <div className="inline-flex flex-wrap gap-2">
-                      {(
-                        ["INTRA_SECMUN", "INTER_SECMUN", "WORKSHOP", "EDBLAZON_TIMES"] as EventType[]
-                      ).map((t) => (
-                        <button
-                          key={t}
-                          type="button"
-                          onClick={() => field.onChange(t)}
-                          className={cn(
-                            "rounded-full border px-3 py-1 text-xs",
-                            field.value === t
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-background text-muted-foreground"
-                          )}
-                        >
-                          {t.replace("_", " ")}
-                        </button>
-                      ))}
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="mt-6 space-y-5">
+              {/* Interest type */}
+              <div>
+                <p className="mb-2 text-sm font-medium">
+                  Registering as
+                </p>
+                <RadioGroup
+                  value={interestType}
+                  onValueChange={(v) =>
+                    setInterestType(v as InterestType)
+                  }
+                  className="flex gap-6"
+                >
+                  <label className="flex items-center gap-2 text-sm">
+                    <RadioGroupItem value="DELEGATE" />
+                    Delegate
+                  </label>
+                  <label className="flex items-center gap-2 text-sm">
+                    <RadioGroupItem value="CAMPUS_AMBASSADOR" />
+                    Campus Ambassador
+                  </label>
+                </RadioGroup>
+              </div>
 
-            {registrationsClosed && (
-              <p className="text-sm text-destructive">
-                Registrations are currently closed for this category.
-              </p>
-            )}
-
-            {/* Basic info */}
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input type="email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="whatsAppNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>WhatsApp number</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="fromSec"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Are you from SEC or outside?</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        className="flex gap-4"
-                      >
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="INSIDE_SEC" id="inside" />
-                          <label htmlFor="inside" className="text-sm">
-                            Inside SEC
-                          </label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <RadioGroupItem value="OUTSIDE_SEC" id="outside" />
-                          <label htmlFor="outside" className="text-sm">
-                            Outside SEC
-                          </label>
-                        </div>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Conditional blocks */}
-            {fromSec === "OUTSIDE_SEC" && (
-              <>
-                <FormField
-                  control={form.control}
-                  name="instituteType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Institute type</FormLabel>
-                      <FormControl>
-                        <select
-                          className="w-full rounded-md border bg-background px-2 py-2 text-sm"
-                          value={field.value ?? ""}
-                          onChange={(e) => field.onChange(e.target.value as InstituteType)}
-                        >
-                          <option value="">Select</option>
-                          <option value="COLLEGE">College</option>
-                          <option value="SCHOOL">School</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              {/* Inputs */}
+              <div className="space-y-4">
+                <Input
+                  placeholder="Full name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
                 />
-                {/* Simple text fields; you can refine validation later */}
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="collegeName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>College name (if applicable)</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="schoolName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>School name (if applicable)</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="semester"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Semester</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="class"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Class</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </>
-            )}
-
-            {fromSec === "INSIDE_SEC" && (
-              <div className="grid gap-4 sm:grid-cols-3">
-                <FormField
-                  control={form.control}
-                  name="insideSemester"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Semester</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                <Input
+                  placeholder="Email address"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                <FormField
-                  control={form.control}
-                  name="classRollNo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Class roll no.</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="department"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Department</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                <Input
+                  placeholder="Phone number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
-            )}
 
-            <FormField
-              control={form.control}
-              name="idDocumentUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ID document URL (upload link)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://..." {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="pastExperience"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Past experience</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Past MUN / workshop experience with rewards, or write NIL if none."
-                      rows={4}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+              <Button
+                onClick={submit}
+                disabled={loading}
+                className="w-full rounded-full"
+              >
+                {loading ? "Submitting..." : "Submit interest"}
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h1 className="text-xl font-semibold">
+              Interest submitted
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              s3cNS will reach out within 48 hours.
+            </p>
             <Button
-              type="submit"
-              className="rounded-full px-6"
-              disabled={registrationsClosed || form.formState.isSubmitting}
+              className="mt-6 w-full rounded-full"
+              onClick={() => router.push("/")}
             >
-              {registrationsClosed ? "Registrations closed" : "Submit registration"}
+              Back to home
             </Button>
-          </form>
-        </Form>
-      </div>
+          </>
+        )}
+      </motion.div>
     </main>
   )
 }

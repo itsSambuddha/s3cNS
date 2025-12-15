@@ -1,10 +1,7 @@
-# TODO: Implement Select Event Dropdown in DA Module
+# Registration Flow Fixes
 
 ## Tasks
-- [x] Update API response format in app/api/events/route.ts to match { success, data, message }
-- [x] Update Event interface in app/(protected)/da/page.tsx to include all fields
-- [x] Add eventsError state in DaPage component
-- [x] Update useEffect to handle new API response, error handling, and auto-select first event
-- [x] Update Select component to display error state
-- [x] Test loading, empty, and error states
-- [x] Verify selectedEventId is passed to child components
+- [ ] Update app/(public)/register/page.tsx to never call notFound() and pass safe fallback eventType
+- [ ] Update components/public/RegisterForm.tsx to accept eventType, avoid .replace on undefined, send correct payload
+- [ ] Update app/api/registrations/interest/route.ts to validate fields, resolve Event, create DelegateRegistration, return id
+- [ ] Ensure components/da/RegistrationsTab.tsx queries by eventType and displays data
