@@ -132,8 +132,8 @@ const showDaCard = canUseDaModule(appUser)
             Open events →
           </Link>
         </motion.div>
-
-        <FinanceCard />
+<FinanceCard />
+        
 
         <motion.div
           variants={fadeInUp}

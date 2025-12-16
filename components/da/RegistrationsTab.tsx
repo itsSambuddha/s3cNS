@@ -50,7 +50,13 @@ function openWhatsApp(
   window.open(url, "_blank")
 }
 
-export function RegistrationsTab() {
+interface RegistrationsTabProps {
+  selectedEventType?: string
+}
+
+export function RegistrationsTab({
+  selectedEventType,
+}: RegistrationsTabProps) {
   const [rows, setRows] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState<string | null>(null)
