@@ -3,47 +3,61 @@ import { connectToDatabase } from "@/lib/db/mongodb"
 import { DelegateRegistration } from "@/lib/db/models/DelegateRegistration"
 import { sendDAInterestEmail } from "@/lib/email/sendDAEmail"
 
-type Channel = "email" | "whatsapp"
-
 export async function POST(req: Request) {
   try {
     const { registrationId, channel } = await req.json()
 
+    if (!registrationId || !channel) {
+      return NextResponse.json(
+        { success: false, error: "Missing parameters" },
+        { status: 400 },
+      )
+    }
+
     await connectToDatabase()
 
-    const reg = await DelegateRegistration.findById(registrationId)
-    if (!reg) {
+    const registration = await DelegateRegistration.findById(registrationId).lean()
+
+    if (!registration) {
       return NextResponse.json(
-        { success: false, error: "Not found" },
+        { success: false, error: "Registration not found" },
         { status: 404 },
       )
     }
 
+    /* =========================
+       EMAIL FLOW
+    ========================= */
     if (channel === "email") {
-      if (!reg.emailSent) {
-        await sendDAInterestEmail({
-          to: reg.email,
-          fullName: reg.fullName,
-          eventName: reg.eventType.replace("_", " "),
-        })
+      await sendDAInterestEmail({
+        to: registration.email,                     // ✅ FROM DB
+        fullName: registration.fullName,             // ✅
+        eventName: registration.eventType.replace("_", " "), // ✅
+        interestType: registration.interestType!,    // ✅
+        email: registration.email,                   // ✅
+        phone: registration.whatsAppNumber,          // ✅
+        submittedAt: registration.createdAt,          // ✅
+      })
 
-        reg.emailSent = true
-        await reg.save()
-      }
+      await DelegateRegistration.findByIdAndUpdate(registrationId, {
+        emailSent: true,
+      })
     }
 
+    /* =========================
+       WHATSAPP FLOW
+    ========================= */
     if (channel === "whatsapp") {
-      if (!reg.whatsappSent) {
-        reg.whatsappSent = true
-        await reg.save()
-      }
+      await DelegateRegistration.findByIdAndUpdate(registrationId, {
+        whatsappSent: true,
+      })
     }
 
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error("[DA_SEND_ERROR]", err)
     return NextResponse.json(
-      { success: false, error: "Send failed" },
+      { success: false, error: "Internal server error" },
       { status: 500 },
     )
   }
