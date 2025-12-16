@@ -51,8 +51,8 @@ export async function GET(req: Request) {
 
         registration: {
           total: fullRegs.length,
-          emailSent: fullRegs.filter(r => r.paymentClaimed).length,
-          whatsappSent: fullRegs.filter(r => r.paymentRef).length,
+          emailSent: fullRegs.filter(r => r.registrationEmailSent).length,
+          whatsappSent: fullRegs.filter(r => r.registrationWhatsappSent).length,
         },
       },
     })

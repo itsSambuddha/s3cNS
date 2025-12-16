@@ -13,6 +13,7 @@ export interface EventDoc extends Document {
   name: string
   type: EventType
   status: EventStatus
+  registrationDeadline?: Date | null
   delegateFormLink?: string
   ambassadorFormLink?: string
 }
@@ -30,6 +31,10 @@ const EventSchema = new Schema<EventDoc>(
       type: String,
       enum: ["REG_OPEN", "REG_CLOSED"],
       default: "REG_CLOSED",
+    },
+    registrationDeadline: {
+      type: Date,
+      default: null,
     },
     delegateFormLink: String,
     ambassadorFormLink: String,

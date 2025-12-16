@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EventType, FromSec, InstituteType } from '@/lib/db/models'
+import { EventType } from '@/lib/db/models'
 
 export const registerSchema = z.object({
   eventType: z.enum(['INTRA_SECMUN', 'INTER_SECMUN', 'WORKSHOP', 'EDBLAZON_TIMES']),
