@@ -3,13 +3,9 @@ import { NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/mongodb"
 import { Event } from "@/lib/db/models/Event"
 
-type RouteParams = {
-  params: { eventId: string }
-}
-
-export async function POST(req: Request, { params }: RouteParams) {
+export async function POST(req: Request, { params }: { params: Promise<{ eventId: string }> }) {
   try {
-    const { eventId } = params
+    const { eventId } = await params
     const body = await req.json()
 
     const {

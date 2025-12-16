@@ -1,48 +1,66 @@
-// app/api/da/overview/route.ts
 import { NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/mongodb"
 import { DelegateRegistration } from "@/lib/db/models/DelegateRegistration"
+import { Event } from "@/lib/db/models/Event"
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url)
+    const eventId = searchParams.get("eventId")
+
+    if (!eventId) {
+      return NextResponse.json(
+        { success: false, error: "eventId required" },
+        { status: 400 }
+      )
+    }
+
     await connectToDatabase()
 
-    const [
-      totalRegistrations,
-      interestCount,
-      emailSent,
-      whatsappSent,
-      registrationLinksSent,
-    ] = await Promise.all([
-      DelegateRegistration.countDocuments({}),
-      DelegateRegistration.countDocuments({
-        interestType: { $exists: true },
-      }),
-      DelegateRegistration.countDocuments({ emailSent: true }),
-      DelegateRegistration.countDocuments({ whatsappSent: true }),
-      DelegateRegistration.countDocuments({
-        $or: [
-          { delegateFormLinkSent: true },
-          { ambassadorFormLinkSent: true },
-        ],
-      }),
-    ])
+    const event = await Event.findById(eventId).lean()
+    if (!event) {
+      return NextResponse.json(
+        { success: false, error: "Event not found" },
+        { status: 404 }
+      )
+    }
+
+    const regs = await DelegateRegistration.find({ eventId }).lean()
+
+    const interestRegs = regs.filter(r => r.interestType)
+    const fullRegs = regs.filter(r => !r.interestType)
 
     return NextResponse.json({
       success: true,
-      data: {
-        totalRegistrations,
-        interestCount,
-        registrationLinksSent,
-        emailSent,
-        whatsappSent,
+      event: {
+        _id: event._id.toString(),
+        name: event.name,
+        type: event.type,
+        status: event.status,
+        delegateFormLink: event.delegateFormLink || "",
+        ambassadorFormLink: event.ambassadorFormLink || "",
+      },
+      stats: {
+        total: regs.length,
+
+        interest: {
+          total: interestRegs.length,
+          emailSent: interestRegs.filter(r => r.emailSent).length,
+          whatsappSent: interestRegs.filter(r => r.whatsappSent).length,
+        },
+
+        registration: {
+          total: fullRegs.length,
+          emailSent: fullRegs.filter(r => r.paymentClaimed).length,
+          whatsappSent: fullRegs.filter(r => r.paymentRef).length,
+        },
       },
     })
   } catch (err) {
-    console.error("[DA_OVERVIEW_ERROR]", err)
+    console.error("[DA_OVERVIEW_EVENT_ERROR]", err)
     return NextResponse.json(
       { success: false, error: "Failed to load overview" },
-      { status: 500 },
+      { status: 500 }
     )
   }
 }
