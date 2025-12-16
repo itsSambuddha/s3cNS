@@ -110,7 +110,7 @@ export function RegistrationsTab({
               <th className="px-3 py-2">Email</th>
               <th className="px-3 py-2">Phone</th>
               <th className="px-3 py-2">Event</th>
-              <th className="px-3 py-2">Type</th>
+              <th className="px-3 py-2">Role</th>
               <th className="px-3 py-2">Actions</th>
             </tr>
           </thead>
