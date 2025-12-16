@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RegistrationsTab } from "@/components/da/RegistrationsTab"
+import { EventsTab } from "@/components/da/EventsTab"
+import {OverviewTab} from "@/components/da/OverviewTab"
 
 export default function DaPage() {
   const [activeTab, setActiveTab] = useState("registrations")
@@ -35,15 +37,11 @@ export default function DaPage() {
 
             {/* Other tabs stay untouched */}
             <TabsContent value="overview" className="mt-0">
-              <div className="text-sm text-muted-foreground">
-                Overview coming next.
-              </div>
+              <OverviewTab />
             </TabsContent>
 
             <TabsContent value="events" className="mt-0">
-              <div className="text-sm text-muted-foreground">
-                Events management unchanged.
-              </div>
+              <EventsTab/>
             </TabsContent>
 
             <TabsContent value="committee" className="mt-0">

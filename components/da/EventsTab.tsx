@@ -167,11 +167,11 @@ export function EventsTab() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All statuses</SelectItem>
-              <SelectItem value="PLANNING">Planning</SelectItem>
+              {/* <SelectItem value="PLANNING">Planning</SelectItem> */}
               <SelectItem value="REG_OPEN">Registrations Open</SelectItem>
-              <SelectItem value="RUNNING">Running</SelectItem>
+              {/* <SelectItem value="RUNNING">Running</SelectItem> */}
               <SelectItem value="COMPLETED">Completed</SelectItem>
-              <SelectItem value="ARCHIVED">Archived</SelectItem>
+              {/* <SelectItem value="ARCHIVED">Archived</SelectItem> */}
             </SelectContent>
           </Select>
         </div>
@@ -245,11 +245,11 @@ export function EventsTab() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="PLANNING">Planning</SelectItem>
+                      {/* <SelectItem value="PLANNING">Planning</SelectItem> */}
                       <SelectItem value="REG_OPEN">Registrations Open</SelectItem>
-                      <SelectItem value="RUNNING">Running</SelectItem>
+                      {/* <SelectItem value="RUNNING">Running</SelectItem> */}
                       <SelectItem value="COMPLETED">Completed</SelectItem>
-                      <SelectItem value="ARCHIVED">Archived</SelectItem>
+                      {/* <SelectItem value="ARCHIVED">Archived</SelectItem> */}
                     </SelectContent>
                   </Select>
                 </div>
