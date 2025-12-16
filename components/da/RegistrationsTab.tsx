@@ -1,81 +1,100 @@
-// components/da/RegistrationsTab.tsx
-// FULLY REPLACEABLE — stable, minimal, production-safe
-
 "use client"
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2, Mail, MessageSquare } from "lucide-react"
+import clsx from "clsx"
 
 type Registration = {
   _id: string
-  eventType: string
   fullName: string
   email: string
   whatsAppNumber: string
+  eventType: string
   interestType?: "DELEGATE" | "CAMPUS_AMBASSADOR"
+
+  // Interest
   emailSent?: boolean
   whatsappSent?: boolean
-  createdAt: string
+
+  // Registration
+  registrationEmailSent?: boolean
+  registrationWhatsappSent?: boolean
 }
 
 function formatEvent(type: string) {
   return type.replace(/_/g, " ")
 }
 
-function openWhatsApp(number: string, name: string, eventType: string) {
-  const clean = number.replace(/\D/g, "")
-  if (clean.length !== 10) {
-    alert("Invalid phone number")
+/* =========================
+   WhatsApp Normalizer
+========================= */
+function openWhatsApp(
+  rawNumber: string,
+  message: string,
+) {
+  // remove everything except digits
+  let num = rawNumber.replace(/\D/g, "")
+
+  // handle +91 / 91 / plain 10 digit
+  if (num.startsWith("91") && num.length === 12) {
+    num = num.slice(2)
+  }
+
+  if (num.length !== 10) {
+    alert(`Invalid phone number: ${rawNumber}`)
     return
   }
 
-  const full = `91${clean}`
-  const text = encodeURIComponent(
-    `Hello ${name}, your interest for ${formatEvent(eventType)} has been registered. Delegate Affairs will contact you shortly.`,
-  )
-
-  window.open(`https://wa.me/${full}?text=${text}`, "_blank")
+  const url = `https://wa.me/91${num}?text=${encodeURIComponent(message)}`
+  window.open(url, "_blank")
 }
 
-export function RegistrationsTab({
-  selectedEventType,
-}: {
-  selectedEventType?: string
-}) {
-  const [data, setData] = useState<Registration[]>([])
+export function RegistrationsTab() {
+  const [rows, setRows] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState<string | null>(null)
 
   async function load() {
     setLoading(true)
-    const url = selectedEventType
-      ? `/api/registrations?eventType=${selectedEventType}`
-      : `/api/registrations`
-
-    const res = await fetch(url)
+    const res = await fetch("/api/registrations")
     const json = await res.json()
-    setData(json.data || [])
+    setRows(json.data || [])
     setLoading(false)
   }
 
   useEffect(() => {
     load()
-  }, [selectedEventType])
+  }, [])
 
-  async function send(reg: Registration, channel: "email" | "whatsapp") {
-    setSending(reg._id + channel)
+  async function send(
+    r: Registration,
+    channel: "email" | "whatsapp",
+    kind: "interest" | "registration",
+  ) {
+    const key = `${r._id}-${kind}-${channel}`
+    setSending(key)
 
     if (channel === "whatsapp") {
-      openWhatsApp(reg.whatsAppNumber, reg.fullName, reg.eventType)
+      const msg =
+        kind === "interest"
+          ? `Hello ${r.fullName}, your interest for ${formatEvent(
+              r.eventType,
+            )} has been recorded.`
+          : `Hello ${r.fullName}, please complete your registration for ${formatEvent(
+              r.eventType,
+            )} using the form sent to you.`
+
+      openWhatsApp(r.whatsAppNumber, msg)
     }
 
     await fetch("/api/registrations/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        registrationId: reg._id,
+        registrationId: r._id,
         channel,
+        kind,
       }),
     })
 
@@ -92,7 +111,7 @@ export function RegistrationsTab({
     )
   }
 
-  if (data.length === 0) {
+  if (!rows.length) {
     return (
       <p className="text-sm text-muted-foreground">
         No registrations found.
@@ -101,70 +120,115 @@ export function RegistrationsTab({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="overflow-x-auto rounded-xl border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/50 text-left">
-            <tr>
-              <th className="px-3 py-2">Name</th>
-              <th className="px-3 py-2">Email</th>
-              <th className="px-3 py-2">Phone</th>
-              <th className="px-3 py-2">Event</th>
-              <th className="px-3 py-2">Role</th>
-              <th className="px-3 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((r) => (
-              <tr key={r._id} className="border-t">
-                <td className="px-3 py-2 font-medium">
-                  {r.fullName}
-                </td>
-                <td className="px-3 py-2">{r.email}</td>
-                <td className="px-3 py-2">{r.whatsAppNumber}</td>
-                <td className="px-3 py-2">
-                  {formatEvent(r.eventType)}
-                </td>
-                <td className="px-3 py-2">
-                  {r.interestType || "—"}
-                </td>
-                <td className="px-3 py-2">
-                  <div className="flex gap-2">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      disabled={r.emailSent || sending === r._id + "email"}
-                      onClick={() => send(r, "email")}
-                    >
-                      {sending === r._id + "email" ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <Mail className="h-4 w-4" />
-                      )}
-                    </Button>
+    <div className="overflow-x-auto rounded-xl border">
+      <table className="w-full text-sm">
+        <thead className="bg-muted/50">
+          <tr>
+            <th className="px-3 py-2 text-left">Name</th>
+            <th className="px-3 py-2 text-left">Email</th>
+            <th className="px-3 py-2 text-left">Phone</th>
+            <th className="px-3 py-2 text-left">Event</th>
+            <th className="px-3 py-2 text-left">Interest</th>
+            <th className="px-3 py-2 text-left">Registration</th>
+          </tr>
+        </thead>
 
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      disabled={
-                        r.whatsappSent ||
-                        sending === r._id + "whatsapp"
-                      }
-                      onClick={() => send(r, "whatsapp")}
-                    >
-                      {sending === r._id + "whatsapp" ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      ) : (
-                        <MessageSquare className="h-4 w-4" />
-                      )}
-                    </Button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r._id} className="border-t">
+              <td className="px-3 py-2 font-medium">{r.fullName}</td>
+              <td className="px-3 py-2">{r.email}</td>
+              <td className="px-3 py-2">{r.whatsAppNumber}</td>
+              <td className="px-3 py-2">{formatEvent(r.eventType)}</td>
+
+              {/* ========== INTEREST ========== */}
+              <td className="px-3 py-2">
+                <div className="flex gap-2">
+                  <CommButton
+                    active={!!r.emailSent}
+                    loading={sending === `${r._id}-interest-email`}
+                    onClick={() =>
+                      send(r, "email", "interest")
+                    }
+                  >
+                    <Mail className="h-4 w-4" />
+                  </CommButton>
+
+                  <CommButton
+                    active={!!r.whatsappSent}
+                    loading={sending === `${r._id}-interest-whatsapp`}
+                    onClick={() =>
+                      send(r, "whatsapp", "interest")
+                    }
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                  </CommButton>
+                </div>
+              </td>
+
+              {/* ========== REGISTRATION ========== */}
+              <td className="px-3 py-2">
+                <div className="flex gap-2">
+                  <CommButton
+                    active={!!r.registrationEmailSent}
+                    loading={sending === `${r._id}-registration-email`}
+                    onClick={() =>
+                      send(r, "email", "registration")
+                    }
+                  >
+                    <Mail className="h-4 w-4" />
+                  </CommButton>
+
+                  <CommButton
+                    active={!!r.registrationWhatsappSent}
+                    loading={sending === `${r._id}-registration-whatsapp`}
+                    onClick={() =>
+                      send(r, "whatsapp", "registration")
+                    }
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                  </CommButton>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+  )
+}
+
+/* =========================
+   Button Component
+========================= */
+function CommButton({
+  active,
+  loading,
+  onClick,
+  children,
+}: {
+  active: boolean
+  loading?: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) {
+  return (
+    <Button
+      size="icon"
+      variant="outline"
+      disabled={loading}
+      onClick={onClick}
+      className={clsx(
+        active
+          ? "bg-green-100 text-green-700 border-green-300"
+          : "bg-red-100 text-red-700 border-red-300",
+      )}
+    >
+      {loading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        children
+      )}
+    </Button>
   )
 }
