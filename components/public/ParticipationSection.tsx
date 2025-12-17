@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
 import { useOutsideClick } from "@/hooks/use-outside-click"
+import { BackgroundGradient } from "@/components/ui/background-gradient"
 
 type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
 
@@ -39,7 +40,9 @@ export function ParticipationSection() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/public/active-events", { cache: "no-store" })
+        const res = await fetch("/api/public/active-events", {
+          cache: "no-store",
+        })
         if (!res.ok) return
         const json = (await res.json()) as ActiveEventsResponse
         setData(json)
@@ -80,7 +83,6 @@ export function ParticipationSection() {
           : item.type === "WORKSHOP"
           ? "/images/workshop.jpg"
           : "/images/edblazon.jpg",
-          //images to be changed
     }
     return { ...base, event: item.event }
   })
@@ -109,7 +111,8 @@ function Header() {
         Choose how you participate in SECMUN
       </h2>
       <p className="mt-2 text-sm text-slate-600 sm:text-base">
-        Explore active conferences, workshops, and media roles curated by the Secretariat.
+        Explore active conferences, workshops, and media roles curated by the
+        Secretariat.
       </p>
     </div>
   )
@@ -141,6 +144,7 @@ function ExpandableCards({ cards }: { cards: CardData[] }) {
 
   return (
     <>
+      {/* Backdrop for expanded card */}
       <AnimatePresence>
         {active && typeof active === "object" && (
           <motion.div
@@ -151,6 +155,8 @@ function ExpandableCards({ cards }: { cards: CardData[] }) {
           />
         )}
       </AnimatePresence>
+
+      {/* Expanded card */}
       <AnimatePresence>
         {active && typeof active === "object" ? (
           <div className="fixed inset-0 z-[100] grid place-items-center px-4">
@@ -171,7 +177,7 @@ function ExpandableCards({ cards }: { cards: CardData[] }) {
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="flex h-full w-full max-w-[520px] flex-col overflow-hidden bg-white dark:bg-neutral-900 md:h-fit md:max-h-[90%] sm:rounded-3xl"
+              className="flex h-full w-full max-w-[520px] flex-col overflow-hidden bg-white md:h-fit md:max-h-[90%] sm:rounded-3xl"
             >
               <motion.div layoutId={`image-${active.title}-${id}`}>
                 <img
@@ -188,13 +194,13 @@ function ExpandableCards({ cards }: { cards: CardData[] }) {
                   <div>
                     <motion.h3
                       layoutId={`title-${active.title}-${id}`}
-                      className="text-base font-medium text-neutral-800 dark:text-neutral-200"
+                      className="text-base font-medium text-slate-900"
                     >
                       {active.title}
                     </motion.h3>
                     <motion.p
                       layoutId={`description-${active.description}-${id}`}
-                      className="text-sm text-neutral-600 dark:text-neutral-400"
+                      className="text-sm text-slate-600"
                     >
                       {active.description}
                     </motion.p>
@@ -224,7 +230,7 @@ function ExpandableCards({ cards }: { cards: CardData[] }) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex h-40 flex-col items-start gap-3 overflow-auto text-xs text-neutral-600 [mask:linear-gradient(to_bottom,white,white,transparent)] dark:text-neutral-400 md:h-fit"
+                    className="flex h-40 flex-col items-start gap-3 overflow-auto text-xs text-slate-600 [mask:linear-gradient(to_bottom,white,white,transparent)] md:h-fit"
                   >
                     {active.event ? (
                       <>
@@ -263,41 +269,69 @@ function ExpandableCards({ cards }: { cards: CardData[] }) {
         ) : null}
       </AnimatePresence>
 
+      {/* Cards grid */}
       <ul className="mx-auto grid w-full max-w-5xl grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {cards.map((card) => (
-          <motion.div
-            layoutId={`card-${card.title}-${id}`}
-            key={card.title}
-            onClick={() => setActive(card)}
-            className="flex cursor-pointer flex-col rounded-2xl border border-slate-200 bg-white/70 p-3 transition-all duration-200 hover:-translate-y-1 hover:border-blue-200 hover:bg-neutral-50 hover:shadow-md dark:hover:bg-neutral-800"
-          >
-            <div className="flex w-full flex-col gap-3">
-              <motion.div layoutId={`image-${card.title}-${id}`}>
-                <img
-                  width={200}
-                  height={120}
-                  src={card.src}
-                  alt={card.title}
-                  className="h-40 w-full rounded-xl object-cover object-top"
-                />
-              </motion.div>
-              <div className="flex flex-col items-center text-center md:items-start md:text-left">
-                <motion.h3
-                  layoutId={`title-${card.title}-${id}`}
-                  className="text-sm font-semibold text-neutral-800 dark:text-neutral-200"
-                >
-                  {card.title}
-                </motion.h3>
-                <motion.p
-                  layoutId={`description-${card.description}-${id}`}
-                  className="text-xs text-neutral-600 dark:text-neutral-400"
-                >
-                  {card.description}
-                </motion.p>
+        {cards.map((card) => {
+          const isActiveEvent =
+            card.event && card.event.status === "REG_OPEN"
+
+          const cardContent = (
+            <motion.div
+              layoutId={`card-${card.title}-${id}`}
+              key={card.title}
+              onClick={() => setActive(card)}
+              className="flex cursor-pointer flex-col rounded-2xl border border-slate-200 bg-white p-3 transition-all duration-200 hover:-translate-y-1 hover:border-blue-300 hover:bg-blue-50/40 hover:shadow-md"
+            >
+              <div className="flex w-full flex-col gap-3">
+                <motion.div layoutId={`image-${card.title}-${id}`}>
+                  <img
+                    width={200}
+                    height={120}
+                    src={card.src}
+                    alt={card.title}
+                    className="h-40 w-full rounded-xl object-cover object-top"
+                  />
+                </motion.div>
+                <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                  <motion.h3
+                    layoutId={`title-${card.title}-${id}`}
+                    className="text-sm font-semibold text-slate-900"
+                  >
+                    {card.title}
+                  </motion.h3>
+                  <motion.p
+                    layoutId={`description-${card.description}-${id}`}
+                    className="text-xs text-slate-600"
+                  >
+                    {card.description}
+                  </motion.p>
+                  {isActiveEvent && (
+                    <span className="mt-2 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold uppercase text-blue-700">
+                      Active now
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          )
+
+          return (
+            <li key={card.title}>
+              {isActiveEvent ? (
+                <BackgroundGradient
+                  animate
+                  containerClassName="rounded-3xl"
+                  className="rounded-2xl
+                    bg-[radial-gradient(circle_at_0_0,#dbeafe,transparent_55%),radial-gradient(circle_at_100%_0,#1d4ed8,transparent_55%),radial-gradient(circle_at_0_100%,#60a5fa,transparent_55%),radial-gradient(circle_at_100%_100%,#ffffff,transparent_55%)]"
+                >
+                  {cardContent}
+                </BackgroundGradient>
+              ) : (
+                cardContent
+              )}
+            </li>
+          )
+        })}
       </ul>
     </>
   )

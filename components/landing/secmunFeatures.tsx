@@ -48,7 +48,7 @@ export function SecmunFeatures() {
             A Control Room for everything SECMUN does.
           </h3>
           <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 dark:text-neutral-300">
-            Finance, communication, archives, and execution live in one system,
+            Automation, Finance, Communication and execution live in one system,
             instead of scattered sheets, chats, and drives.
           </p>
         </motion.div>
@@ -67,10 +67,9 @@ export function SecmunFeatures() {
               index={0}
               className="col-span-1 lg:col-span-4 lg:row-span-2 border-b lg:border-b-0 lg:border-r border-neutral-200/80 dark:border-neutral-800"
             >
-              <FeatureTitle>Finance built for conferences</FeatureTitle>
+              <FeatureTitle><strong>AUTOMATION</strong> For Conferences</FeatureTitle>
               <FeatureDescription>
-                Design per‑event budgets, log expenses, and see totals in one
-                view instead of juggling ten different sheets.
+                One Stop Solution to manage and automate finances, communication, archives and on-ground execution for SECMUN.
               </FeatureDescription>
               <motion.div
                 whileHover={{ scale: 1.02, translateY: -4 }}
@@ -91,10 +90,11 @@ export function SecmunFeatures() {
               index={1}
               className="col-span-1 lg:col-span-2 lg:row-span-3 border-t lg:border-t-0 border-neutral-200/80 dark:border-neutral-800 flex flex-col"
             >
-              <FeatureTitle>Automated, real‑time communication</FeatureTitle>
+              <FeatureTitle>Automated, real-time communication</FeatureTitle>
               <FeatureDescription>
-                Once budgets or updates are logged, emails, WhatsApp messages, and
-                device push notifications are sent automatically.
+                Updates, reminders, allotments, etc all sent automatically
+                via Gmail, WhatsApp, and in-app alerts — all triggered by actions
+                in s3cNS.
               </FeatureDescription>
               <div className="flex-1 flex items-end">
                 <AutomationRail />
@@ -149,7 +149,7 @@ export function SecmunFeatures() {
               <FeatureTitle>From scattered tools to one control room</FeatureTitle>
               <FeatureDescription>
                 Slide between the old “spreadsheets + chats + drives” setup and
-                a single SEC‑MUN workspace.
+                a single SECMUN workspace.
               </FeatureDescription>
               <HassleFreeCompare />
             </FeatureCard>

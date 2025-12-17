@@ -49,16 +49,16 @@ export function Footer({ className }: { className?: string }) {
                   Features overview
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="#finance" className="hover:text-slate-100">
                   Finance workspace
                 </Link>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <Link href="#communication" className="hover:text-slate-100">
-                  Comms automations
+                  Comms Automations
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="#archives" className="hover:text-slate-100">
                   Archives &amp; inventory
@@ -80,14 +80,14 @@ export function Footer({ className }: { className?: string }) {
             <ul className="space-y-2 text-sm text-slate-400">
               <li>
                 <Link href="#use-cases" className="hover:text-slate-100">
-                  Conference control room
+                  Conference Control Room
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="#use-cases" className="hover:text-slate-100">
                   Society finances
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="#use-cases" className="hover:text-slate-100">
                   Alumni handover
