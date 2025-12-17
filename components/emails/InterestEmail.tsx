@@ -1,3 +1,5 @@
+// components/emails/InterestEmail.tsx
+
 import * as React from "react"
 import {
   Body,
@@ -7,7 +9,6 @@ import {
   Heading,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Row,
@@ -16,25 +17,26 @@ import {
   Text,
 } from "@react-email/components"
 
-interface InterestConfirmationEmailProps {
+interface InterestEmailProps {
   fullName: string
   eventName: string
-  interestType: "DELEGATE" | "CAMPUS_AMBASSADOR"
+  interestType?: "DELEGATE" | "CAMPUS_AMBASSADOR"
   email: string
   phone: string
-  submittedAt: Date
 }
 
-export function InterestConfirmationEmail({
+export function InterestEmail({
   fullName,
   eventName,
   interestType,
   email,
   phone,
-  submittedAt,
-}: InterestConfirmationEmailProps) {
+}: InterestEmailProps) {
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+
+  const roleText =
+    interestType === "CAMPUS_AMBASSADOR" ? "Campus Ambassador" : "Delegate"
 
   return (
     <Html>
@@ -55,7 +57,7 @@ export function InterestConfirmationEmail({
                     Office of Delegation Affairs
                   </Heading>
                   <Text className="mt-1 text-xs text-slate-500">
-                    Interest Registration Confirmation
+                    Interest Acknowledgement
                   </Text>
                 </Column>
               </Row>
@@ -68,51 +70,40 @@ export function InterestConfirmationEmail({
               <Text className="text-[14px] text-slate-800">
                 Dear <span className="font-semibold">{fullName}</span>,
               </Text>
+
               <Text className="mt-2 text-[13px] leading-relaxed text-slate-700">
-                Your interest for{" "}
-                <span className="font-semibold">{eventName}</span> has been
-                successfully recorded by the Delegation Affairs team.
+                Thank you for submitting your interest in{" "}
+                <span className="font-semibold">{eventName}</span> as a{" "}
+                {roleText}.
               </Text>
             </Section>
 
             {/* Summary */}
             <Section className="mb-4 rounded-xl bg-slate-50 px-4 py-3">
               <Text className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                Registration Summary
+                Interest Details
               </Text>
+
               <Text className="text-[12px] text-slate-800">
                 <strong>Event:</strong> {eventName}
               </Text>
+
               <Text className="text-[12px] text-slate-800">
-                <strong>Applied as:</strong>{" "}
-                {interestType === "DELEGATE"
-                  ? "Delegate"
-                  : "Campus Ambassador"}
+                <strong>Role of interest:</strong> {roleText}
               </Text>
+
               <Text className="text-[12px] text-slate-800">
                 <strong>Email:</strong> {email}
               </Text>
+
               <Text className="text-[12px] text-slate-800">
                 <strong>WhatsApp:</strong> {phone}
               </Text>
-              <Text className="text-[12px] text-slate-800">
-                <strong>Submitted on:</strong>{" "}
-                {submittedAt.toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </Text>
-            </Section>
 
-            {/* Next steps */}
-            <Section className="mb-4">
-              <Text className="text-[13px] leading-relaxed text-slate-700">
-                Our team will review all interest submissions carefully. After verification, you will receive a follow-up email containing the
-                detailed registration Google Form.
-              </Text>
-              <Text className="mt-2 text-[13px] text-slate-700">
-                Expected response time: within <strong>48 hours</strong>.
+              <Text className="mt-2 text-[12px] text-slate-700">
+                The Secretariat will review all submissions and begin allotment
+                shortly. If shortlisted, you will receive a separate email with
+                the official registration form.
               </Text>
             </Section>
 
@@ -125,6 +116,7 @@ export function InterestConfirmationEmail({
                   <Text className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                     Contact
                   </Text>
+
                   <Text className="mt-1 text-[12px] text-slate-700">
                     Email:{" "}
                     <Link
@@ -134,6 +126,7 @@ export function InterestConfirmationEmail({
                       sidhusamsk@gmail.com
                     </Link>
                   </Text>
+
                   <Text className="text-[12px] text-slate-700">
                     Instagram:{" "}
                     <Link
@@ -143,6 +136,7 @@ export function InterestConfirmationEmail({
                       @secmun2024
                     </Link>
                   </Text>
+
                   <Text className="mt-1 text-[11px] text-slate-500">
                     SECMUN Secretariat, St. Edmund&apos;s College, Shillong,
                     Meghalaya, India
@@ -153,20 +147,21 @@ export function InterestConfirmationEmail({
                   <Row>
                     <Column className="pr-[6px]">
                       <Link href="mailto:sidhusamsk@gmail.com">
-                        <Img
+                        <img
                           alt="Email"
-                          width="24"
-                          height="24"
+                          width={24}
+                          height={24}
                           src={`${baseUrl}/logo/mail.svg`}
                         />
                       </Link>
                     </Column>
+
                     <Column className="pr-[6px]">
                       <Link href="https://instagram.com/secmun2024">
-                        <Img
+                        <img
                           alt="Instagram"
-                          width="24"
-                          height="24"
+                          width={24}
+                          height={24}
                           src="https://react.email/static/instagram-logo.png"
                         />
                       </Link>
@@ -179,6 +174,7 @@ export function InterestConfirmationEmail({
                 This is an automated message generated by the SECMUN Delegation
                 Affairs system. Please do not reply directly to this email.
               </Text>
+
               <Text className="mt-1 text-[11px] text-slate-400">
                 Office of Delegation Affairs · SECMUN Secretariat
               </Text>

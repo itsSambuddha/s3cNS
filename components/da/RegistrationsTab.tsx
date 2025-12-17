@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { waTo } from "@/lib/whatsapp"
+import Image from "next/image"
 
 type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR"
 type DelegateStatus = "APPLIED" | "ALLOTTED" | "REJECTED" | "WITHDRAWN"
@@ -30,22 +31,30 @@ interface RegistrationsResponse {
   registrations: RegistrationRow[]
 }
 
-interface Props {
-  selectedEventId?: string | null
-  selectedInterestType?: InterestType | "ALL"
-}
-
-export function RegistrationsTab({
-  selectedEventId,
-  selectedInterestType = "ALL",
-}: Props) {
+export function RegistrationsTab() {
   const [rows, setRows] = useState<RegistrationRow[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // local event + interest filters
+  const [selectedEventId, setSelectedEventId] = useState<string>("")
+  const [selectedInterestType, setSelectedInterestType] =
+    useState<InterestType | "ALL">("ALL")
+
   const [sendingInterest, setSendingInterest] = useState(false)
   const [sendingRegistration, setSendingRegistration] = useState(false)
   const [sendingRowId, setSendingRowId] = useState<string | null>(null)
 
+  // derive unique events from rows for dropdown
+  const uniqueEvents = Array.from(
+    new Map(
+      rows
+        .filter((r) => r.eventId && r.eventName)
+        .map((r) => [r.eventId as string, r.eventName as string]),
+    ).entries(),
+  ).map(([id, name]) => ({ id, name }))
+
+  // load whenever filters change
   useEffect(() => {
     let cancelled = false
 
@@ -97,15 +106,17 @@ export function RegistrationsTab({
     }
   }
 
+  // BULK EMAIL: INTEREST / REGISTRATION
   async function sendBulk(mode: "INTEREST" | "REGISTRATION") {
     if (!selectedEventId) {
-      setError("Please select an event before sending messages.")
+      setError("Select an event to use bulk send.")
       return
     }
 
-    const setter = mode === "INTEREST" ? setSendingInterest : setSendingRegistration
-    setter(true)
     setError(null)
+    const setter =
+      mode === "INTEREST" ? setSendingInterest : setSendingRegistration
+    setter(true)
 
     try {
       const res = await fetch("/api/registrations/send", {
@@ -114,8 +125,8 @@ export function RegistrationsTab({
         body: JSON.stringify({
           mode,
           eventId: selectedEventId,
-          interestType: selectedInterestType === "ALL" ? null : selectedInterestType,
-          channel: "BOTH",
+          interestType:
+            selectedInterestType === "ALL" ? null : selectedInterestType,
         }),
       })
 
@@ -126,7 +137,7 @@ export function RegistrationsTab({
       }
 
       await reloadRows()
-      console.log(`✅ ${mode} messages sent successfully`, data)
+      console.log(`✅ ${mode} EMAIL messages sent successfully`, data)
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err)
       console.error(`❌ Failed to send ${mode} messages:`, msg)
@@ -136,6 +147,7 @@ export function RegistrationsTab({
     }
   }
 
+  // SINGLE EMAIL
   async function sendSingleEmail(
     mode: "INTEREST" | "REGISTRATION",
     registrationId: string,
@@ -149,7 +161,6 @@ export function RegistrationsTab({
         body: JSON.stringify({
           mode,
           registrationId,
-          channel: "EMAIL",
         }),
       })
       const data = await res.json()
@@ -182,22 +193,53 @@ export function RegistrationsTab({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
+      {/* Header + filters */}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">Registrations</h2>
           <p className="text-xs text-gray-500">
-            Showing interest submissions for the selected event and interest type.
+            Filter by event and interest type, then send emails in bulk or per
+            registrant.
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 md:items-center">
+          <select
+            value={selectedEventId}
+            onChange={(e) => setSelectedEventId(e.target.value)}
+            className="h-9 rounded-md border px-3 text-xs"
+          >
+            <option value="">All events</option>
+            {uniqueEvents.map((e) => (
+              <option key={e.id} value={e.id}>
+                {e.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={selectedInterestType}
+            onChange={(e) =>
+              setSelectedInterestType(
+                e.target.value === "ALL"
+                  ? "ALL"
+                  : (e.target.value as InterestType),
+              )
+            }
+            className="h-9 rounded-md border px-3 text-xs"
+          >
+            <option value="ALL">All interests</option>
+            <option value="DELEGATE">Delegate</option>
+            <option value="CAMPUS_AMBASSADOR">Campus ambassador</option>
+          </select>
+
           <Button
             variant="outline"
             size="sm"
             disabled={sendingInterest || !selectedEventId}
             onClick={() => sendBulk("INTEREST")}
           >
-            {sendingInterest ? "Sending interest..." : "Send interest (all)"}
+            {sendingInterest ? "Sending interest emails..." : "Send all interest"}
           </Button>
           <Button
             size="sm"
@@ -205,8 +247,8 @@ export function RegistrationsTab({
             onClick={() => sendBulk("REGISTRATION")}
           >
             {sendingRegistration
-              ? "Sending registration..."
-              : "Send registration (all)"}
+              ? "Sending registration emails..."
+              : "Send all registration"}
           </Button>
         </div>
       </div>
@@ -241,9 +283,13 @@ export function RegistrationsTab({
               {rows.map((r) => (
                 <tr key={r.id}>
                   <td className="px-3 py-2 whitespace-nowrap">
-                    <div className="font-medium text-gray-900">{r.fullName}</div>
+                    <div className="font-medium text-gray-900">
+                      {r.fullName}
+                    </div>
                     {r.eventName && (
-                      <div className="text-xs text-gray-500">{r.eventName}</div>
+                      <div className="text-xs text-gray-500">
+                        {r.eventName}
+                      </div>
                     )}
                   </td>
                   <td className="px-3 py-2">{r.email}</td>
@@ -261,40 +307,71 @@ export function RegistrationsTab({
                       : "No"}
                   </td>
                   <td className="px-3 py-2 text-xs">
-                    <div className="flex flex-wrap gap-1">
-                      {/* Interest EMAIL */}
+                    <div className="flex flex-wrap gap-2">
                       <Button
+                        type="button"
                         variant="outline"
-                        size="sm"
+                        size="icon"
+                        className="h-8 w-8"
                         disabled={sendingRowId === r.id}
                         onClick={() => sendSingleEmail("INTEREST", r.id)}
+                        title="Send interest email"
                       >
-                        IE
+                        <Image
+                          src="/logo/Gmail_Logo.svg"
+                          alt="Email"
+                          width={16}
+                          height={16}
+                        />
                       </Button>
-                      {/* Interest WHATSAPP */}
+
                       <Button
+                        type="button"
                         variant="outline"
-                        size="sm"
+                        size="icon"
+                        className="h-8 w-8"
                         onClick={() => openInterestWhatsApp(r)}
+                        title="Send interest WhatsApp"
                       >
-                        IW
+                        <Image
+                          src="/logo/WhatsApp.svg"
+                          alt="WhatsApp"
+                          width={16}
+                          height={16}
+                        />
                       </Button>
-                      {/* Registration EMAIL */}
+
                       <Button
+                        type="button"
                         variant="outline"
-                        size="sm"
+                        size="icon"
+                        className="h-8 w-8"
                         disabled={sendingRowId === r.id}
                         onClick={() => sendSingleEmail("REGISTRATION", r.id)}
+                        title="Send registration email"
                       >
-                        RE
+                        <Image
+                          src="/logo/Gmail_Logo.svg"
+                          alt="Email"
+                          width={16}
+                          height={16}
+                        />
                       </Button>
-                      {/* Registration WHATSAPP */}
+
                       <Button
+                        type="button"
                         variant="outline"
-                        size="sm"
+                        size="icon"
+                        className="h-8 w-8"
                         onClick={() => openRegistrationWhatsApp(r)}
+                        title="Send registration WhatsApp"
                       >
-                        RW
+                        <Image
+                          src="/logo/WhatsApp.svg"
+                          alt="WhatsApp"
+                          width={16}
+                          height={16}
+                        />
                       </Button>
                     </div>
                   </td>

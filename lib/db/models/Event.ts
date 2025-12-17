@@ -15,8 +15,10 @@ export interface EventDoc extends Document {
   type: EventType
   status: EventStatus
   registrationDeadline?: Date | null
-  delegateFormLink?: string
-  ambassadorFormLink?: string
+  delegateFormLink?: string | null
+  ambassadorFormLink?: string | null
+  startDate: Date
+  endDate: Date
   createdAt: Date
   updatedAt: Date
 }
@@ -44,7 +46,6 @@ const EventSchema = new Schema<EventDoc>(
       default: null,
     },
 
-    // Per‑event links used in OverviewTab and registration communications
     delegateFormLink: {
       type: String,
       default: null,
@@ -53,6 +54,16 @@ const EventSchema = new Schema<EventDoc>(
     ambassadorFormLink: {
       type: String,
       default: null,
+    },
+
+    startDate: {
+      type: Date,
+      required: true,
+    },
+
+    endDate: {
+      type: Date,
+      required: true,
     },
   },
   {

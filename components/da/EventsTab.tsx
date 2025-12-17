@@ -1,3 +1,5 @@
+// components/da/EventsTab.tsx
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -38,6 +40,8 @@ interface Event {
   registrationDeadline: string | null
   delegateFormLink: string | null
   ambassadorFormLink: string | null
+  startDate: string
+  endDate: string
   createdAt: string
 }
 
@@ -48,15 +52,17 @@ export function EventsTab() {
   const [submitting, setSubmitting] = useState(false)
   const [typeFilter, setTypeFilter] = useState<EventType | "ALL">("ALL")
   const [statusFilter, setStatusFilter] = useState<EventStatus | "ALL">("ALL")
+  const [copiedId, setCopiedId] = useState<string | null>(null)
 
   const [formData, setFormData] = useState({
     name: "",
     type: "INTRA_SECMUN" as EventType,
     status: "REG_CLOSED" as EventStatus,
     registrationDeadline: "",
+    startDate: "",
+    endDate: "",
   })
 
-  // Load events
   useEffect(() => {
     async function loadEvents() {
       try {
@@ -82,6 +88,10 @@ export function EventsTab() {
       alert("Please fill in the event name")
       return
     }
+    if (!formData.startDate || !formData.endDate) {
+      alert("Please provide start and end dates")
+      return
+    }
 
     setSubmitting(true)
     try {
@@ -93,6 +103,8 @@ export function EventsTab() {
           type: formData.type,
           status: formData.status,
           registrationDeadline: formData.registrationDeadline || null,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
         }),
       })
 
@@ -112,6 +124,8 @@ export function EventsTab() {
         type: "INTRA_SECMUN",
         status: "REG_CLOSED",
         registrationDeadline: "",
+        startDate: "",
+        endDate: "",
       })
     } catch (err) {
       console.error("Failed to create event", err)
@@ -171,7 +185,7 @@ export function EventsTab() {
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto">Create event</Button>
           </DialogTrigger>
-          <DialogContent className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <DialogContent className="w-full max-w-xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create new event</DialogTitle>
             </DialogHeader>
@@ -188,42 +202,72 @@ export function EventsTab() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Type *</label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(v) =>
-                    setFormData({ ...formData, type: v as EventType })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="INTRA_SECMUN">Intra SECMUN</SelectItem>
-                    <SelectItem value="INTER_SECMUN">Inter SECMUN</SelectItem>
-                    <SelectItem value="WORKSHOP">Workshop</SelectItem>
-                    <SelectItem value="EDBLAZON_TIMES">EdBlazon Times</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Type *</label>
+                  <Select
+                    value={formData.type}
+                    onValueChange={(v) =>
+                      setFormData({ ...formData, type: v as EventType })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="INTRA_SECMUN">Intra SECMUN</SelectItem>
+                      <SelectItem value="INTER_SECMUN">Inter SECMUN</SelectItem>
+                      <SelectItem value="WORKSHOP">Workshop</SelectItem>
+                      <SelectItem value="EDBLAZON_TIMES">
+                        EdBlazon Times
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Status</label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(v) =>
+                      setFormData({ ...formData, status: v as EventStatus })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="REG_OPEN">Registrations Open</SelectItem>
+                      <SelectItem value="REG_CLOSED">
+                        Registrations Closed
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Status</label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(v) =>
-                    setFormData({ ...formData, status: v as EventStatus })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="REG_OPEN">Registrations Open</SelectItem>
-                    <SelectItem value="REG_CLOSED">Registrations Closed</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Start date *</label>
+                  <Input
+                    type="date"
+                    value={formData.startDate}
+                    onChange={(e) =>
+                      setFormData({ ...formData, startDate: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">End date *</label>
+                  <Input
+                    type="date"
+                    value={formData.endDate}
+                    onChange={(e) =>
+                      setFormData({ ...formData, endDate: e.target.value })
+                    }
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -260,10 +304,10 @@ export function EventsTab() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead>Name / ID</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Created</TableHead>
+              <TableHead>Dates</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -279,9 +323,28 @@ export function EventsTab() {
             ) : (
               filteredEvents.map((event) => (
                 <TableRow key={event.id}>
-                  <TableCell className="font-medium">{event.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <div>{event.name}</div>
+                    <button
+                      className="mt-1 inline-flex items-center rounded bg-slate-100 px-2 py-0.5 text-[10px] text-slate-500 hover:bg-slate-200"
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(event.id)
+                          setCopiedId(event.id)
+                          setTimeout(() => setCopiedId(null), 1500)
+                        } catch {
+                          // ignore
+                        }
+                      }}
+                      title={event.id}
+                    >
+                      {copiedId === event.id ? "Copied" : `ID: ${event.id.slice(0, 6)}…`}
+                    </button>
+                  </TableCell>
                   <TableCell>
-                    <Badge variant="outline">{event.type.replace("_", " ")}</Badge>
+                    <Badge variant="outline">
+                      {event.type.replace("_", " ")}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge
@@ -293,7 +356,8 @@ export function EventsTab() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm">
-                    {new Date(event.createdAt).toLocaleDateString()}
+                    {new Date(event.startDate).toLocaleDateString()} –{" "}
+                    {new Date(event.endDate).toLocaleDateString()}
                   </TableCell>
                 </TableRow>
               ))

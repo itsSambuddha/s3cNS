@@ -89,11 +89,14 @@ export async function POST(req: NextRequest) {
 
         if (mode === "INTEREST") {
           await sendDAInterestEmail({
-            to: reg.email,
-            fullName: reg.fullName,
-            eventName: event.name,
-            interestType: role,
-          })
+          to: reg.email,
+          fullName: reg.fullName,
+          eventName: event.name,
+          interestType: role,
+          email: reg.email,
+          phone: reg.whatsAppNumber,
+        })
+
           reg.emailSent = true
         } else {
           const registrationLink =

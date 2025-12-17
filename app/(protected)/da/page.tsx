@@ -64,7 +64,7 @@ export default function DaPage() {
             </div>
 
             <TabsContent value="registrations" className="mt-0">
-              <RegistrationsTab selectedEventId={selectedEventId} />
+              <RegistrationsTab />
             </TabsContent>
 
             <TabsContent value="overview" className="mt-0">

@@ -518,12 +518,12 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
               >
                 Back to Home
               </Button>
-              <Button
+              {/* <Button
                 className="flex-1 rounded-full"
                 onClick={() => router.push("/events")}
               >
                 View Events
-              </Button>
+              </Button> */}
             </motion.div>
 
             {/* Footer note */}

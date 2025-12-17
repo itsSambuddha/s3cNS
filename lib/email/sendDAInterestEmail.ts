@@ -1,18 +1,20 @@
-// lib/email/sendDAInterestEmail.ts
-
 import nodemailer from "nodemailer"
+import { render } from "@react-email/render"
+import { InterestEmail } from "@/components/emails/InterestEmail"
 
 export interface SendDAInterestEmailOptions {
   to: string
   fullName: string
   eventName: string
   interestType?: "DELEGATE" | "CAMPUS_AMBASSADOR"
+  email: string
+  phone: string
 }
 
 export async function sendDAInterestEmail(
   options: SendDAInterestEmailOptions,
 ): Promise<void> {
-  const { to, fullName, eventName, interestType } = options
+  const { to, fullName, eventName, interestType, email, phone } = options
 
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || "smtp.gmail.com",
@@ -24,23 +26,20 @@ export async function sendDAInterestEmail(
     },
   })
 
-  const roleText =
-    interestType === "CAMPUS_AMBASSADOR" ? "Campus Ambassador" : "Delegate"
-
-  const html = `
-    <div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;">
-      <h1>Interest received for ${eventName}</h1>
-      <p>Hi ${fullName},</p>
-      <p>Thank you for showing interest in ${eventName} as a ${roleText}.</p>
-      <p>We will get back to you soon with further details.</p>
-      <p>Best regards,<br />SECMUN Delegate Affairs</p>
-    </div>
-  `
+  const html = await render(
+    InterestEmail({
+      fullName,
+      eventName,
+      interestType,
+      email,
+      phone,
+    }),
+  )
 
   await transporter.sendMail({
     from: `"SECMUN Delegate Affairs" <${process.env.SMTP_USER}>`,
     to,
-    subject: `Your interest in ${eventName} has been received`,
+    subject: `Interest received for ${eventName}`,
     html,
   })
 }

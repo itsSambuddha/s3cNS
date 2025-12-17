@@ -1,38 +1,40 @@
-import { NextResponse } from "next/server"
+// app/api/events/[id]/route.ts
+
+import { NextRequest, NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/mongodb"
 import { Event } from "@/lib/db/models/Event"
 
-type Params = {
-  params: { eventId: string }
+interface Params {
+  params: { id: string }
 }
 
-export async function PATCH(req: Request, { params }: Params) {
+export async function DELETE(req: NextRequest, { params }: Params) {
   try {
-    const body = await req.json()
-    await connectToDatabase()
-
-    const updated = await Event.findByIdAndUpdate(
-      params.eventId,
-      { $set: body },
-      { new: true }
-    )
-
-    if (!updated) {
+    const { id } = params
+    if (!id) {
       return NextResponse.json(
-        { success: false, error: "Event not found" },
-        { status: 404 }
+        { error: "Missing event id" },
+        { status: 400 },
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      data: updated,
-    })
+    await connectToDatabase()
+
+    const res = await Event.findByIdAndDelete(id)
+    if (!res) {
+      return NextResponse.json(
+        { error: "Event not found" },
+        { status: 404 },
+      )
+    }
+
+    return NextResponse.json({ success: true }, { status: 200 })
   } catch (err) {
-    console.error("[EVENT_UPDATE_ERROR]", err)
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error("❌ events DELETE error:", msg)
     return NextResponse.json(
-      { success: false, error: "Failed to update event" },
-      { status: 500 }
+      { error: "Failed to delete event" },
+      { status: 500 },
     )
   }
 }

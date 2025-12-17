@@ -3,20 +3,17 @@
 import { NextRequest, NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/mongodb"
 import { Event } from "@/lib/db/models/Event"
-
-type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
-type EventStatus = "REG_OPEN" | "REG_CLOSED"
+import type { EventType, EventStatus } from "@/lib/db/models/Event"
 
 interface CreateEventBody {
   name?: string
   type?: EventType
   status?: EventStatus
   registrationDeadline?: string | null
-  delegateFormLink?: string | null
-  ambassadorFormLink?: string | null
+  startDate?: string
+  endDate?: string
 }
 
-// GET /api/events?type=&status=
 export async function GET(req: NextRequest) {
   try {
     await connectToDatabase()
@@ -32,7 +29,7 @@ export async function GET(req: NextRequest) {
     const events = await Event.find(filter)
       .sort({ createdAt: -1 })
       .select(
-        "_id name type status registrationDeadline delegateFormLink ambassadorFormLink createdAt",
+        "_id name type status registrationDeadline delegateFormLink ambassadorFormLink startDate endDate createdAt",
       )
 
     const data = events.map((ev) => ({
@@ -43,6 +40,8 @@ export async function GET(req: NextRequest) {
       registrationDeadline: ev.registrationDeadline,
       delegateFormLink: ev.delegateFormLink ?? null,
       ambassadorFormLink: ev.ambassadorFormLink ?? null,
+      startDate: ev.startDate,
+      endDate: ev.endDate,
       createdAt: ev.createdAt,
     }))
 
@@ -57,7 +56,6 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST /api/events  (create new event)
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as CreateEventBody
@@ -66,8 +64,8 @@ export async function POST(req: NextRequest) {
       type,
       status = "REG_CLOSED",
       registrationDeadline,
-      delegateFormLink,
-      ambassadorFormLink,
+      startDate,
+      endDate,
     } = body
 
     if (!name || !name.trim()) {
@@ -84,28 +82,11 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const validTypes: EventType[] = [
-      "INTRA_SECMUN",
-      "INTER_SECMUN",
-      "WORKSHOP",
-      "EDBLAZON_TIMES",
-    ]
-    if (!validTypes.includes(type)) {
+    if (!startDate || !endDate) {
       return NextResponse.json(
         {
-          error: `Invalid type. Must be one of: ${validTypes.join(", ")}`,
-          code: "INVALID_TYPE",
-        },
-        { status: 400 },
-      )
-    }
-
-    const validStatuses: EventStatus[] = ["REG_OPEN", "REG_CLOSED"]
-    if (!validStatuses.includes(status)) {
-      return NextResponse.json(
-        {
-          error: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
-          code: "INVALID_STATUS",
+          error: "startDate and endDate are required",
+          code: "MISSING_DATES",
         },
         { status: 400 },
       )
@@ -113,7 +94,6 @@ export async function POST(req: NextRequest) {
 
     await connectToDatabase()
 
-    // If creating a REG_OPEN event, close other events of same type
     if (status === "REG_OPEN") {
       await Event.updateMany(
         { type },
@@ -131,8 +111,8 @@ export async function POST(req: NextRequest) {
           : registrationDeadline
           ? new Date(registrationDeadline)
           : null,
-      delegateFormLink: delegateFormLink ?? undefined,
-      ambassadorFormLink: ambassadorFormLink ?? undefined,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
     })
 
     const created = {
@@ -143,6 +123,8 @@ export async function POST(req: NextRequest) {
       registrationDeadline: doc.registrationDeadline,
       delegateFormLink: doc.delegateFormLink ?? null,
       ambassadorFormLink: doc.ambassadorFormLink ?? null,
+      startDate: doc.startDate,
+      endDate: doc.endDate,
       createdAt: doc.createdAt,
     }
 
