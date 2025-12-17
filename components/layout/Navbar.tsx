@@ -15,7 +15,7 @@ import { NotificationBell } from '@/components/notifications/NotificationBell'
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/dashboard', label: 'Dashboard' },
-  { href: '/events', label: 'Events' },   // placeholder
+  { href: '/gazette', label: 'Gazette' },   // placeholder
   { href: '/secretariat', label: 'Secretariat' }, // placeholder
   { href: '/help', label: 'Help' }, // placeholder
 ]

@@ -17,8 +17,8 @@ import type { IUser } from '@/lib/db/models/User'
 const topLinks = [
   { href: '/', label: 'Home' },
   { href: '/dashboard', label: 'Dashboard' },
-  { href: '/events', label: 'Events' },
-  { href: '/finance', label: 'Finance' },
+  { href: '/gazette', label: 'Gazette' },
+  { href: '/secretariat', label: 'Secretariat' },
 ]
 
 // Sidebar items (from Sidebar.tsx)
