@@ -1,3 +1,4 @@
+//lib/email/sendDARegistrationEmail.ts
 import nodemailer from "nodemailer"
 import { render } from "@react-email/render"
 import { RegistrationEmail } from "@/components/emails/RegistrationEmail"

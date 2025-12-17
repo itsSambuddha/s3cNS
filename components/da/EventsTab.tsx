@@ -1,4 +1,3 @@
-// components/da/EventsTab.tsx
 "use client"
 
 import { useState, useEffect } from "react"
@@ -29,17 +28,17 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 
 type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
-type EventStatus = "PLANNING" | "REG_OPEN" | "RUNNING" | "COMPLETED" | "ARCHIVED"
+type EventStatus = "REG_OPEN" | "REG_CLOSED"
 
 interface Event {
-  _id: string
+  id: string
   name: string
-  code: string
   type: EventType
   status: EventStatus
-  startDate: string
-  endDate: string
-  venue: string
+  registrationDeadline: string | null
+  delegateFormLink: string | null
+  ambassadorFormLink: string | null
+  createdAt: string
 }
 
 export function EventsTab() {
@@ -52,13 +51,9 @@ export function EventsTab() {
 
   const [formData, setFormData] = useState({
     name: "",
-    code: "",
     type: "INTRA_SECMUN" as EventType,
-    startDate: "",
-    endDate: "",
-    venue: "",
-    owningOffice: "",
-    status: "PLANNING" as EventStatus,
+    status: "REG_CLOSED" as EventStatus,
+    registrationDeadline: "",
   })
 
   // Load events
@@ -66,14 +61,12 @@ export function EventsTab() {
     async function loadEvents() {
       try {
         const res = await fetch("/api/events")
-        if (res.ok) {
-          const apiResponse = await res.json()
-          if (apiResponse.success) {
-            setEvents(apiResponse.data || [])
-          } else {
-            console.error("Failed to fetch events:", apiResponse.message)
-          }
+        if (!res.ok) {
+          throw new Error(`Failed to fetch events: ${res.status}`)
         }
+        const json = await res.json()
+        const list = (json.events || []) as Event[]
+        setEvents(list)
       } catch (err) {
         console.error("Failed to load events", err)
       } finally {
@@ -85,8 +78,8 @@ export function EventsTab() {
   }, [])
 
   async function handleCreateEvent() {
-    if (!formData.name || !formData.code || !formData.startDate || !formData.endDate || !formData.venue) {
-      alert("Please fill in all required fields")
+    if (!formData.name.trim()) {
+      alert("Please fill in the event name")
       return
     }
 
@@ -96,29 +89,30 @@ export function EventsTab() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formData,
-          startDate: new Date(formData.startDate),
-          endDate: new Date(formData.endDate),
+          name: formData.name.trim(),
+          type: formData.type,
+          status: formData.status,
+          registrationDeadline: formData.registrationDeadline || null,
         }),
       })
 
-      if (res.ok) {
-        const newEvent = await res.json()
-        setEvents([newEvent, ...events])
-        setDialogOpen(false)
-        setFormData({
-          name: "",
-          code: "",
-          type: "INTRA_SECMUN",
-          startDate: "",
-          endDate: "",
-          venue: "",
-          owningOffice: "",
-          status: "PLANNING",
-        })
-      } else {
-        alert("Failed to create event")
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}))
+        console.error("Failed to create event:", errJson)
+        alert(errJson.error || "Failed to create event")
+        return
       }
+
+      const json = await res.json()
+      const created = json.event as Event
+      setEvents((prev) => [created, ...prev])
+      setDialogOpen(false)
+      setFormData({
+        name: "",
+        type: "INTRA_SECMUN",
+        status: "REG_CLOSED",
+        registrationDeadline: "",
+      })
     } catch (err) {
       console.error("Failed to create event", err)
       alert("Error creating event")
@@ -167,11 +161,8 @@ export function EventsTab() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ALL">All statuses</SelectItem>
-              {/* <SelectItem value="PLANNING">Planning</SelectItem> */}
               <SelectItem value="REG_OPEN">Registrations Open</SelectItem>
-              {/* <SelectItem value="RUNNING">Running</SelectItem> */}
-              <SelectItem value="COMPLETED">Completed</SelectItem>
-              {/* <SelectItem value="ARCHIVED">Archived</SelectItem> */}
+              <SelectItem value="REG_CLOSED">Registrations Closed</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -180,132 +171,77 @@ export function EventsTab() {
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto">Create event</Button>
           </DialogTrigger>
-          <DialogContent className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="w-full max-w-md max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Create new event</DialogTitle>
             </DialogHeader>
 
             <div className="space-y-6 py-4">
-              {/* Row 1: Name and Code */}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Event name *</label>
-                  <Input
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    placeholder="e.g., Intra SECMUN 2025"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Event code *</label>
-                  <Input
-                    value={formData.code}
-                    onChange={(e) =>
-                      setFormData({ ...formData, code: e.target.value })
-                    }
-                    placeholder="e.g., INTRA25"
-                  />
-                </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Event name *</label>
+                <Input
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  placeholder="e.g., Intra SECMUN 2025"
+                />
               </div>
 
-              {/* Row 2: Type and Status */}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Type *</label>
-                  <Select
-                    value={formData.type}
-                    onValueChange={(v) =>
-                      setFormData({ ...formData, type: v as EventType })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="INTRA_SECMUN">Intra SECMUN</SelectItem>
-                      <SelectItem value="INTER_SECMUN">Inter SECMUN</SelectItem>
-                      <SelectItem value="WORKSHOP">Workshop</SelectItem>
-                      <SelectItem value="EDBLAZON_TIMES">EdBlazon Times</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Status</label>
-                  <Select
-                    value={formData.status}
-                    onValueChange={(v) =>
-                      setFormData({ ...formData, status: v as EventStatus })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {/* <SelectItem value="PLANNING">Planning</SelectItem> */}
-                      <SelectItem value="REG_OPEN">Registrations Open</SelectItem>
-                      {/* <SelectItem value="RUNNING">Running</SelectItem> */}
-                      <SelectItem value="COMPLETED">Completed</SelectItem>
-                      {/* <SelectItem value="ARCHIVED">Archived</SelectItem> */}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Type *</label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(v) =>
+                    setFormData({ ...formData, type: v as EventType })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="INTRA_SECMUN">Intra SECMUN</SelectItem>
+                    <SelectItem value="INTER_SECMUN">Inter SECMUN</SelectItem>
+                    <SelectItem value="WORKSHOP">Workshop</SelectItem>
+                    <SelectItem value="EDBLAZON_TIMES">EdBlazon Times</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Row 3: Start and End dates */}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Start date *</label>
-                  <Input
-                    type="date"
-                    value={formData.startDate}
-                    onChange={(e) =>
-                      setFormData({ ...formData, startDate: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">End date *</label>
-                  <Input
-                    type="date"
-                    value={formData.endDate}
-                    onChange={(e) =>
-                      setFormData({ ...formData, endDate: e.target.value })
-                    }
-                  />
-                </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Status</label>
+                <Select
+                  value={formData.status}
+                  onValueChange={(v) =>
+                    setFormData({ ...formData, status: v as EventStatus })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="REG_OPEN">Registrations Open</SelectItem>
+                    <SelectItem value="REG_CLOSED">Registrations Closed</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              {/* Row 4: Venue and Owning office */}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Venue *</label>
-                  <Input
-                    value={formData.venue}
-                    onChange={(e) =>
-                      setFormData({ ...formData, venue: e.target.value })
-                    }
-                    placeholder="e.g., SECMUN Hall"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Owning office</label>
-                  <Input
-                    value={formData.owningOffice}
-                    onChange={(e) =>
-                      setFormData({ ...formData, owningOffice: e.target.value })
-                    }
-                    placeholder="e.g., DA, Events"
-                  />
-                </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Registration deadline (optional)
+                </label>
+                <Input
+                  type="date"
+                  value={formData.registrationDeadline}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      registrationDeadline: e.target.value,
+                    })
+                  }
+                />
               </div>
 
-              {/* Action button */}
               <Button
                 onClick={handleCreateEvent}
                 disabled={submitting}
@@ -325,25 +261,25 @@ export function EventsTab() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Code</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Dates</TableHead>
-              <TableHead>Venue</TableHead>
+              <TableHead>Created</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredEvents.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                <TableCell
+                  colSpan={4}
+                  className="text-center text-muted-foreground py-8"
+                >
                   No events found
                 </TableCell>
               </TableRow>
             ) : (
               filteredEvents.map((event) => (
-                <TableRow key={event._id}>
+                <TableRow key={event.id}>
                   <TableCell className="font-medium">{event.name}</TableCell>
-                  <TableCell className="text-sm">{event.code}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{event.type.replace("_", " ")}</Badge>
                   </TableCell>
@@ -357,10 +293,8 @@ export function EventsTab() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm">
-                    {new Date(event.startDate).toLocaleDateString()} –{" "}
-                    {new Date(event.endDate).toLocaleDateString()}
+                    {new Date(event.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="text-sm">{event.venue}</TableCell>
                 </TableRow>
               ))
             )}

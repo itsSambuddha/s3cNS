@@ -1,5 +1,5 @@
 // lib/db/models/DelegateRegistration.ts
-// FULLY REPLACEABLE — CLEAN, STABLE, PROD-SAFE
+
 
 import mongoose, { Schema, type Document, type Model } from "mongoose"
 import { EventType } from "./Event"

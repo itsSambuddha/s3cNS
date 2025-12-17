@@ -7,32 +7,32 @@ import { Input } from "@/components/ui/input"
 import { Tooltip } from "@/components/ui/tooltip-card"
 import clsx from "clsx"
 
-type EventItem = {
-  _id: string
-  name: string
-  type: string
-  status: "REG_OPEN" | "REG_CLOSED"
-  delegateFormLink?: string
-  ambassadorFormLink?: string
-}
+type EventStatus = "REG_OPEN" | "REG_CLOSED"
+type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
 
-type OverviewResponse = {
-  event: EventItem
-  stats: {
+type EventSummary = {
+  id: string
+  name: string
+  type: EventType
+  status: EventStatus
+  registrationDeadline: string | null
+  delegateFormLink: string | null
+  ambassadorFormLink: string | null
+  createdAt: string
+  registrationCounts: {
     total: number
-    interest: {
-      emailSent: number
-      whatsappSent: number
-    }
-    registration: {
-      emailSent: number
-      whatsappSent: number
-    }
+    delegates: number
+    ambassadors: number
   }
 }
 
+type OverviewResponse = {
+  totalRegistrations: number
+  events: EventSummary[]
+}
+
 export function OverviewTab() {
-  const [events, setEvents] = useState<EventItem[]>([])
+  const [events, setEvents] = useState<EventSummary[]>([])
   const [eventId, setEventId] = useState("")
   const [data, setData] = useState<OverviewResponse | null>(null)
   const [loading, setLoading] = useState(false)
@@ -40,102 +40,115 @@ export function OverviewTab() {
   const [delegateLink, setDelegateLink] = useState("")
   const [ambassadorLink, setAmbassadorLink] = useState("")
 
-  /* ---------------- Load events ---------------- */
+  // Load overview once
   useEffect(() => {
-    fetch("/api/events")
-      .then(r => r.json())
-      .then(j => j.success && setEvents(j.data))
+    async function load() {
+      try {
+        const res = await fetch("/api/da/overview", { cache: "no-store" })
+        if (!res.ok) {
+          throw new Error(`Failed to load overview: ${res.status}`)
+        }
+        const json = (await res.json()) as OverviewResponse
+        setData(json)
+        setEvents(json.events)
+      } catch (err) {
+        console.error("Failed to load DA overview", err)
+      }
+    }
+    load()
   }, [])
 
-  /* ---------------- Load overview ---------------- */
+  // When eventId changes, sync links from data
   useEffect(() => {
+    if (!eventId || !data) return
+    const ev = data.events.find((e) => e.id === eventId)
+    if (!ev) return
+    setDelegateLink(ev.delegateFormLink || "")
+    setAmbassadorLink(ev.ambassadorFormLink || "")
+  }, [eventId, data])
+
+  async function patchEvent(payload: Partial<EventSummary>) {
     if (!eventId) return
-    setLoading(true)
-
-    fetch(`/api/da/overview?eventId=${eventId}`)
-      .then(r => r.json())
-      .then(j => {
-        if (j.success) {
-          setData(j)
-          setDelegateLink(j.event.delegateFormLink || "")
-          setAmbassadorLink(j.event.ambassadorFormLink || "")
-        }
-      })
-      .finally(() => setLoading(false))
-  }, [eventId])
-
-  /* ---------------- Update event ---------------- */
-  async function patchEvent(payload: Partial<EventItem>) {
-    if (!data) return
     try {
-      const response = await fetch(`/api/da/events/${data.event._id}/update`, {
+      const res = await fetch(`/api/da/events/${eventId}/update`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-      if (!response.ok) {
-        throw new Error(`Failed to update: ${response.statusText}`)
+      if (!res.ok) {
+        throw new Error(`Failed to update: ${res.status}`)
       }
-      setData({
-        ...data,
-        event: { ...data.event, ...payload },
-      })
+      const json = await res.json()
+      const updated = json.event as EventSummary
+
+      setData((prev) =>
+        prev
+          ? {
+              ...prev,
+              events: prev.events.map((e) =>
+                e.id === updated.id ? { ...e, ...updated } : e,
+              ),
+            }
+          : prev,
+      )
     } catch (error) {
       console.error("Error updating event:", error)
       alert("Failed to save changes. Please try again.")
     }
   }
 
-  if (!events.length) {
+  if (!data || events.length === 0) {
     return <p className="text-sm text-muted-foreground">Loading events…</p>
   }
 
+  const selected = events.find((e) => e.id === eventId) || null
+
   return (
     <div className="space-y-8 print:p-8">
-      {/* ================= Event Selector ================= */}
+      {/* Event selector */}
       <select
         value={eventId}
-        onChange={e => setEventId(e.target.value)}
+        onChange={(e) => setEventId(e.target.value)}
         className="rounded-md border px-3 py-2 text-sm"
       >
         <option value="">Select event</option>
-        {events.map(e => (
-          <option key={e._id} value={e._id}>
+        {events.map((e) => (
+          <option key={e.id} value={e.id}>
             {e.name} — {e.type}
           </option>
         ))}
       </select>
 
-      {loading && <p>Loading overview…</p>}
+      {!selected && <p className="text-sm text-muted-foreground">Select an event to view overview.</p>}
 
-      {data && (
+      {selected && (
         <>
-          {/* ================= Header ================= */}
+          {/* Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold">{data.event.name}</h2>
-              <p className="text-sm text-muted-foreground">{data.event.type}</p>
+              <h2 className="text-xl font-semibold">{selected.name}</h2>
+              <p className="text-sm text-muted-foreground">{selected.type}</p>
             </div>
 
             <div className="flex items-center gap-5">
               <span
                 className={clsx(
                   "rounded-full px-5 py-2 text-l font-bold",
-                  data.event.status === "REG_OPEN"
+                  selected.status === "REG_OPEN"
                     ? "bg-green-100 text-green-700"
                     : "bg-red-100 text-red-700",
                 )}
               >
-                {data.event.status === "REG_OPEN" ? "Open" : "Closed"}
+                {selected.status === "REG_OPEN" ? "Open" : "Closed"}
               </span>
 
               <input
                 type="checkbox"
-                checked={data.event.status === "REG_OPEN"}
+                checked={selected.status === "REG_OPEN"}
                 onChange={() =>
                   patchEvent({
                     status:
-                      data.event.status === "REG_OPEN"
+                      selected.status === "REG_OPEN"
                         ? "REG_CLOSED"
                         : "REG_OPEN",
                   })
@@ -144,26 +157,17 @@ export function OverviewTab() {
             </div>
           </div>
 
-          {/* ================= Stats ================= */}
+          {/* Stats */}
           <div className="grid grid-cols-3 gap-4">
-            <Stat title="Total entries" value={data.stats.total} />
-
-            {/* <CommStat
-              title="Interest"
-              email={data.stats.interest.emailSent}
-              whatsapp={data.stats.interest.whatsappSent}
-              enabled
-            /> */}
-
-            {/* <CommStat
-              title="Registration"
-              email={data.stats.registration.emailSent}
-              whatsapp={data.stats.registration.whatsappSent}
-              enabled={!!data.event.delegateFormLink}
-            /> */}
+            <Stat title="Total entries" value={selected.registrationCounts.total} />
+            <Stat title="Delegates" value={selected.registrationCounts.delegates} />
+            <Stat
+              title="Campus Ambassadors"
+              value={selected.registrationCounts.ambassadors}
+            />
           </div>
 
-          {/* ================= Form Links ================= */}
+          {/* Form Links */}
           <Card className="space-y-4 p-4">
             <h3 className="font-medium">Registration Forms</h3>
 
@@ -180,24 +184,22 @@ export function OverviewTab() {
               tooltip="Sent to approved CAs"
               value={ambassadorLink}
               onChange={setAmbassadorLink}
-              onSave={() =>
-                patchEvent({ ambassadorFormLink: ambassadorLink })
-              }
+              onSave={() => patchEvent({ ambassadorFormLink: ambassadorLink })}
             />
           </Card>
 
-          {/* ================= Preview ================= */}
+          {/* Preview */}
           <Card className="p-4 space-y-3">
             <h3 className="font-medium">Communication preview</h3>
             <Preview title="Interest email">
-              Thank you for showing interest in {data.event.name}.
+              Thank you for showing interest in {selected.name}.
             </Preview>
             <Preview title="Registration email">
               Please complete the registration form to proceed.
             </Preview>
           </Card>
 
-          {/* ================= Report ================= */}
+          {/* Report */}
           <Button variant="outline" onClick={() => window.print()}>
             Download report
           </Button>
@@ -207,7 +209,7 @@ export function OverviewTab() {
   )
 }
 
-/* ================= Subcomponents ================= */
+/* Subcomponents */
 
 function Stat({ title, value }: { title: string; value: number }) {
   return (
@@ -215,53 +217,6 @@ function Stat({ title, value }: { title: string; value: number }) {
       <p className="text-xs text-muted-foreground">{title}</p>
       <p className="text-2xl font-semibold">{value}</p>
     </Card>
-  )
-}
-
-function CommStat({
-  title,
-  email,
-  whatsapp,
-  enabled,
-}: {
-  title: string
-  email: number
-  whatsapp: number
-  enabled: boolean
-}) {
-  return (
-    <Card className="p-4 space-y-2">
-      <p className="text-xs text-muted-foreground">{title}</p>
-      <div className="flex gap-2">
-        <CommButton label="Email" active={email > 0} enabled={enabled} />
-        <CommButton label="WhatsApp" active={whatsapp > 0} enabled={enabled} />
-      </div>
-    </Card>
-  )
-}
-
-function CommButton({
-  label,
-  active,
-  enabled,
-}: {
-  label: string
-  active: boolean
-  enabled: boolean
-}) {
-  return (
-    <button
-      disabled={!enabled}
-      className={clsx(
-        "rounded px-3 py-1 text-xs font-medium",
-        active
-          ? "bg-green-100 text-green-700"
-          : "bg-red-100 text-red-700",
-        !enabled && "opacity-40 cursor-not-allowed",
-      )}
-    >
-      {label}
-    </button>
   )
 }
 
@@ -276,7 +231,7 @@ function FormField({
   tooltip: string
   value: string
   onChange: (v: string) => void
-  onSave: () => Promise<void>
+  onSave: () => Promise<void> | void
 }) {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -286,9 +241,7 @@ function FormField({
     try {
       await onSave()
       setSaved(true)
-      setTimeout(() => setSaved(false), 2000) // Reset after 2 seconds
-    } catch (error) {
-      // Error already handled in patchEvent
+      setTimeout(() => setSaved(false), 2000)
     } finally {
       setSaving(false)
     }
@@ -302,7 +255,7 @@ function FormField({
         </label>
       </Tooltip>
       <div className="flex gap-2">
-        <Input value={value} onChange={e => onChange(e.target.value)} />
+        <Input value={value} onChange={(e) => onChange(e.target.value)} />
         <Button size="sm" onClick={handleSave} disabled={saving}>
           {saving ? "Saving..." : saved ? "Saved" : "Save"}
         </Button>

@@ -1,3 +1,5 @@
+// components/public/ParticipationSection.tsx
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -5,30 +7,66 @@ import Link from "next/link"
 
 type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
 
-type ActiveMap = Record<EventType, boolean>
+interface ActiveEventInfo {
+  id: string
+  name: string
+  type: EventType
+  status: "REG_OPEN" | "REG_CLOSED"
+  registrationDeadline: string | null
+  delegateFormLink: string | null
+  ambassadorFormLink: string | null
+}
 
-const initialState: ActiveMap = {
-  INTRA_SECMUN: false,
-  INTER_SECMUN: false,
-  WORKSHOP: false,
-  EDBLAZON_TIMES: false,
+interface EventsByTypeItem {
+  type: EventType
+  event: ActiveEventInfo | null
+}
+
+interface ActiveEventsResponse {
+  eventsByType: EventsByTypeItem[]
+}
+
+const LABELS: Record<EventType, { title: string; description: string }> = {
+  INTRA_SECMUN: {
+    title: "Intra SECMUN",
+    description: "Closed-door intra-college conference for SEC delegates.",
+  },
+  INTER_SECMUN: {
+    title: "Inter SECMUN",
+    description: "Flagship inter-college SECMUN conference.",
+  },
+  WORKSHOP: {
+    title: "Workshops",
+    description: "Skill-building workshops and training sessions.",
+  },
+  EDBLAZON_TIMES: {
+    title: "EdBlazon Times",
+    description: "Editorial and journalism-focused experiences.",
+  },
 }
 
 export function ParticipationSection() {
-  const [active, setActive] = useState<ActiveMap | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [data, setData] = useState<EventsByTypeItem[] | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
 
     async function load() {
       try {
-        const res = await fetch("/api/public/active-events")
-        if (!res.ok) throw new Error("Failed to load events")
-        const data = (await res.json()) as Partial<ActiveMap>
-        if (!cancelled) setActive({ ...initialState, ...data })
-      } catch (e) {
-        if (!cancelled) setError("Could not load event status right now.")
+        const res = await fetch("/api/public/active-events", { cache: "no-store" })
+        if (!res.ok) {
+          throw new Error(`Failed to load active events: ${res.status}`)
+        }
+        const json = (await res.json()) as ActiveEventsResponse
+        if (!cancelled) {
+          setData(json.eventsByType)
+        }
+      } catch (err) {
+        console.error("❌ Failed to load active events", err)
+        if (!cancelled) setData([])
+      } finally {
+        if (!cancelled) setLoading(false)
       }
     }
 
@@ -38,96 +76,70 @@ export function ParticipationSection() {
     }
   }, [])
 
-  const cards: { type: EventType; title: string; desc: string }[] = [
-    {
-      type: "INTRA_SECMUN",
-      title: "Intra SECMUN",
-      desc: "Closed-door intra-college conference for SEC delegates.",
-    },
-    {
-      type: "INTER_SECMUN",
-      title: "Inter SECMUN",
-      desc: "Flagship inter-college SECMUN conference.",
-    },
-    {
-      type: "WORKSHOP",
-      title: "Workshops",
-      desc: "Skill-building workshops and training sessions.",
-    },
-    {
-      type: "EDBLAZON_TIMES",
-      title: "EdBlazon Times",
-      desc: "Editorial and journalism-focused experiences.",
-    },
-  ]
+  function renderCard(type: EventType) {
+    const item = data?.find((i) => i.type === type) ?? null
+    const ev = item?.event ?? null
+    const { title, description } = LABELS[type]
 
-  const state = active ?? initialState
+    const isActive = !!ev
+    const href = isActive
+      ? `/register?eventType=${encodeURIComponent(type)}&eventId=${encodeURIComponent(ev.id)}`
+      : undefined
 
-  return (
-    <section className="bg-background py-12 sm:py-16">
-      <div className="mx-auto max-w-5xl px-4">
-        <div className="mb-8 space-y-2 text-center">
-          <h2 className="text-2xl font-semibold sm:text-3xl">
-            Participate in a SECMUN event
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Choose your event and submit your registration. Delegate Affairs will review every application carefully.
-          </p>
-          {error && (
-            <p className="text-xs text-destructive">
-              {error}
-            </p>
+    return (
+      <div
+        key={type}
+        className="flex flex-col rounded-xl border bg-white p-4 shadow-sm"
+      >
+        <div className="flex-1">
+          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          <p className="mt-1 text-sm text-gray-600">{description}</p>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between">
+          <span
+            className={`text-xs font-medium px-2 py-1 rounded-full ${
+              isActive ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"
+            }`}
+          >
+            {isActive ? "Active" : "Not active"}
+          </span>
+
+          {isActive ? (
+            <Link
+              href={href!}
+              className="text-sm font-medium text-blue-600 hover:text-blue-700"
+            >
+              Register interest →
+            </Link>
+          ) : (
+            <span className="text-xs text-gray-400">Registrations closed</span>
           )}
         </div>
+      </div>
+    )
+  }
 
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {cards.map((card) => {
-            const open = state[card.type]
-            return (
-              <div
-                key={card.type}
-                className="flex flex-col justify-between rounded-2xl border border-border/60 bg-card/80 p-4 shadow-sm backdrop-blur-xl transition hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-base font-semibold">{card.title}</h3>
-                    <span
-                      className={
-                        "rounded-full px-2 py-0.5 text-xs " +
-                        (open
-                          ? "bg-emerald-500/10 text-emerald-500"
-                          : "bg-muted text-muted-foreground")
-                      }
-                    >
-                      {open ? "Registrations open" : "Not active"}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {card.desc}
-                  </p>
-                </div>
+  return (
+    <section className="py-12">
+      <div className="mx-auto max-w-5xl px-4">
+        <h2 className="text-2xl font-semibold text-gray-900">
+          Participate in a SECMUN event
+        </h2>
+        <p className="mt-2 text-sm text-gray-600">
+          Choose your event and submit your registration. Delegate Affairs will review every application carefully.
+        </p>
 
-                <div className="mt-4">
-                  {open ? (
-                    <Link
-                      href={`/register?eventType=${card.type}`}
-                      className="inline-flex w-full items-center justify-center rounded-full bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition hover:bg-primary/90"
-                    >
-                      Register now
-                    </Link>
-                  ) : (
-                    <button
-                      className="inline-flex w-full cursor-not-allowed items-center justify-center rounded-full bg-muted px-3 py-2 text-xs font-medium text-muted-foreground"
-                      disabled
-                    >
-                      This event is not active now
-                    </button>
-                  )}
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        {loading ? (
+          <p className="mt-6 text-sm text-gray-500">Loading events...</p>
+        ) : (
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {renderCard("INTRA_SECMUN")}
+            {renderCard("INTER_SECMUN")}
+            {renderCard("WORKSHOP")}
+            {renderCard("EDBLAZON_TIMES")}
+          </div>
+        )}
       </div>
     </section>
   )

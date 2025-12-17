@@ -1,66 +1,90 @@
-import { NextResponse } from "next/server"
+// app/api/da/overview/route.ts
+
+import { NextRequest, NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/mongodb"
-import { DelegateRegistration } from "@/lib/db/models/DelegateRegistration"
 import { Event } from "@/lib/db/models/Event"
+import { DelegateRegistration } from "@/lib/db/models/DelegateRegistration"
 
-export async function GET(req: Request) {
+export async function GET(_req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url)
-    const eventId = searchParams.get("eventId")
-
-    if (!eventId) {
-      return NextResponse.json(
-        { success: false, error: "eventId required" },
-        { status: 400 }
-      )
-    }
-
     await connectToDatabase()
 
-    const event = await Event.findById(eventId).lean()
-    if (!event) {
-      return NextResponse.json(
-        { success: false, error: "Event not found" },
-        { status: 404 }
-      )
+    const [events, totalRegistrations] = await Promise.all([
+      Event.find({})
+        .sort({ createdAt: -1 })
+        .select(
+          "_id name type status registrationDeadline delegateFormLink ambassadorFormLink createdAt",
+        ),
+      DelegateRegistration.countDocuments({}),
+    ])
+
+    // count registrations per event
+    const regsByEvent = await DelegateRegistration.aggregate([
+      {
+        $group: {
+          _id: "$eventId",
+          total: { $sum: 1 },
+          delegates: {
+            $sum: {
+              $cond: [{ $eq: ["$interestType", "DELEGATE"] }, 1, 0],
+            },
+          },
+          ambassadors: {
+            $sum: {
+              $cond: [{ $eq: ["$interestType", "CAMPUS_AMBASSADOR"] }, 1, 0],
+            },
+          },
+        },
+      },
+    ])
+
+    const regMap = new Map<
+      string,
+      { total: number; delegates: number; ambassadors: number }
+    >()
+    for (const row of regsByEvent) {
+      if (!row._id) continue
+      regMap.set(String(row._id), {
+        total: row.total ?? 0,
+        delegates: row.delegates ?? 0,
+        ambassadors: row.ambassadors ?? 0,
+      })
     }
 
-    const regs = await DelegateRegistration.find({ eventId }).lean()
+    const eventSummaries = events.map((ev) => {
+      const key = String(ev._id)
+      const counts = regMap.get(key) ?? {
+        total: 0,
+        delegates: 0,
+        ambassadors: 0,
+      }
 
-    const interestRegs = regs.filter(r => r.interestType)
-    const fullRegs = regs.filter(r => !r.interestType)
-
-    return NextResponse.json({
-      success: true,
-      event: {
-        _id: event._id.toString(),
-        name: event.name,
-        type: event.type,
-        status: event.status,
-        delegateFormLink: event.delegateFormLink || "",
-        ambassadorFormLink: event.ambassadorFormLink || "",
-      },
-      stats: {
-        total: regs.length,
-
-        interest: {
-          total: interestRegs.length,
-          emailSent: interestRegs.filter(r => r.emailSent).length,
-          whatsappSent: interestRegs.filter(r => r.whatsappSent).length,
-        },
-
-        registration: {
-          total: fullRegs.length,
-          emailSent: fullRegs.filter(r => r.registrationEmailSent).length,
-          whatsappSent: fullRegs.filter(r => r.registrationWhatsappSent).length,
-        },
-      },
+      return {
+        id: key,
+        name: ev.name,
+        type: ev.type,
+        status: ev.status,
+        registrationDeadline: ev.registrationDeadline,
+        delegateFormLink: ev.delegateFormLink ?? null,
+        ambassadorFormLink: ev.ambassadorFormLink ?? null,
+        createdAt: ev.createdAt,
+        registrationCounts: counts,
+      }
     })
-  } catch (err) {
-    console.error("[DA_OVERVIEW_EVENT_ERROR]", err)
+
     return NextResponse.json(
-      { success: false, error: "Failed to load overview" },
-      { status: 500 }
+      {
+        totalRegistrations,
+        events: eventSummaries,
+      },
+      { status: 200 },
+    )
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error("❌ DA overview GET error:", msg)
+    return NextResponse.json(
+      { error: "Failed to load DA overview" },
+      { status: 500 },
     )
   }
 }

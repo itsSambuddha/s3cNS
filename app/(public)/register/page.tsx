@@ -1,35 +1,27 @@
+// app/(public)/register/page.tsx
+
 import { RegisterForm } from "@/components/public/RegisterForm"
 
-type EventType =
-  | "INTRA_SECMUN"
-  | "INTER_SECMUN"
-  | "WORKSHOP"
-  | "EDBLAZON_TIMES"
+type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
 
-function normalizeEventType(
-  raw: string | string[] | undefined,
-): EventType {
-  if (!raw) return "INTRA_SECMUN" // safe fallback
-  const value = Array.isArray(raw) ? raw[0] : raw
+function normalizeEventType(raw?: string): EventType {
   if (
-    value === "INTRA_SECMUN" ||
-    value === "INTER_SECMUN" ||
-    value === "WORKSHOP" ||
-    value === "EDBLAZON_TIMES"
+    raw === "INTRA_SECMUN" ||
+    raw === "INTER_SECMUN" ||
+    raw === "WORKSHOP" ||
+    raw === "EDBLAZON_TIMES"
   ) {
-    return value
+    return raw
   }
-  return "INTRA_SECMUN" // safe fallback
+  return "INTRA_SECMUN"
 }
 
-export default function RegisterPage({
-  searchParams,
-}: {
-  searchParams?: { eventType?: string }
+export default async function RegisterPage(props: {
+  searchParams: Promise<{ eventType?: string; eventId?: string }>
 }) {
-  const eventType = normalizeEventType(searchParams?.eventType)
+  const params = await props.searchParams
+  const eventType = normalizeEventType(params.eventType)
+  const eventId = params.eventId
 
-  return (
-    <RegisterForm eventType={eventType} />
-  )
+  return <RegisterForm eventType={eventType} eventId={eventId} />
 }
