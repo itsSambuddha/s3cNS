@@ -19,6 +19,7 @@ import { Lamp } from 'lucide-react'
 import { LampSection } from '@/components/landing/LampSection'
 import { PwaInstallButton } from '@/components/ui/PwaInstallButton'
 import { ParticipationSection } from '@/components/public/ParticipationSection'
+import { ConstitutionPreview } from '@/components/landing/constitution-preview'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 18 },
@@ -53,7 +54,7 @@ export default function LandingPage() {
       <Hero />
       
       {/* BEFORE / AFTER SECTION */}
-      
+      <ConstitutionPreview />
       <motion.section
         className="border-y bg-muted/40"
         initial="hidden"
