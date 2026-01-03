@@ -48,6 +48,7 @@ export default function ConstitutionPage() {
   const [email, setEmail] = useState("")
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState<"idle" | "ok" | "error">("idle")
+  const [showAppendixFull, setShowAppendixFull] = useState(false)
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id)
@@ -82,13 +83,11 @@ export default function ConstitutionPage() {
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <Navbar />
-        {/* main is now the background container and clamps overflow */}
         <main className="relative flex-1 px-3 pt-4 pb-0 sm:px-6 sm:pt-6 sm:pb-0 overflow-hidden">
-          {/* soft background gradient, now attached to main */}
+          {/* soft background gradient */}
           <div className="pointer-events-none absolute inset-0 -z-10">
             <div className="absolute left-[-15%] top-[-10%] h-64 w-64 rounded-full bg-blue-200/30 blur-3xl" />
             <div className="absolute right-[-10%] top-[35%] h-72 w-72 rounded-full bg-sky-200/30 blur-3xl" />
-            {/* no negative bottom so it won't create extra scroll height */}
             <div className="absolute bottom-0 left-[20%] h-52 w-52 rounded-full bg-indigo-200/25 blur-3xl" />
           </div>
 
@@ -203,6 +202,39 @@ export default function ConstitutionPage() {
                     </a>
                   </div>
                 </div>
+
+                {/* Appendix PDF – mini A4 card + fullscreen on click */}
+                <button
+                  type="button"
+                  onClick={() => setShowAppendixFull(true)}
+                  className="w-full rounded-2xl border border-slate-200 bg-white/95 p-3 text-xs shadow-sm backdrop-blur text-left hover:border-blue-300 hover:shadow-md transition"
+                >
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    Appendix
+                  </p>
+                  <p className="mt-1 text-[12px] font-semibold text-slate-900">
+                    Constitution Appendix (PDF)
+                  </p>
+                  <p className="mt-1 text-[11px] text-slate-500">
+                    Click to view the full appendix.
+                  </p>
+
+                  {/* Mini A4-style dummy preview */}
+                  <div className="mt-2 flex justify-center">
+                    <div className="relative h-40 w-28 overflow-hidden rounded-[6px] border border-slate-200 bg-slate-50 shadow-sm">
+                      <div className="absolute inset-0 flex flex-col">
+                        <div className="h-4 bg-slate-200/80" />
+                        <div className="mt-2 space-y-1 px-2">
+                          <div className="h-1.5 rounded bg-slate-200" />
+                          <div className="h-1.5 w-5/6 rounded bg-slate-200" />
+                          <div className="h-1.5 w-4/6 rounded bg-slate-200" />
+                          <div className="h-1.5 w-2/3 rounded bg-slate-200" />
+                        </div>
+                      </div>
+                      <div className="pointer-events-none absolute inset-0 rounded-[6px] ring-1 ring-slate-900/5" />
+                    </div>
+                  </div>
+                </button>
               </aside>
 
               {/* Main content – tabs render different components */}
@@ -225,6 +257,57 @@ export default function ConstitutionPage() {
               </motion.div>
             </section>
           </div>
+
+          {/* Fullscreen Appendix overlay */}
+          {showAppendixFull && (
+            <>
+              <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" />
+              <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/95">
+                <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-300">
+                      Appendix
+                    </p>
+                    <p className="text-sm font-semibold text-slate-50">
+                      Constitution Appendix (PDF)
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowAppendixFull(false)}
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-500 bg-slate-900 text-slate-100 text-sm hover:bg-slate-800"
+                    aria-label="Close appendix"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="flex-1 px-2 pb-4 pt-1 sm:px-4 sm:pb-6">
+                  <div className="h-full w-full overflow-hidden rounded-xl border border-slate-700 bg-black">
+                    <object
+                      data="/Constitution/Appendix.pdf"
+                      type="application/pdf"
+                      className="h-full w-full"
+                    >
+                      <div className="flex h-full items-center justify-center p-4">
+                        <p className="text-xs text-slate-200 text-center">
+                          Your browser cannot display embedded PDFs.{" "}
+                          <a
+                            href="/Constitution/Appendix.pdf"
+                            className="text-blue-300 underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Open the appendix in a new tab
+                          </a>
+                          .
+                        </p>
+                      </div>
+                    </object>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </main>
       </div>
     </div>
