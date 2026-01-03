@@ -22,10 +22,10 @@ const baseLinks = [
   { href: "/dashboard", label: "Overview", icon: IconLayoutDashboard },
   { href: "/timetable", label: "Timetable", icon: IconCalendarTime },
   { href: "/finance/records?tab=budgets", label: "Budget", icon: IconCurrencyRupee },
-  { href: "/documents", label: "Documents", icon: IconFileText },
+  // { href: "/documents", label: "Documents", icon: IconFileText },
   { href: "/news", label: "News", icon: IconNews },
   { href: "/achievements", label: "Achievements", icon: IconTrophy },
-  { href: "/directory", label: "Directory", icon: IconUsersGroup },
+  // { href: "/directory", label: "Directory", icon: IconUsersGroup },
 ]
 
 // Secretariat-only links; shown only when user has a secretariatRole
