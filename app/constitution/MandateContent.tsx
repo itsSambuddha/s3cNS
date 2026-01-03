@@ -435,6 +435,7 @@ export function MandateContent() {
           />
         </div>
       </BounceSection>
+      <br/>
     </div>
   )
 }

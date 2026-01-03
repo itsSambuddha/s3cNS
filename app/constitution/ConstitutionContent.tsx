@@ -11,14 +11,16 @@ import {
   CalendarClock,
   ShieldCheck,
   Award,
+  FileText,
+  DollarSign,
 } from "lucide-react"
 
 /**
  * ConstitutionContent
  *
- * Full Constitution view:
- * - Preamble
- * - Articles 1–13 (grouped where logical)
+ * Full Constitution view accurately reflecting the official SECMUN Constitution:
+ * - Preamble (verbatim adaptation)
+ * - Articles 1–13 with precise structure, eligibility rules, office details, and procedures
  *
  * Sections have ids that match the NAV_ITEMS used in page.tsx.
  */
@@ -31,101 +33,66 @@ export function ConstitutionContent() {
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
           Constitution
         </p>
-        <h2 className="mt-2 text-lg font-semibold text-slate-900">
-          Preamble
-        </h2>
-        <p className="mt-1 text-sm text-slate-600">
-          This Constitution is the foundational charter of SECMUN. It recalls
-          the club’s origin and legacy at St. Edmund’s College, recognises the
-          role of faculty and administration, and records the mandate entrusted
-          to the Secretariat and general body.
-        </p>
-        <p className="mt-2 text-sm text-slate-600">
-          The document exists to codify structure, responsibilities,
-          accountability, and procedures in a manner that is transparent,
-          consistent, and aligned with institutional expectations. All members,
-          office‑bearers, and bodies constituted under SECMUN are bound by the
-          provisions set out herein.
-        </p>
-        <p className="mt-2 text-sm text-slate-600">
-          In affirming this Constitution, SECMUN commits itself to
-          professionalism, inclusivity, academic integrity, and service to the
-          wider student and Model United Nations community.
-        </p>
+        <h2 className="mt-2 text-lg font-semibold text-slate-900">Preamble</h2>
+        <div className="mt-1 space-y-3 text-sm text-slate-700">
+          <p>
+            We, the members of the SECMUN (St. Edmund&apos;s College Model United Nations) Club,
+            Recalling the club&apos;s founding in 2014 and recognizing its heritage in fostering
+            academic excellence, global discourse, and diplomatic practice;
+          </p>
+          <p>
+            <em>Acknowledging </em>, the leadership and visionary direction of the 2025 Senior Secretariat
+            constituting of the President and Secretary-General in revitalizing
+            the club’s mandate toward national recognition;
+          </p>
+          <p>
+            <em>Affirming </em>, our collective commitment to cultivate articulate, ethical, and globally-minded
+            individuals through structured MUN experiences, training programs, and intellectual forums;
+          </p>
+          <p>
+            <em>Emphasizing </em>, the importance of professionalism, inclusivity, academic integrity, and service
+            to both the institution and the international MUN community;
+          </p>
+          <p>
+            <em>Recognizing </em>, the continued guidance of our esteemed Teacher-in-Charge and the need for
+            institutional accountability;
+          </p>
+          <p className="font-semibold">
+            Do hereby establish and adopt this Constitution as the supreme governing document of the
+            SECMUN club, to regulate its organization, responsibilities, code of conduct, and future
+            development.
+          </p>
+        </div>
       </BounceSection>
 
       {/* Article 1 */}
       <BounceSection id="const-1" icon={<GavelIcon />}>
         <h3 className="text-sm font-semibold text-slate-900">
-          Article 1 – Name and Nature
+          Article 1: Name and Purpose
         </h3>
-        <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-slate-700">
-          <li>
-            The name of the body shall be “SECMUN” (St. Edmund&apos;s College
-            Model United Nations), hereafter referred to as “the Club” or
-            “SECMUN Secretariat” where applicable.
-          </li>
-          <li>
-            SECMUN is recognised as an institutional, student‑led academic body
-            functioning under the administrative oversight of St. Edmund’s
-            College through the Teacher‑in‑Charge/Faculty Coordinator and
-            relevant authorities.
-          </li>
-          <li>
-            This Constitution, together with the Mandate, is the official
-            governance framework for SECMUN and supersedes all informal
-            understandings that conflict with its provisions.
-          </li>
-        </ul>
+        <div className="mt-2 space-y-2 text-sm text-slate-700">
+          <p><strong>1.1 Name:</strong> The club shall be known as SECMUN (St. Edmund&apos;s College Model United Nations).</p>
+          <p><strong>1.2 Purpose:</strong> To organize MUN conferences, workshops, and training sessions; to represent SECMUN at external MUN events; to provide members with platforms to develop diplomacy, public speaking, writing, research, and negotiation skills; and to make SECMUN a nationally recognized student body.</p>
+        </div>
       </BounceSection>
 
       {/* Article 2 */}
       <BounceSection id="const-2" icon={<UsersIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Article 2 – Membership
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          Membership provisions define who may be part of SECMUN, what rights
-          and duties they hold, and how they may cease to be members.
-        </p>
+        <h3 className="text-sm font-semibold text-slate-900">Article 2: Membership</h3>
         <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
           <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">Eligibility</p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                Membership is generally open to students currently enrolled at
-                St. Edmund’s College, subject to institutional rules.
-              </li>
-              <li>
-                Categories such as core members, associate members, and Junior
-                Secretariat members may be defined in supplemental regulations.
-              </li>
-              <li>
-                Members must accept this Constitution and Code of Conduct as a
-                condition of entry and continued participation.
-              </li>
+            <p className="font-semibold text-slate-900">Eligibility & Rights</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm">
+              <li><strong>2.1 Eligibility:</strong> Membership is open to all enrolled students of the college.</li>
+              <li><strong>2.2 Rights:</strong> Members have the right to participate in all club activities, vote in elections, and apply for official positions.</li>
             </ul>
           </div>
           <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Rights, duties, and cessation
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
+            <p className="font-semibold text-slate-900">Duties & Discipline</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm">
+              <li><strong>2.3 Duties:</strong> Members must uphold the values of the club, comply with the code of conduct, and actively engage in organized events.</li>
               <li>
-                Rights may include participation in SECMUN activities, access
-                to training, eligibility for Secretariat positions, and voting
-                in internal processes where specified.
-              </li>
-              <li>
-                Duties include maintaining decorum, upholding SECMUN&apos;s
-                reputation, adhering to academic and ethical standards, and
-                complying with directions of the Secretariat issued under this
-                Constitution.
-              </li>
-              <li>
-                Membership may be suspended or terminated for misconduct,
-                persistent non‑performance, or violation of the Code of Conduct,
-                following the procedures laid down in later Articles.
+                <strong>2.4 Disciplinary Clause:</strong> Any form of misconduct, including but not limited to harassment, academic dishonesty, financial misappropriation, unauthorized representation, or breach of the code of conduct (as laid out in Article 11), shall result in disciplinary action up to suspension or expulsion. Illegal activities within or outside SECMUN that damage its reputation will result in immediate expulsion and be reported to college authorities. The Teacher-in-Charge and core leadership shall jointly preside over all disciplinary hearings.
               </li>
             </ul>
           </div>
@@ -134,306 +101,163 @@ export function ConstitutionContent() {
 
       {/* Article 3 */}
       <BounceSection id="const-3" icon={<NetworkIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Article 3 – Secretariat Structure
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          This Article establishes the internal architecture of SECMUN and
-          identifies principal offices, bodies, and reporting lines.
-        </p>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-          <li>
-            The Secretariat shall consist of:
-            <ul className="mt-1 list-disc space-y-1 pl-5 text-xs">
-              <li>
-                Senior Secretariat (President, Secretary‑General, General
-                Secretary, and any other roles defined in the Mandate).
-              </li>
-              <li>
-                Under‑Secretary‑General offices and other operational
-                departments as described in the Mandate.
-              </li>
-              <li>
-                Junior Secretariat functioning under the General Secretary.
-              </li>
-              <li>
-                Executive Board (Dias) for each conference committee.
-              </li>
+        <h3 className="text-sm font-semibold text-slate-900">Article 3: Secretariat Structure</h3>
+        <div className="mt-2 space-y-4 text-sm text-slate-700">
+          <div>
+            <p className="font-semibold">3.1 Senior Secretariat:</p>
+            <ul className="mt-1 list-disc pl-5 space-y-1">
+              <li><strong>President:</strong> Principal authority and external representative of the club.</li>
+              <li><strong>Secretary-General:</strong> Chief coordinator of administrative and operational activities.</li>
+              <li><strong>General Secretary:</strong> Custodian of official documentation and internal communication. Supervises the Junior Secretariat and liaises across offices.</li>
+              <li><strong>Faculty Advisor / Teacher-in-Charge:</strong> Provides institutional oversight, ensures academic and disciplinary integrity, and approves structural and financial decisions.</li>
             </ul>
-          </li>
-          <li>
-            A Teacher‑in‑Charge/Faculty Coordinator shall be appointed by the
-            College to provide academic and administrative oversight, and to act
-            as the primary liaison between SECMUN and the institution.
-          </li>
-          <li>
-            Any modification to the Secretariat structure must be proposed in
-            writing, justified with operational need, and ratified in accordance
-            with the amendment procedures outlined in this Constitution.
-          </li>
-        </ul>
+          </div>
+          
+          <div>
+            <p className="font-semibold">3.2 Offices Under Secretary General (1 Head + Deputies):</p>
+            <div className="mt-2 grid grid-cols-2 gap-2 text-xs md:grid-cols-3">
+              <span>Delegate Affairs (1+2)</span>
+              <span>IT Office (1+2)</span>
+              <span>PR Office (1+1)</span>
+              <span>Marketing (1+1)</span>
+              <span>Finance (1+1)</span>
+              <span>Sponsorship (1+1)</span>
+              <span>Logistics (1+1)</span>
+              <span>Conference Mgmt (1)</span>
+            </div>
+          </div>
+          
+          {/* <p><strong>3.3 Junior Secretariat:</strong> Under General Secretary. Assists all Offices and functions as a preparatory cohort for future leadership.</p> */}
+        </div>
       </BounceSection>
 
-      {/* Articles 4–6 */}
+      {/* Articles 4-5 */}
       <BounceSection id="const-4" icon={<LayersIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Articles 4–6 – Roles, Hierarchy, and Tenure
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          These Articles translate Secretariat positions into clear,
-          enforceable roles and timelines, defining how authority and
-          responsibility flow within SECMUN.
-        </p>
-
-        <div className="mt-3 grid gap-4 text-xs text-slate-700 md:grid-cols-3">
+        <h3 className="text-sm font-semibold text-slate-900">Articles 4–5: Roles & Hierarchy</h3>
+        <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
           <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Article 4 – Roles and responsibilities
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                Each office‑bearer shall have a defined mandate, including key
-                tasks, decision‑making limits, and expected standards of
-                performance, as elaborated in the Mandate.
-              </li>
-              <li>
-                Office‑bearers must exercise their powers in good faith and in
-                alignment with SECMUN’s objectives and institutional norms.
-              </li>
-              <li>
-                Failure to meet role expectations may trigger review, guidance,
-                or removal as provided under subsequent Articles.
-              </li>
+            <p className="font-semibold text-slate-900">Article 4: Roles and Responsibilities</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm">
+              <li>All office-bearers shall receive a role description document outlining specific functions, expectations, and reporting duties.</li>
+              <li>Office-bearers must adhere to a professional standard in conduct and performance, in accordance with Article 11 (Code of Conduct).</li>
+              <li>The Teacher-in-Charge shall retain the right to oversee and audit club activities at any time.</li>
             </ul>
           </div>
-
           <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Article 5 – Reporting hierarchy
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                Deputies report to their respective Heads, who in turn report to
-                the Secretary‑General; the Secretary‑General reports to the
-                President and the Teacher‑in‑Charge where required.
-              </li>
-              <li>
-                The General Secretary oversees documentation, records, and the
-                Junior Secretariat, and coordinates with other offices for
-                information flow.
-              </li>
-              <li>
-                The Executive Board of each committee remains academically
-                autonomous in moderation but accountable to the Senior
-                Secretariat for adherence to conference‑wide policies.
-              </li>
-            </ul>
-          </div>
-
-          <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Article 6 – Tenure and vacancies
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                The default tenure of Secretariat positions shall be one
-                academic session or as otherwise notified in writing.
-              </li>
-              <li>
-                Eligibility for specific roles may include semester standing,
-                prior experience, merit, and conduct, as determined through
-                defined selection processes.
-              </li>
-              <li>
-                Vacancies created by resignation, removal, or other causes shall
-                be filled through an interim appointment or special selection,
-                recorded and communicated to the membership.
-              </li>
+            <p className="font-semibold text-slate-900">Article 5: Reporting Hierarchy</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm">
+              <li>Deputies → Office Heads → Secretary-General → President</li>
+              {/* <li>Junior Secretariat/Deputies → General Secretary → Secretary-General</li> */}
+              <li>All senior leadership reports operational updates to the Teacher-in-Charge / College administration if and when required.</li>
             </ul>
           </div>
         </div>
       </BounceSection>
 
-      {/* Articles 7–10 */}
-      <BounceSection id="const-5" icon={<CalendarIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Articles 7–10 – Meetings, Activities, Finance, and Amendments
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          These Articles govern how SECMUN deliberates, what activities it may
-          undertake, how finances are managed, and how this Constitution may be
-          improved over time.
-        </p>
+      {/* Article 6 */}
+      <BounceSection id="const-6" icon={<CalendarClock className="h-4 w-4" />}>
+        <h3 className="text-sm font-semibold text-slate-900">Article 6: Tenure and Selection</h3>
+        <div className="mt-3 space-y-3 text-xs text-slate-700">
+          <p><strong>6.1 Tenure:</strong> All office-bearers shall serve a one-year term aligned with the operational calendar of SECMUN, commencing from the date of their official appointment. This term shall not extend beyond the academic year in which the appointment was made.</p>
+          
+          <p className="font-semibold">Academic Eligibility:</p>
+          <ul className="list-disc pl-5 space-y-1">
+            <li><strong>President/Secretary-General:</strong> Senior-most semester after 6th Semester (typically Semester 4).</li>
+            {/* <li><strong>Junior Secretariat:</strong> Junior-most semester (typically Semester 1 or 2).</li> */}
+            <li><strong>Other roles:</strong> Open to all enrolled members meeting role requirements.</li>
+          </ul>
+          
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div className="rounded-2xl bg-slate-50/80 p-3">
+              <p className="font-semibold text-slate-900 text-xs">6.2 Selection Process</p>
+              <ul className="mt-1 list-disc pl-4 text-xs">
+                <li><em>Most positions:</em> Open applications → Core Panel selection → Teacher-in-Charge ratification</li>
+                <li><em>President/SecGen/GenSec:</em> Club election/nomination → Teacher-in-Charge approval</li>
+                {/* <li><em>Junior Sec:</em> Performance-based screening + recommendations</li> */}
+              </ul>
+            </div>
+            <div className="rounded-2xl bg-slate-50/80 p-3">
+              <p className="font-semibold text-slate-900 text-xs">6.3-6.4 Vacancies/Termination</p>
+              <ul className="mt-1 list-disc pl-4 text-xs">
+                <li>Mid-term: Acting Officer → Replacement within 15 days</li>
+                <li>Termination: Gross misconduct, negligence, or protocol violations via formal inquiry</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </BounceSection>
 
-        <div className="mt-3 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
+      {/* Articles 7-9 */}
+      <BounceSection id="const-7" icon={<FileText className="h-4 w-4" />}>
+        <h3 className="text-sm font-semibold text-slate-900">Articles 7–9: Operations</h3>
+        <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-3">
           <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Article 7 – Meetings and quorum
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                Ordinary meetings of the Secretariat shall be held at intervals
-                determined by the Senior Secretariat, with reasonable notice to
-                members.
-              </li>
-              <li>
-                Emergency meetings may be convened for urgent matters, with
-                shortened notice periods as circumstances require.
-              </li>
-              <li>
-                Quorum for meetings that take binding decisions shall be a
-                proportion of voting members specified in internal regulations;
-                absence of quorum limits such meetings to discussion only.
-              </li>
-            </ul>
-
-            <p className="mt-3 font-semibold text-slate-900">
-              Article 8 – Events and activities
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                SECMUN may organise conferences, workshops, training sessions,
-                mock simulations, outreach events, and delegations to external
-                MUNs, subject to institutional approval.
-              </li>
-              <li>
-                All events must comply with college policies on finance,
-                security, publicity, and use of premises.
-              </li>
-              <li>
-                The Secretariat shall ensure that academic quality and decorum
-                remain central to every activity conducted under the SECMUN
-                name.
-              </li>
+            <p className="font-semibold text-slate-900 mb-2">Article 7: Meetings</p>
+            <ul className="list-disc pl-4 space-y-1 text-sm">
+              <li>Quarterly meetings for progress assessment</li>
+              <li>Emergency meetings by President/SecGen/Teacher-in-Charge</li>
+              <li>Quorum: 50%+1 of office-bearers</li>
             </ul>
           </div>
-
           <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Article 9 – Finance
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                All financial inflows and outflows relating to SECMUN shall be
-                recorded accurately, with supporting documentation retained for
-                audit and review.
-              </li>
-              <li>
-                Budgets must be prepared in advance for major events and
-                submitted for approval to the appropriate institutional
-                authority.
-              </li>
-              <li>
-                No office‑bearer may incur expenditure or enter into financial
-                commitments in SECMUN&apos;s name beyond limits or processes
-                approved by this Constitution and college rules.
-              </li>
+            <p className="font-semibold text-slate-900 mb-2">Article 8: Events</p>
+            <ul className="list-disc pl-4 space-y-1 text-sm">
+              <li>Workshops, training, mock MUNs, conferences</li>
+              <li>Delegation to regional/national/international MUNs</li>
+              <li>All events under Teacher-in-Charge knowledge</li>
             </ul>
-
-            <p className="mt-3 font-semibold text-slate-900">
-              Article 10 – Feedback and amendments
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                Members may provide feedback on the functioning of the
-                Secretariat and the adequacy of this Constitution through
-                channels notified by the Senior Secretariat.
-              </li>
-              <li>
-                Proposed amendments shall be circulated in writing, debated in a
-                properly convened meeting, and adopted by a qualified majority
-                specified in internal amendment rules.
-              </li>
-              <li>
-                Amendments that alter fundamental structure or institutional
-                commitments require concurrence of the Teacher‑in‑Charge and
-                other authorities designated by the College.
-              </li>
+          </div>
+          <div className="rounded-2xl bg-slate-50/80 p-4">
+            <p className="font-semibold text-slate-900 mb-2">Article 9: Finance</p>
+            <ul className="list-disc pl-4 space-y-1 text-sm">
+              <li>Finance + Sponsorship Offices manage budgeting</li>
+              <li>Transparent financial records required</li>
+              <li>Annual budgets submitted to Teacher-in-Charge</li>
             </ul>
           </div>
         </div>
       </BounceSection>
 
-      {/* Article 11 */}
-      <BounceSection id="const-6" icon={<ShieldIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Article 11 – Code of Conduct
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          This Article codifies the behavioural and professional expectations
-          applicable to all members, delegates, and office‑bearers.
-        </p>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-          <li>
-            Members shall uphold standards of respect, non‑discrimination,
-            academic honesty, and professional conduct in all SECMUN activities.
-          </li>
-          <li>
-            Misuse of authority, harassment, discrimination, intimidation,
-            deliberate misinformation, or breach of confidentiality are
-            prohibited and may attract disciplinary action.
-          </li>
-          <li>
-            Complaints of misconduct shall be handled through a structured
-            process, ensuring fairness, the right to be heard, and appropriate
-            sanctions where violations are established.
-          </li>
-        </ul>
+      {/* Articles 10-11 */}
+      <BounceSection id="const-10" icon={<ShieldCheck className="h-4 w-4" />}>
+        <h3 className="text-sm font-semibold text-slate-900">Articles 10–11: Governance</h3>
+        <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
+          <div className="rounded-2xl bg-slate-50/80 p-4">
+            <p className="font-semibold text-slate-900">Article 10: Feedback & Amendments</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm">
+              <li>Feedback system for members&apos; concerns/suggestions</li>
+              <li>Amendments: ⅔ majority of office-bearers + Teacher-in-Charge ratification</li>
+            </ul>
+          </div>
+          <div className="rounded-2xl bg-slate-50/80 p-4">
+            <p className="font-semibold text-slate-900">Article 11: Code of Conduct</p>
+            <ul className="mt-2 list-disc space-y-1 pl-4 text-sm">
+              <li>All members addressed as &quot;Sir/Madam&quot; during formal operations</li>
+              <li>Professional etiquette, non-discrimination, punctuality mandatory</li>
+              <li>Misconduct → formal inquiry by Teacher-in-Charge</li>
+            </ul>
+          </div>
+        </div>
       </BounceSection>
 
       {/* Article 12 */}
-      <BounceSection id="const-12" icon={<AwardIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Article 12 – Certification and Recognition
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          This Article governs how SECMUN formally acknowledges service and
-          contribution.
-        </p>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-          <li>
-            Certificates of service may be issued to Secretariat members,
-            office‑bearers, and contributors who have satisfactorily completed
-            their tenure or assignment.
-          </li>
-          <li>
-            The Senior Secretariat may recommend special recognition, awards, or
-            commendations for exceptional work, subject to institutional norms.
-          </li>
-          <li>
-            No certificate or recognition may be issued that misrepresents
-            actual responsibilities or performance.
-          </li>
-        </ul>
+      <BounceSection id="const-12" icon={<Award className="h-4 w-4" />}>
+        <h3 className="text-sm font-semibold text-slate-900">Article 12: Certification</h3>
+        <div className="mt-2 space-y-3 text-sm text-slate-700">
+          <p><strong>12.1 Certification of Service:</strong> Issued to all Secretariat members upon term completion, stating designation, tenure, and responsibilities.</p>
+          <p><strong>12.2 Recognition:</strong> Distinguished contributions acknowledged in assemblies/documentation.</p>
+          <p><strong>12.3 Documentation:</strong> All certificates recorded in central archive by General Secretary.</p>
+        </div>
       </BounceSection>
 
       {/* Article 13 */}
-      <BounceSection id="const-13" icon={<GavelIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Article 13 – Dissolution
-        </h3>
+      <BounceSection id="const-13" icon={<Gavel className="h-4 w-4" />}>
+        <h3 className="text-sm font-semibold text-slate-900 ">Article 13: Dissolution</h3>
         <p className="mt-1 text-sm text-slate-600">
-          This Article specifies how and under whose authority SECMUN may be
-          dissolved.
+          The club may only be dissolved upon unanimous agreement of the President, Secretary-General, and General Secretary, and with formal consent from the Teacher-in-Charge.
         </p>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-          <li>
-            SECMUN may be dissolved only with the approval of the College
-            authorities designated for this purpose, acting on a formal proposal
-            that sets out reasons and implications.
-          </li>
-          <li>
-            In the event of dissolution, all records, funds, and properties held
-            in SECMUN&apos;s name shall be handed over to the institution in
-            accordance with its rules.
-          </li>
-          <li>
-            Dissolution shall be treated as a measure of last resort, to be
-            considered only after reasonable alternatives to reform or
-            restructure have been examined.
-          </li>
-        </ul>
       </BounceSection>
+      <br/>
     </div>
   )
 }
@@ -474,7 +298,7 @@ function BounceSection({
   )
 }
 
-/* ---------- Icon wrappers (for clarity) ---------- */
+/* ---------- Icon wrappers ---------- */
 
 function ScrollTextIcon() {
   return <ScrollText className="h-4 w-4" />
