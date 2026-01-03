@@ -38,7 +38,7 @@ const secretariatLinks = [
 // Admin-only links; shown only when role === "ADMIN"
 const adminLinks = [
   { href: "/admin", label: "Admin Controls", icon: IconShield },
-    { href: "/secretariat/usg-approvals", label: "USG Approvals" },
+    // { href: "/secretariat/usg-approvals", label: "USG Approvals" },
 ]
 
 type AnyLink = {
@@ -211,7 +211,9 @@ const Logo = () => (
     href="/dashboard"
     className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-slate-900 dark:text-slate-50"
   >
-    <div className="h-6 w-7 shrink-0 rounded-tl-xl rounded-tr-sm rounded-br-xl rounded-bl-sm bg-slate-900 dark:bg-slate-50" />
+    <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" width={32} height={32} className="rounded-md"/>
+    
+    {/* <div className="h-6 w-7 shrink-0 rounded-tl-xl rounded-tr-sm rounded-br-xl rounded-bl-sm bg-slate-900 dark:bg-slate-50" /> */}
     <motion.span
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -227,6 +229,7 @@ const LogoIcon = () => (
     href="/dashboard"
     className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-slate-900 dark:text-slate-50"
   >
-    <div className="h-6 w-7 shrink-0 rounded-tl-xl rounded-tr-sm rounded-br-xl rounded-bl-sm bg-slate-900 dark:bg-slate-50" />
+        <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" width={32} height={32} className="rounded-md"/>
+    {/* <div className="h-6 w-7 shrink-0 rounded-tl-xl rounded-tr-sm rounded-br-xl rounded-bl-sm bg-slate-900 dark:bg-slate-50" /> */}
   </a>
 )
