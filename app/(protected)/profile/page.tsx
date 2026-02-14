@@ -4,7 +4,7 @@
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useAppUser } from '@/hooks/useAppUser'
-import RoleOnboarding from '@/components/secretariat/RoleOnBoarding'
+import RoleOnboarding from '@/components/secretariat/role-onboarding'
 
 export default function ProfilePage() {
   const router = useRouter()
