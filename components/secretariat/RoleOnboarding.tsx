@@ -1,4 +1,4 @@
-// components/secretariat/RoleOnBoarding.tsx
+// components/secretariat/RoleOnboarding.tsx
 "use client"
 
 import React, { useState } from "react"
@@ -660,7 +660,6 @@ export default function RoleOnboarding({
               <div className="space-y-1">
                 <h2 className="flex items-center gap-3 text-lg font-semibold">
                   {avatarPreview && (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={avatarPreview}
                       alt="Profile"
