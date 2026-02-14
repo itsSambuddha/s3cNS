@@ -4,6 +4,9 @@ import { User as UserModel } from "@/lib/db/models/User"
 import { getCurrentUser } from "@/lib/auth/getCurrentUser"
 import { NotificationSettingsForm } from "@/components/notifications/NotificationSettingsForm"
 
+// Force dynamic rendering since this page requires database access
+export const dynamic = 'force-dynamic'
+
 export default async function NotificationSettingsPage() {
   const user = await getCurrentUser()
   if (!user) redirect("/login")

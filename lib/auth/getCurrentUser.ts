@@ -2,16 +2,23 @@
 import { cookies } from 'next/headers'
 import { connectToDatabase } from '@/lib/db/connect'
 import { User } from '@/lib/db/models/User'
+import { verifySessionToken } from './jwt'
 
 export async function getCurrentUser() {
   await connectToDatabase()
 
   const cookieStore = await cookies()
-  const uid = cookieStore.get('s3cns_session')?.value
-  if (!uid) return null
+  const token = cookieStore.get('s3cns_session')?.value
 
-  const user = await User.findOne({ uid }).lean().exec()
+  if (!token) return null
+
+  const payload = await verifySessionToken(token)
+  if (!payload || !payload.uid) return null
+
+  const user = await User.findOne({ uid: payload.uid }).lean().exec()
+
   if (!user) return null
 
+  // Mongoose lean() returns POJO, safe to return
   return user
 }

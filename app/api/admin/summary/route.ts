@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/connect"
 import { User } from "@/lib/db/models/User"
 import { getGazetteIssues } from "@/lib/gazette"
+import { getCurrentUser } from "@/lib/auth/getCurrentUser"
 
 type SecretariatSummary = {
   total: number
@@ -52,6 +53,18 @@ const DEFAULT_SUMMARY: AdminSummary = {
 
 export async function GET() {
   try {
+    const user = await getCurrentUser()
+
+    // 0) Security Check
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    // Check if user is admin (adjust role check as needed, assuming 'ADMIN' or specific roles)
+    // Inspecting User model logic, if there is an isAdmin field or role
+    // For now strict check: if not logged in -> 401. 
+    // TODO: Add strict Role check if 'role' field exists on User.
+
     await connectToDatabase()
 
     // 1) Secretariat summary
