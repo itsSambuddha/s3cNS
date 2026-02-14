@@ -9,7 +9,7 @@ import RoleOnboarding from '@/components/secretariat/RoleOnBoarding'
 export default function ProfilePage() {
   const router = useRouter()
   const { user: fbUser, loading: authLoading } = useAuth()
-  const { user: appUser, loading: appLoading } = useAppUser()
+  const { user: appUser, loading: appLoading } = useAppUser() 
 
   if (authLoading || appLoading) {
     return (
