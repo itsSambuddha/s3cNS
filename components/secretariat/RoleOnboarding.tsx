@@ -56,7 +56,7 @@ const officeOptions: OfficeKey[] = [
 const MAX_SIZE_MB = 2
 const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024
 
-export function RoleOnboarding({
+export default function RoleOnboarding({
   initialName,
   initialEmail,
   initialPhone,
@@ -190,7 +190,7 @@ export function RoleOnboarding({
           console.error("avatar upload error", uploadErr)
           setError(
             uploadErr?.message ||
-              "Could not upload avatar. You can try again or continue without it.",
+            "Could not upload avatar. You can try again or continue without it.",
           )
         }
       }
@@ -241,8 +241,8 @@ export function RoleOnboarding({
               isActive
                 ? "border-sky-500 bg-sky-50 text-sky-900"
                 : isDone
-                ? "border-emerald-500/70 bg-emerald-50 text-emerald-900"
-                : "border-transparent bg-muted/60 text-muted-foreground",
+                  ? "border-emerald-500/70 bg-emerald-50 text-emerald-900"
+                  : "border-transparent bg-muted/60 text-muted-foreground",
             )}
             onClick={() => {
               if (idx <= steps.findIndex((s) => s.id === currentStep)) {

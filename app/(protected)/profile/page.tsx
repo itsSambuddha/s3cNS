@@ -4,7 +4,7 @@
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useAppUser } from '@/hooks/useAppUser'
-import { RoleOnboarding } from '@/components/secretariat/RoleOnBoarding'
+import RoleOnboarding from '@/components/secretariat/RoleOnBoarding'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -41,7 +41,7 @@ export default function ProfilePage() {
           initialDepartment={appUser.academicDepartment}
           initialSecretariatRole={appUser.secretariatRole}
           initialOffice={appUser.office ?? undefined}
-          // if you later add tagline to schema, pass it here too
+        // if you later add tagline to schema, pass it here too
         />
       </div>
     </div>

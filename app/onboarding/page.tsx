@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useAppUser } from '@/hooks/useAppUser'
-import { RoleOnboarding } from '@/components/secretariat/RoleOnBoarding'
+import RoleOnboarding from '@/components/secretariat/RoleOnBoarding'
 
 export default function OnboardingPage() {
   const router = useRouter()
