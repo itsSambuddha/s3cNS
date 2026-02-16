@@ -4,7 +4,7 @@
 import mongoose, { Schema, type Document, type Model } from "mongoose"
 import { EventType } from "./Event"
 
-export type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR"
+export type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR" | "JOURNALIST" | "VIDEO_JOURNALIST" | "PARTICIPANT"
 export type DelegateStatus = "APPLIED" | "ALLOTTED" | "REJECTED" | "WITHDRAWN"
 
 export interface DelegateRegistrationDoc extends Document {
@@ -67,7 +67,7 @@ const DelegateRegistrationSchema = new Schema<DelegateRegistrationDoc>(
 
     interestType: {
       type: String,
-      enum: ["DELEGATE", "CAMPUS_AMBASSADOR"],
+      enum: ["DELEGATE", "CAMPUS_AMBASSADOR", "JOURNALIST", "VIDEO_JOURNALIST", "PARTICIPANT"],
     },
 
     emailSent: {

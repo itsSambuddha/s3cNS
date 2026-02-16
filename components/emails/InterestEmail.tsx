@@ -20,7 +20,12 @@ import {
 interface InterestEmailProps {
   fullName: string
   eventName: string
-  interestType?: "DELEGATE" | "CAMPUS_AMBASSADOR"
+  interestType?:
+  | "DELEGATE"
+  | "CAMPUS_AMBASSADOR"
+  | "JOURNALIST"
+  | "VIDEO_JOURNALIST"
+  | "PARTICIPANT"
   email: string
   phone: string
 }
@@ -35,8 +40,11 @@ export function InterestEmail({
   const baseUrl =
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
-  const roleText =
-    interestType === "CAMPUS_AMBASSADOR" ? "Campus Ambassador" : "Delegate"
+  let roleText = "Delegate"
+  if (interestType === "CAMPUS_AMBASSADOR") roleText = "Campus Ambassador"
+  if (interestType === "JOURNALIST") roleText = "Journalist"
+  if (interestType === "VIDEO_JOURNALIST") roleText = "Video Journalist"
+  if (interestType === "PARTICIPANT") roleText = "Participant"
 
   return (
     <Html>

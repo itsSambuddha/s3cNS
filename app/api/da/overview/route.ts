@@ -1,5 +1,6 @@
 // app/api/da/overview/route.ts
 
+// Force reload
 import { NextRequest, NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/mongodb"
 import { Event } from "@/lib/db/models/Event"
@@ -13,7 +14,7 @@ export async function GET(_req: NextRequest) {
       Event.find({})
         .sort({ createdAt: -1 })
         .select(
-          "_id name type status registrationDeadline delegateFormLink ambassadorFormLink createdAt",
+          "_id name type status registrationDeadline delegateFormLink ambassadorFormLink journalistFormLink videoJournalistFormLink participantFormLink createdAt",
         ),
       DelegateRegistration.countDocuments({}),
     ])
@@ -67,6 +68,9 @@ export async function GET(_req: NextRequest) {
         registrationDeadline: ev.registrationDeadline,
         delegateFormLink: ev.delegateFormLink ?? null,
         ambassadorFormLink: ev.ambassadorFormLink ?? null,
+        journalistFormLink: ev.journalistFormLink ?? null,
+        videoJournalistFormLink: ev.videoJournalistFormLink ?? null,
+        participantFormLink: ev.participantFormLink ?? null,
         createdAt: ev.createdAt,
         registrationCounts: counts,
       }

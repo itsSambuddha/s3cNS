@@ -101,36 +101,78 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const doc = await Event.create({
-      name: name.trim(),
-      type,
-      status,
-      registrationDeadline:
-        registrationDeadline === null
-          ? null
-          : registrationDeadline
-          ? new Date(registrationDeadline)
-          : null,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-    })
+    try {
+      const doc = await Event.create({
+        name: name.trim(),
+        type,
+        status,
+        registrationDeadline:
+          registrationDeadline === null
+            ? null
+            : registrationDeadline
+              ? new Date(registrationDeadline)
+              : null,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+      })
 
-    const created = {
-      id: String(doc._id),
-      name: doc.name,
-      type: doc.type,
-      status: doc.status,
-      registrationDeadline: doc.registrationDeadline,
-      delegateFormLink: doc.delegateFormLink ?? null,
-      ambassadorFormLink: doc.ambassadorFormLink ?? null,
-      startDate: doc.startDate,
-      endDate: doc.endDate,
-      createdAt: doc.createdAt,
+      const created = {
+        id: String(doc._id),
+        name: doc.name,
+        type: doc.type,
+        status: doc.status,
+        registrationDeadline: doc.registrationDeadline,
+        delegateFormLink: doc.delegateFormLink ?? null,
+        ambassadorFormLink: doc.ambassadorFormLink ?? null,
+        startDate: doc.startDate,
+        endDate: doc.endDate,
+        createdAt: doc.createdAt,
+      }
+
+      return NextResponse.json({ event: created }, { status: 201 })
+    } catch (createErr: any) {
+      // Self-healing: Drop unused 'code_1' index if it causes issues
+      if (createErr.code === 11000 && createErr.keyPattern?.code) {
+        console.warn("⚠️ Detected legacy unique index on 'code'. Dropping it...")
+        await Event.collection.dropIndex("code_1")
+
+        // Retry creation once
+        const doc = await Event.create({
+          name: name.trim(),
+          type,
+          status,
+          registrationDeadline:
+            registrationDeadline === null
+              ? null
+              : registrationDeadline
+                ? new Date(registrationDeadline)
+                : null,
+          startDate: new Date(startDate),
+          endDate: new Date(endDate),
+        })
+
+        const created = {
+          id: String(doc._id),
+          name: doc.name,
+          type: doc.type,
+          status: doc.status,
+          registrationDeadline: doc.registrationDeadline,
+          delegateFormLink: doc.delegateFormLink ?? null,
+          ambassadorFormLink: doc.ambassadorFormLink ?? null,
+          startDate: doc.startDate,
+          endDate: doc.endDate,
+          createdAt: doc.createdAt,
+        }
+        return NextResponse.json({ event: created }, { status: 201 })
+      }
+      throw createErr
     }
-
-    return NextResponse.json({ event: created }, { status: 201 })
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
+    if (msg.includes("E11000")) {
+      console.error("❌ events POST duplicate key error:", msg)
+      // Fallback if the self-healing block above didn't catch (e.g. different key)
+    }
     console.error("❌ events POST error:", msg)
     return NextResponse.json(
       { error: "Failed to create event", details: msg },

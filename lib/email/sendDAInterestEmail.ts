@@ -6,7 +6,12 @@ export interface SendDAInterestEmailOptions {
   to: string
   fullName: string
   eventName: string
-  interestType?: "DELEGATE" | "CAMPUS_AMBASSADOR"
+  interestType?:
+  | "DELEGATE"
+  | "CAMPUS_AMBASSADOR"
+  | "JOURNALIST"
+  | "VIDEO_JOURNALIST"
+  | "PARTICIPANT"
   email: string
   phone: string
 }

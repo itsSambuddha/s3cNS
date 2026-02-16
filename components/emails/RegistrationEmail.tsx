@@ -19,7 +19,12 @@ import {
 interface RegistrationEmailProps {
   fullName: string
   eventName: string
-  role: "DELEGATE" | "CAMPUS_AMBASSADOR"
+  role:
+  | "DELEGATE"
+  | "CAMPUS_AMBASSADOR"
+  | "JOURNALIST"
+  | "VIDEO_JOURNALIST"
+  | "PARTICIPANT"
   email: string
   phone: string
   formLink: string
@@ -88,7 +93,15 @@ export function RegistrationEmail({
 
               <Text className="text-[12px] text-slate-800">
                 <strong>Role:</strong>{" "}
-                {role === "DELEGATE" ? "Delegate" : "Campus Ambassador"}
+                {role === "DELEGATE"
+                  ? "Delegate"
+                  : role === "CAMPUS_AMBASSADOR"
+                    ? "Campus Ambassador"
+                    : role === "JOURNALIST"
+                      ? "Journalist"
+                      : role === "VIDEO_JOURNALIST"
+                        ? "Video Journalist"
+                        : "Participant"}
               </Text>
 
               <Text className="text-[12px] text-slate-800">

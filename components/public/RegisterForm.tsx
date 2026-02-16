@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { AlertCircle, CheckCircle, Loader2 } from "lucide-react"
 
 type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
-type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR"
+type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR" | "JOURNALIST" | "VIDEO_JOURNALIST" | "PARTICIPANT"
 
 interface APIErrorResponse {
   error: string
@@ -40,7 +40,11 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
   const router = useRouter()
 
   // Form state
-  const [interestType, setInterestType] = useState<InterestType>("DELEGATE")
+  const [interestType, setInterestType] = useState<InterestType>(() => {
+    if (eventType === "EDBLAZON_TIMES") return "JOURNALIST"
+    if (eventType === "WORKSHOP") return "PARTICIPANT"
+    return "DELEGATE"
+  })
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
@@ -157,7 +161,7 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
 
     setLoading(true)
 
-  try {
+    try {
       const payload = {
         eventType,
         eventId: eventId ?? null,
@@ -283,16 +287,43 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
                 <RadioGroup
                   value={interestType}
                   onValueChange={(v) => setInterestType(v as InterestType)}
-                  className="flex gap-6"
+                  className="flex flex-col gap-3 sm:flex-row sm:gap-6"
                 >
-                  <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
-                    <RadioGroupItem value="DELEGATE" id="delegate-radio" />
-                    <span>Delegate</span>
-                  </label>
-                  <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
-                    <RadioGroupItem value="CAMPUS_AMBASSADOR" id="ambassador-radio" />
-                    <span>Campus Ambassador</span>
-                  </label>
+                  {/* EdBlazon Times: Journalist / Video Journalist */}
+                  {eventType === "EDBLAZON_TIMES" && (
+                    <>
+                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
+                        <RadioGroupItem value="JOURNALIST" id="journalist-radio" />
+                        <span>Journalist</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
+                        <RadioGroupItem value="VIDEO_JOURNALIST" id="vj-radio" />
+                        <span>Video Journalist</span>
+                      </label>
+                    </>
+                  )}
+
+                  {/* Workshop: Participant only */}
+                  {eventType === "WORKSHOP" && (
+                    <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
+                      <RadioGroupItem value="PARTICIPANT" id="participant-radio" />
+                      <span>Participant</span>
+                    </label>
+                  )}
+
+                  {/* SECMUN (Intra/Inter): Delegate / Campus Ambassador */}
+                  {(eventType === "INTRA_SECMUN" || eventType === "INTER_SECMUN") && (
+                    <>
+                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
+                        <RadioGroupItem value="DELEGATE" id="delegate-radio" />
+                        <span>Delegate</span>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
+                        <RadioGroupItem value="CAMPUS_AMBASSADOR" id="ambassador-radio" />
+                        <span>Campus Ambassador</span>
+                      </label>
+                    </>
+                  )}
                 </RadioGroup>
               </div>
 
@@ -309,11 +340,10 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
                     value={fullName}
                     onChange={(e) => handleFieldChange("fullName", e.target.value)}
                     onBlur={() => handleBlur("fullName")}
-                    className={`${
-                      touched.fullName && validationErrors.fullName
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                        : "border-gray-300"
-                    } transition-colors`}
+                    className={`${touched.fullName && validationErrors.fullName
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                      : "border-gray-300"
+                      } transition-colors`}
                     disabled={loading}
                   />
                   {touched.fullName && validationErrors.fullName && (
@@ -340,11 +370,10 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
                     value={email}
                     onChange={(e) => handleFieldChange("email", e.target.value)}
                     onBlur={() => handleBlur("email")}
-                    className={`${
-                      touched.email && validationErrors.email
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                        : "border-gray-300"
-                    } transition-colors`}
+                    className={`${touched.email && validationErrors.email
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                      : "border-gray-300"
+                      } transition-colors`}
                     disabled={loading}
                   />
                   {touched.email && validationErrors.email && (
@@ -371,18 +400,17 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
                     value={phone}
                     onChange={(e) => handleFieldChange("phone", e.target.value)}
                     onBlur={() => handleBlur("phone")}
-                    className={`${
-                      touched.phone && validationErrors.phone
-                        ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                        : "border-gray-300"
-                    } transition-colors`}
+                    className={`${touched.phone && validationErrors.phone
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                      : "border-gray-300"
+                      } transition-colors`}
                     disabled={loading}
                   />
                   {touched.phone && validationErrors.phone && (
                     <motion.p
                       initial={{ opacity: 0, y: -8 }}
                       animate={{ opacity: 1, y: 0 }}
-                                           className="mt-1 text-xs text-red-600 flex items-center gap-1"
+                      className="mt-1 text-xs text-red-600 flex items-center gap-1"
                     >
                       <AlertCircle className="h-3 w-3" />
                       {validationErrors.phone}
@@ -496,7 +524,7 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
               <p>
                 Have questions? Contact us at{" "}
                 <a
-                  href="mailto:support@secmun.org"
+                  href="mailto:sidhusamsk@gmail.com"
                   className="text-blue-600 hover:underline font-medium"
                 >
                   support@secmun.org

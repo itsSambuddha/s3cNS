@@ -17,6 +17,9 @@ export interface EventDoc extends Document {
   registrationDeadline?: Date | null
   delegateFormLink?: string | null
   ambassadorFormLink?: string | null
+  journalistFormLink?: string | null
+  videoJournalistFormLink?: string | null
+  participantFormLink?: string | null
   startDate: Date
   endDate: Date
   createdAt: Date
@@ -56,6 +59,21 @@ const EventSchema = new Schema<EventDoc>(
       default: null,
     },
 
+    journalistFormLink: {
+      type: String,
+      default: null,
+    },
+
+    videoJournalistFormLink: {
+      type: String,
+      default: null,
+    },
+
+    participantFormLink: {
+      type: String,
+      default: null,
+    },
+
     startDate: {
       type: Date,
       required: true,
@@ -71,5 +89,11 @@ const EventSchema = new Schema<EventDoc>(
   },
 )
 
-export const Event: Model<EventDoc> =
-  mongoose.models.Event || mongoose.model<EventDoc>("Event", EventSchema)
+/* ===== FORCE RESET FOR NEXT DEV ===== */
+const MODEL = "Event"
+if (mongoose.models[MODEL]) delete mongoose.models[MODEL]
+
+export const Event: Model<EventDoc> = mongoose.model<EventDoc>(
+  MODEL,
+  EventSchema,
+)

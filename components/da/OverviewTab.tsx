@@ -25,6 +25,9 @@ type EventSummary = {
   registrationDeadline: string | null
   delegateFormLink: string | null
   ambassadorFormLink: string | null
+  journalistFormLink: string | null
+  videoJournalistFormLink: string | null
+  participantFormLink: string | null
   createdAt: string
   registrationCounts: {
     total: number
@@ -46,6 +49,9 @@ export function OverviewTab() {
 
   const [delegateLink, setDelegateLink] = useState("")
   const [ambassadorLink, setAmbassadorLink] = useState("")
+  const [journalistLink, setJournalistLink] = useState("")
+  const [vjLink, setVjLink] = useState("")
+  const [participantLink, setParticipantLink] = useState("")
 
   // Load overview once
   useEffect(() => {
@@ -75,6 +81,9 @@ export function OverviewTab() {
     if (!ev) return
     setDelegateLink(ev.delegateFormLink || "")
     setAmbassadorLink(ev.ambassadorFormLink || "")
+    setJournalistLink(ev.journalistFormLink || "")
+    setVjLink(ev.videoJournalistFormLink || "")
+    setParticipantLink(ev.participantFormLink || "")
   }, [eventId, data])
 
   async function patchEvent(payload: Partial<EventSummary>) {
@@ -89,20 +98,24 @@ export function OverviewTab() {
         throw new Error(`Failed to update: ${res.status}`)
       }
       const json = await res.json()
-      const updated = json.event as EventSummary
+      const updated = json.event
+      // PATCH returns mongoose doc (with _id), but frontend state uses id.
+      const updatedId = updated.id || updated._id
 
+      // We merge `updated` into `e`. This preserves `e.id` (if present in `e`)
+      // and overwrites fields from `updated`.
       setData((prev) =>
         prev
           ? {
-              ...prev,
-              events: prev.events.map((e) =>
-                e.id === updated.id ? { ...e, ...updated } : e,
-              ),
-            }
+            ...prev,
+            events: prev.events.map((e) =>
+              e.id === updatedId ? { ...e, ...updated } : e,
+            ),
+          }
           : prev,
       )
       setEvents((prev) =>
-        prev.map((e) => (e.id === updated.id ? { ...e, ...updated } : e)),
+        prev.map((e) => (e.id === updatedId ? { ...e, ...updated } : e)),
       )
     } catch (error) {
       console.error("Error updating event:", error)
@@ -134,12 +147,15 @@ export function OverviewTab() {
       setEventId("")
       setDelegateLink("")
       setAmbassadorLink("")
+      setJournalistLink("")
+      setVjLink("")
+      setParticipantLink("")
       setData((prev) =>
         prev
           ? {
-              ...prev,
-              events: remaining,
-            }
+            ...prev,
+            events: remaining,
+          }
           : prev,
       )
     } catch (err) {
@@ -312,23 +328,62 @@ export function OverviewTab() {
               </p>
             </div>
 
-            <FormField
-              label="Delegate form"
-              tooltip="Sent to approved delegates in registration communications."
-              value={delegateLink}
-              onChange={setDelegateLink}
-              onSave={() => patchEvent({ delegateFormLink: delegateLink })}
-            />
+            {(selected.type === "INTRA_SECMUN" ||
+              selected.type === "INTER_SECMUN") && (
+                <>
+                  <FormField
+                    label="Delegate form"
+                    tooltip="Sent to approved delegates in registration communications."
+                    value={delegateLink}
+                    onChange={setDelegateLink}
+                    onSave={() => patchEvent({ delegateFormLink: delegateLink })}
+                  />
+                  <FormField
+                    label="Campus ambassador form"
+                    tooltip="Sent to approved CAs in registration communications."
+                    value={ambassadorLink}
+                    onChange={setAmbassadorLink}
+                    onSave={() =>
+                      patchEvent({ ambassadorFormLink: ambassadorLink })
+                    }
+                  />
+                </>
+              )}
 
-            <FormField
-              label="Campus ambassador form"
-              tooltip="Sent to approved CAs in registration communications."
-              value={ambassadorLink}
-              onChange={setAmbassadorLink}
-              onSave={() =>
-                patchEvent({ ambassadorFormLink: ambassadorLink })
-              }
-            />
+            {selected.type === "EDBLAZON_TIMES" && (
+              <>
+                <FormField
+                  label="Journalist form"
+                  tooltip="Sent to approved Journalists."
+                  value={journalistLink}
+                  onChange={setJournalistLink}
+                  onSave={() =>
+                    patchEvent({ journalistFormLink: journalistLink })
+                  }
+                />
+                <FormField
+                  label="Video Journalist form"
+                  tooltip="Sent to approved VJs."
+                  value={vjLink}
+                  onChange={setVjLink}
+                  onSave={() =>
+                    patchEvent({ videoJournalistFormLink: vjLink })
+                  }
+                />
+              </>
+            )}
+
+            {selected.type === "WORKSHOP" && (
+              <FormField
+                label="Participant form"
+                tooltip="Sent to approved Participants."
+                value={participantLink}
+                onChange={setParticipantLink}
+                onSave={() =>
+                  patchEvent({ participantFormLink: participantLink })
+                }
+              />
+            )}
           </Card>
 
           {/* Communication preview + report */}

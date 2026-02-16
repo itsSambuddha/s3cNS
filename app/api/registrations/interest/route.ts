@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     }
 
     const validEventTypes = ["INTRA_SECMUN", "INTER_SECMUN", "WORKSHOP", "EDBLAZON_TIMES"]
-    const validInterestTypes = ["DELEGATE", "CAMPUS_AMBASSADOR"]
+    const validInterestTypes = ["DELEGATE", "CAMPUS_AMBASSADOR", "JOURNALIST", "VIDEO_JOURNALIST", "PARTICIPANT"]
 
     if (!validEventTypes.includes(eventType)) {
       return NextResponse.json(

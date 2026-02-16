@@ -8,7 +8,12 @@ import { sendDAInterestEmail } from "@/lib/email/sendDAInterestEmail"
 import { sendDARegistrationEmail } from "@/lib/email/sendDARegistrationEmail"
 
 type Mode = "INTEREST" | "REGISTRATION"
-type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR"
+type InterestType =
+  | "DELEGATE"
+  | "CAMPUS_AMBASSADOR"
+  | "JOURNALIST"
+  | "VIDEO_JOURNALIST"
+  | "PARTICIPANT"
 
 interface SendBody {
   mode: Mode
@@ -70,7 +75,7 @@ export async function POST(req: NextRequest) {
     }
 
     const event = await Event.findById(effectiveEventId).select(
-      "name type status delegateFormLink ambassadorFormLink",
+      "name type status delegateFormLink ambassadorFormLink journalistFormLink videoJournalistFormLink participantFormLink",
     )
     if (!event) {
       return NextResponse.json(
@@ -89,20 +94,35 @@ export async function POST(req: NextRequest) {
 
         if (mode === "INTEREST") {
           await sendDAInterestEmail({
-          to: reg.email,
-          fullName: reg.fullName,
-          eventName: event.name,
-          interestType: role,
-          email: reg.email,
-          phone: reg.whatsAppNumber,
-        })
+            to: reg.email,
+            fullName: reg.fullName,
+            eventName: event.name,
+            interestType: role,
+            email: reg.email,
+            phone: reg.whatsAppNumber,
+          })
 
           reg.emailSent = true
         } else {
-          const registrationLink =
-            role === "CAMPUS_AMBASSADOR"
-              ? event.ambassadorFormLink ?? ""
-              : event.delegateFormLink ?? ""
+          let registrationLink = ""
+          switch (role) {
+            case "CAMPUS_AMBASSADOR":
+              registrationLink = event.ambassadorFormLink ?? ""
+              break
+            case "JOURNALIST":
+              registrationLink = event.journalistFormLink ?? ""
+              break
+            case "VIDEO_JOURNALIST":
+              registrationLink = event.videoJournalistFormLink ?? ""
+              break
+            case "PARTICIPANT":
+              registrationLink = event.participantFormLink ?? ""
+              break
+            case "DELEGATE":
+            default:
+              registrationLink = event.delegateFormLink ?? ""
+              break
+          }
 
           await sendDARegistrationEmail({
             to: reg.email,

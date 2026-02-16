@@ -7,7 +7,12 @@ export async function sendDARegistrationEmail(params: {
   to: string
   fullName: string
   eventName: string
-  role: "DELEGATE" | "CAMPUS_AMBASSADOR"
+  role:
+  | "DELEGATE"
+  | "CAMPUS_AMBASSADOR"
+  | "JOURNALIST"
+  | "VIDEO_JOURNALIST"
+  | "PARTICIPANT"
   email: string
   phone: string
   formLink: string
@@ -22,25 +27,25 @@ export async function sendDARegistrationEmail(params: {
     },
   })
 
-    const html = await render(
+  const html = await render(
 
-      RegistrationEmail({
+    RegistrationEmail({
 
-        fullName: params.fullName,
+      fullName: params.fullName,
 
-        eventName: params.eventName,
+      eventName: params.eventName,
 
-        role: params.role,
+      role: params.role,
 
-        email: params.email, // ✅ FIX
+      email: params.email, // ✅ FIX
 
-        phone: params.phone, // ✅ FIX
+      phone: params.phone, // ✅ FIX
 
-        formLink: params.formLink, // ✅ FIX
+      formLink: params.formLink, // ✅ FIX
 
-      }),
+    }),
 
-    )
+  )
 
   await transporter.sendMail({
     from: `"SECMUN Delegate Affairs" <${process.env.SMTP_USER}>`,

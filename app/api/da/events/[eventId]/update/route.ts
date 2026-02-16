@@ -1,5 +1,6 @@
 // app/api/da/events/[eventId]/update/route.ts
 
+// Force reload
 import { NextRequest, NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/mongodb"
 import { Event } from "@/lib/db/models/Event"
@@ -10,6 +11,9 @@ interface UpdateBody {
   registrationDeadline?: string | null
   delegateFormLink?: string | null
   ambassadorFormLink?: string | null
+  journalistFormLink?: string | null
+  videoJournalistFormLink?: string | null
+  participantFormLink?: string | null
 }
 
 export async function POST(
@@ -46,6 +50,27 @@ export async function POST(
       update.ambassadorFormLink = body.ambassadorFormLink
     }
 
+    if (
+      typeof body.journalistFormLink === "string" ||
+      body.journalistFormLink === null
+    ) {
+      update.journalistFormLink = body.journalistFormLink
+    }
+
+    if (
+      typeof body.videoJournalistFormLink === "string" ||
+      body.videoJournalistFormLink === null
+    ) {
+      update.videoJournalistFormLink = body.videoJournalistFormLink
+    }
+
+    if (
+      typeof body.participantFormLink === "string" ||
+      body.participantFormLink === null
+    ) {
+      update.participantFormLink = body.participantFormLink
+    }
+
     // if status is set to REG_OPEN, close others of same type
     let eventBefore = await Event.findById(eventId).select("type status")
     if (!eventBefore) {
@@ -65,7 +90,7 @@ export async function POST(
     const updated = await Event.findByIdAndUpdate(eventId, update, {
       new: true,
     }).select(
-      "_id name type status registrationDeadline delegateFormLink ambassadorFormLink createdAt",
+      "_id name type status registrationDeadline delegateFormLink ambassadorFormLink journalistFormLink videoJournalistFormLink participantFormLink createdAt",
     )
 
     return NextResponse.json({ event: updated }, { status: 200 })
