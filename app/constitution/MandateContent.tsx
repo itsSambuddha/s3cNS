@@ -18,6 +18,7 @@ import {
   CalendarClock,
   ShieldCheck,
   ScrollText,
+  ChevronRight,
 } from "lucide-react"
 
 /**
@@ -31,416 +32,535 @@ import {
 
 export function MandateContent() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       {/* 1. Structure of the Secretariat */}
-      <BounceSection id="mandate-overview" icon={<BuildingIcon />}>
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600">
-            Mandate & Secretariat
-          </p>
-        </div>
-        <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-900 dark:text-white">
-          The Secretariat operational nucleus
-        </h2>
-        <div className="mt-4 space-y-4 text-sm font-medium text-slate-500 leading-relaxed dark:text-zinc-400">
-          <p>
-            The Secretariat is the operational nucleus of SECMUN, a
-            multi‑departmental body designed for precision and synergy, with each
-            department commanded by an Under‑Secretary‑General responsible for
-            both strategic direction and day‑to‑day execution.
-          </p>
-          <p>
-            Departments function with semi‑independence during planning but are
-            designed to converge seamlessly under Conference Management during the
-            event, ensuring that specialised tasks are handled by experts while
-            critical decisions remain centrally coordinated.
-          </p>
+      <BounceSection id="mandate-overview" icon={<Building2 />}>
+        <div className="flex flex-col md:flex-row gap-10 items-start">
+          <div className="flex-1 space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 dark:bg-blue-500/10 dark:border-blue-500/20">
+              Institutional Framework
+            </div>
+            <h2 className="text-4xl font-black tracking-tighter text-slate-950 dark:text-white sm:text-5xl leading-[0.9]">
+              The Secretariat <br /> <span className="text-blue-600">Operational Nucleus.</span>
+            </h2>
+            <div className="space-y-4 text-base font-medium text-slate-600 leading-relaxed dark:text-zinc-400">
+              <p>
+                The Secretariat is the operational nucleus of SECMUN, a
+                multi‑departmental body designed for precision and synergy, with each
+                department commanded by an Under‑Secretary‑General responsible for
+                both strategic direction and day‑to‑day execution.
+              </p>
+              <p>
+                Departments function with semi‑independence during planning but are
+                designed to converge seamlessly under Conference Management during the
+                event, ensuring that specialised tasks are handled by experts while
+                critical decisions remain centrally coordinated.
+              </p>
+            </div>
+          </div>
+          <div className="w-full md:w-72 p-6 rounded-[2.5rem] bg-slate-950 text-white shadow-2xl relative overflow-hidden group">
+            <div className="absolute -right-4 -bottom-4 opacity-10 transition-transform group-hover:scale-110">
+              <ShieldCheck className="w-32 h-32" />
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-4 font-mono">Service Protocol</p>
+            <p className="text-sm font-medium leading-relaxed text-slate-400 relative z-10">
+              &quot;SECMUN operates under a strict meritocratic hierarchy where responsibility is the currency of authority.&quot;
+            </p>
+          </div>
         </div>
       </BounceSection>
 
       {/* 2. Senior Secretariat */}
-      <BounceSection id="mandate-structure" icon={<CrownIcon />}>
-        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-          Senior Secretariat command
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          The Senior Secretariat is the highest tier of leadership, providing
-          overarching vision, ensuring inter‑departmental cohesion, and
-          representing SECMUN to all external stakeholders.
-        </p>
+      <BounceSection id="mandate-structure" icon={<Crown />}>
+        <div className="space-y-8">
+          <div>
+            <h3 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white">Senior Secretariat Command</h3>
+            <p className="mt-2 text-base font-medium text-slate-600 dark:text-zinc-400">
+              The highest tier of leadership, providing overarching vision and institutional representing.
+            </p>
+          </div>
 
-        <div className="mt-3 grid gap-4 text-xs text-slate-700 md:grid-cols-3">
-          <MiniRoleCard
-            icon={<CrownIcon small />}
-            title="President"
-            lines={[
-              "Principal authority and external representative of the club.",
-              "Final arbiter of the Secretariat, bearing ultimate responsibility for conference success and reputation.",
-            ]}
-          />
-          <MiniRoleCard
-            icon={<ScrollUserIcon />}
-            title="Secretary‑General"
-            lines={[
-              "Chief coordinator of administrative and operational activities, reporting to the President.",
-              "Ceremonial head who presides over key functions, ensures diplomatic protocol, and upholds the academic spirit of the event.",
-            ]}
-          />
-          <MiniRoleCard
-            icon={<UserRoundIcon />}
-            title="General Secretary"
-            lines={[
-              "Custodian of official documentation and internal communication.",
-              "Supervises the Junior Secretariat and maintains archival records and formal documentation.",
-            ]}
-          />
-        </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <MiniRoleCard
+              icon={<Crown className="w-5 h-5" />}
+              title="President"
+              lines={[
+                "Principal authority and external representative of the club.",
+                "Final arbiter of the Secretariat, bearing ultimate responsibility for conference success."
+              ]}
+              accent="blue"
+            />
+            <MiniRoleCard
+              icon={<ScrollText className="w-5 h-5" />}
+              title="Secretary-General"
+              lines={[
+                "Chief coordinator of administrative and operational activities.",
+                "Presides over key functions, ensures diplomatic protocol, and upholds academic spirit."
+              ]}
+              accent="blue"
+            />
+            <MiniRoleCard
+              icon={<UserRound className="w-5 h-5" />}
+              title="General Secretary"
+              lines={[
+                "Custodian of official documentation and internal communication.",
+                "Supervises the Junior Secretariat and maintains archival records."
+              ]}
+              accent="slate"
+            />
+          </div>
 
-        <div className="mt-4 rounded-2xl bg-slate-50/80 p-4 text-xs text-slate-700">
-          <p className="font-semibold text-slate-900">
-            Core duties and strategic responsibilities
-          </p>
-          <ul className="mt-2 list-disc space-y-1 pl-4">
-            <li>
-              Diplomacy and outreach: drafting, approving, and dispatching
-              formal agreements and communications, including invitations to
-              dignitaries, keynote speakers, Executive Board members, and staff.
-            </li>
-            <li>
-              Protocol and documentation: overseeing preparation, verification,
-              and distribution of certificates, awards, and all official
-              documents.
-            </li>
-            <li>
-              Dignitary management: handling hospitality, logistics, and
-              communication for high‑profile guests to ensure a seamless and
-              respectful experience.
-            </li>
-            <li>
-              Crisis management: acting as the primary decision‑making body
-              during unforeseen crises to provide calm, decisive leadership.
-            </li>
-          </ul>
+          <div className="rounded-[2.5rem] border border-slate-100 bg-slate-50/50 p-10 dark:bg-white/5 dark:border-white/5">
+            <h4 className="text-base font-black text-slate-950 dark:text-white mb-6 flex items-center gap-3">
+              <div className="h-2 w-2 rounded-full bg-blue-600" />
+              Core Strategic Responsibilities
+            </h4>
+            <div className="grid gap-8 md:grid-cols-2">
+              <ul className="space-y-4">
+                <li className="flex gap-4 group">
+                  <div className="mt-1 h-5 w-5 rounded-md border border-slate-200 bg-white dark:bg-zinc-800 flex items-center justify-center text-[10px] font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">01</div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-zinc-400"><span className="text-slate-900 font-bold dark:text-white">Diplomacy:</span> Drafting and dispatching formal agreements and invitations.</p>
+                </li>
+                <li className="flex gap-4 group">
+                  <div className="mt-1 h-5 w-5 rounded-md border border-slate-200 bg-white dark:bg-zinc-800 flex items-center justify-center text-[10px] font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">02</div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-zinc-400"><span className="text-slate-900 font-bold dark:text-white">Protocol:</span> Overseeing preparation of certificates and official awards.</p>
+                </li>
+              </ul>
+              <ul className="space-y-4">
+                <li className="flex gap-4 group">
+                  <div className="mt-1 h-5 w-5 rounded-md border border-slate-200 bg-white dark:bg-zinc-800 flex items-center justify-center text-[10px] font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">03</div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-zinc-400"><span className="text-slate-900 font-bold dark:text-white">Hospitality:</span> Handling high-profile guest management and logistics.</p>
+                </li>
+                <li className="flex gap-4 group">
+                  <div className="mt-1 h-5 w-5 rounded-md border border-slate-200 bg-white dark:bg-zinc-800 flex items-center justify-center text-[10px] font-black group-hover:bg-blue-600 group-hover:text-white transition-colors">04</div>
+                  <p className="text-sm font-medium text-slate-600 dark:text-zinc-400"><span className="text-slate-900 font-bold dark:text-white">Crisis:</span> Primary decision-making body during unforeseen operational crises.</p>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </BounceSection>
 
       {/* 3. USG Offices / Departments */}
-      <BounceSection id="mandate-departments" icon={<NetworkIconBig />}>
-        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-          Operational structure
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          Under‑Secretary‑General offices are specialised departments led by a
-          Head with Deputies, reporting to the Secretary‑General and managing
-          core functional domains such as Delegate Affairs, IT, PR, Marketing,
-          Finance, Sponsorship, Logistics, and Conference Management.
-        </p>
+      <BounceSection id="mandate-departments" icon={<Network />}>
+        <div className="space-y-10">
+          <div>
+            <h3 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white">Operational Structure</h3>
+            <p className="mt-2 text-base font-medium text-slate-600 dark:text-zinc-400 max-w-2xl">
+              Under-Secretary-General offices are specialised departments managing core functional domains.
+            </p>
+          </div>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <DeptCard
-            icon={<UsersIcon />}
-            title="Delegate Affairs"
-            structure="1 Head, 2 Deputies"
-            reporting="Deputies → Head → Secretary‑General"
-            mandatePoints={[
-              "Handles membership and delegate registration, attendance monitoring, identity verification, and onboarding.",
-              "Maintains delegate databases and manages portfolio allocation and on‑site query resolution.",
-            ]}
-            narrativeTitle="Participant journey"
-            narrativePoints={[
-              "Guides delegates from registration to feedback with clear communication on portfolios and committee placement.",
-              "Collaborates with Conference Management and Logistics on rooming, desk layouts, and movement flows.",
-            ]}
-          />
+          <div className="grid gap-8 md:grid-cols-2">
+            <DeptCard
+              icon={<Users />}
+              title="Delegate Affairs"
+              structure="1 Head, 2 Deputies"
+              mandatePoints={[
+                "Membership and delegate registration protocols.",
+                "Attendance monitoring and identity verification.",
+                "Strategic portfolio allocation and query resolution."
+              ]}
+              narrativeTitle="Participant Journey"
+              narrativePoints={[
+                "Guides delegates from registration to feedback cycles.",
+                "Coordinates seating and movement flows with Logistics."
+              ]}
+            />
 
-          <DeptCard
-            icon={<ITIcon />}
-            title="Information Technology (IT)"
-            structure="1 Head, 2 Deputies"
-            reporting="Deputies → Head → Secretary‑General"
-            mandatePoints={[
-              "Maintains digital infrastructure, backend systems, and registration portals.",
-              "Supports visual branding, presentation design, and technical troubleshooting during events.",
-            ]}
-            narrativeTitle="Digital & creative identity"
-            narrativePoints={[
-              "Maintains websites, forms, and data integrity across platforms.",
-              "Works with PR and design sub‑teams to create a coherent visual and video presence for SECMUN.",
-            ]}
-          />
+            <DeptCard
+              icon={<Palette />}
+              title="Information Technology"
+              structure="1 Head, 2 Deputies"
+              mandatePoints={[
+                "Maintaining digital infrastructure and backend systems.",
+                "Registration portal management and data integrity.",
+                "Visual branding and presentation design support."
+              ]}
+              narrativeTitle="Digital Identity"
+              narrativePoints={[
+                "Creating a coherent video and visual presence.",
+                "Ensuring high-security data management practices."
+              ]}
+            />
 
-          <DeptCard
-            icon={<PRIcon />}
-            title="Public Relations"
-            structure="1 Head, 1 Deputy"
-            reporting="Deputy → Head → Secretary‑General"
-            mandatePoints={[
-              "Manages media communication, public image, and official correspondence.",
-              "Acts as primary liaison with student communities and external institutions.",
-            ]}
-            narrativeTitle="Crafting the narrative"
-            narrativePoints={[
-              "Creates and disseminates promotional materials across digital and print channels.",
-              "Maintains social media, manages media and institutional outreach, and runs the Campus Ambassador Programme.",
-              "Supplies copy and messaging support for IT/Design assets.",
-            ]}
-          />
+            <DeptCard
+              icon={<Megaphone />}
+              title="Public Relations"
+              structure="1 Head, 1 Deputy"
+              mandatePoints={[
+                "Media communication and external public image.",
+                "Primary liaison for student communities and institutions.",
+                "Campus Ambassador Program management."
+              ]}
+              narrativeTitle="The SECMUN Voice"
+              narrativePoints={[
+                "Disseminating promotional materials and messaging.",
+                "Crafting high-impact institutional narratives."
+              ]}
+            />
 
-          <DeptCard
-            icon={<MegaphoneIcon />}
-            title="Marketing"
-            structure="1 Head, 1 Deputy"
-            reporting="Deputy → Head → Secretary‑General"
-            mandatePoints={[
-              "Leads publicity campaigns, poster design, promotional content, and cross‑platform outreach.",
-            ]}
-            narrativeTitle="Amplifying the brand"
-            narrativePoints={[
-              "Translates SECMUN’s core narrative into targeted campaigns across campuses and online platforms.",
-              "Aligns messaging with PR and Sponsorship to maintain a coherent, professional presence.",
-            ]}
-          />
+            <DeptCard
+              icon={<Network />}
+              title="Marketing"
+              structure="1 Head, 1 Deputy"
+              mandatePoints={[
+                "Publicity campaign leads and cross-platform outreach.",
+                "Poster production and promotional content strategy.",
+                "Brand alignment across all departmental assets."
+              ]}
+              narrativeTitle="Institutional Growth"
+              narrativePoints={[
+                "Translating core narratives into targeted campaigns.",
+                "Sponsorship-integrated marketing solutions."
+              ]}
+            />
 
-          <DeptCard
-            icon={<WalletIcon />}
-            title="Finance"
-            structure="1 Head, 1 Deputy"
-            reporting="Deputy → Head → Secretary‑General"
-            mandatePoints={[
-              "Prepares budgets, tracks expenditure, processes reimbursements, and produces financial reports.",
-            ]}
-            narrativeTitle="Financial integrity"
-            narrativePoints={[
-              "Keeps SECMUN audit‑ready with clear documentation of inflows and outflows.",
-              "Coordinates with Sponsorship to reconcile sponsorship funds and obligations.",
-            ]}
-          />
+            <DeptCard
+              icon={<Wallet />}
+              title="Finance"
+              structure="1 Head, 1 Deputy"
+              mandatePoints={[
+                "Budgeting, tracking expenditure, and reporting.",
+                "Processing reimbursements and reconciling inflows.",
+                "Institutional financial accountability."
+              ]}
+              narrativeTitle="Financial Integrity"
+              narrativePoints={[
+                "Audit-ready documentation of all transactions.",
+                "Coordination with Sponsorship for reconciliation."
+              ]}
+            />
 
-          <DeptCard
-            icon={<HandshakeIcon />}
-            title="Sponsorship"
-            structure="1 Head, 1 Deputy"
-            reporting="Deputy → Head → Secretary‑General"
-            mandatePoints={[
-              "Conducts sponsorship outreach, manages MoUs, and oversees corporate engagement.",
-              "Coordinates with Finance to ensure sponsor‑related financial flows are properly recorded.",
-            ]}
-            narrativeTitle="Strategic partnerships"
-            narrativePoints={[
-              "Designs sponsorship decks aligned with SECMUN’s value proposition.",
-              "Ensures sponsor presence enhances rather than distracts from academic and delegate experience.",
-            ]}
-          />
+            <DeptCard
+              icon={<Handshake />}
+              title="Sponsorship"
+              structure="1 Head, 1 Deputy"
+              mandatePoints={[
+                "Sponsorship outreach and MoU management.",
+                "Corporate engagement and strategic partnerships.",
+                "Value proposition design for brand partners."
+              ]}
+              narrativeTitle="External Funding"
+              narrativePoints={[
+                "Ensuring partner presence enhances delegate experience.",
+                "Managing long-term institutional relationships."
+              ]}
+            />
 
-          <DeptCard
-            icon={<TruckIcon />}
-            title="Logistics"
-            structure="1 Head, 1 Deputy"
-            reporting="Deputy → Head → Secretary‑General"
-            mandatePoints={[
-              "Oversees event setup, material procurement, seating plans, and operational readiness.",
-            ]}
-            narrativeTitle="The engine room"
-            narrativePoints={[
-              "Controls physical assets such as placards, kits, awards, mementoes, and room arrangements.",
-              "Coordinates with Conference Management so physical spaces support the planned run‑of‑show.",
-            ]}
-          />
+            <DeptCard
+              icon={<Truck />}
+              title="Logistics"
+              structure="1 Head, 1 Deputy"
+              mandatePoints={[
+                "Event setup and physical material procurement.",
+                "Seating plans and venue operational readiness.",
+                "Management of physical club assets and awards."
+              ]}
+              narrativeTitle="Movement & Readiness"
+              narrativePoints={[
+                "Executing the physical blueprint of the conference.",
+                "Commanding on-site material distribution."
+              ]}
+            />
 
-          <DeptCard
-            icon={<ClipboardIcon />}
-            title="Conference Management"
-            structure="1 Head"
-            reporting="Head → Secretary‑General"
-            mandatePoints={[
-              "Leads end‑to‑end planning and execution of conferences, including portfolio distribution and Dais coordination.",
-            ]}
-            narrativeTitle="Architects of the experience"
-            narrativePoints={[
-              "Owns venue management, technical readiness, and the detailed minute‑by‑minute run‑of‑show.",
-              "Aligns ceremonies, socials, committee timings, and announcements into a cohesive schedule.",
-            ]}
-          />
+            <DeptCard
+              icon={<ClipboardList />}
+              title="Conference Management"
+              structure="1 Head"
+              mandatePoints={[
+                "End-to-end conference planning and execution.",
+                "Portfolio distribution and Executive Board coordination.",
+                "Master run-of-show and ceremony management."
+              ]}
+              narrativeTitle="Mission Command"
+              narrativePoints={[
+                "Architecting the minute-by-minute attendee flow.",
+                "Ensuring central command over all operational nodes."
+              ]}
+            />
+          </div>
         </div>
       </BounceSection>
 
       {/* 4. Junior Secretariat */}
-      <BounceSection
-        id="mandate-junior-secretariat"
-        icon={<GraduationCapIcon />}
-      >
-        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-          Junior Secretariat
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          The Junior Secretariat is a foundational unit that supports
-          day‑to‑day operations while serving as a leadership incubation
-          platform for future Secretariat members, reporting directly to the
-          General Secretary.
-        </p>
-        <div className="mt-3 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
-          <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Key responsibilities
+      <BounceSection id="mandate-junior-secretariat" icon={<GraduationCap />}>
+        <div className="grid gap-12 md:grid-cols-2">
+          <div className="space-y-6">
+            <h3 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white">Junior Secretariat</h3>
+            <p className="text-base font-medium text-slate-600 dark:text-zinc-400">
+              The foundational unit that supports day‑to‑day operations while serving as a leadership incubation platform.
             </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                Administrative: preparation of placards, attendance
-                documentation, and delegate kits.
-              </li>
-              <li>
-                Operational: venue setup, entry and exit regulation, and
-                maintaining decorum during sessions.
-              </li>
-              <li>
-                Documentation: drafting minutes, generating reports, and
-                assisting with records.
-              </li>
-              <li>
-                Delegate assistance: on‑site support, guidance, and material
-                distribution.
-              </li>
-            </ul>
+            <div className="rounded-[2rem] border border-blue-100 bg-blue-50/30 p-8 dark:bg-white/5 dark:border-white/5">
+              <p className="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-6 font-mono">Operational Focus</p>
+              <ul className="space-y-4">
+                {[
+                  "Preparation of placards and delegate kits.",
+                  "Venue entry and exit regulation.",
+                  "Drafting minutes and assisting with records.",
+                  "Direct delegate movement and support."
+                ].map((text, i) => (
+                  <li key={i} className="flex gap-4 text-sm font-medium text-slate-700 dark:text-zinc-400">
+                    <div className="h-1.5 w-1.5 mt-1.5 rounded-full bg-blue-500 shrink-0" />
+                    {text}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Purpose & selection
-            </p>
-            <ul className="mt-2 list-disc space-y-1 pl-4">
-              <li>
-                Identifies and grooms potential future leaders of the
-                Secretariat.
-              </li>
-              <li>
-                Selection is merit‑based, focusing on discipline,
-                responsibility, and demonstrated commitment.
-              </li>
-              <li>
-                May operate under guidance of Office Heads during events while
-                retaining a clear reporting line to the General Secretary.
-              </li>
-            </ul>
+          <div className="relative rounded-[3rem] bg-slate-950 p-10 text-white overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 p-10 opacity-10">
+              <GraduationCap className="w-40 h-40" />
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-8 font-mono">Incubation Mandate</p>
+            <div className="space-y-8 relative z-10">
+              <div>
+                <h4 className="text-xl font-bold mb-2">Leadership Pipeline</h4>
+                <p className="text-sm font-medium text-slate-400 leading-relaxed">
+                  Identifies and grooms future Secretariat leaders. Selection is merit-based, focusing on discipline and commitment.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-xl font-bold mb-2">Command Hierarchy</h4>
+                <p className="text-sm font-medium text-slate-400 leading-relaxed">
+                  Operates under Office Heads during events while retaining a direct reporting line to the General Secretary.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </BounceSection>
 
       {/* 5. Tenure, Selection & Promotion */}
-      <BounceSection id="mandate-tenure" icon={<CalendarIcon />}>
-        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-          Tenure & selection
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          The Mandate sets standard durations of office, eligibility criteria,
-          and procedures for selection, promotion, and removal to ensure
-          continuity, fairness, and institutional compliance.
-        </p>
-        <div className="mt-3 grid gap-4 text-xs text-slate-700 md:grid-cols-3">
-          <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">Standard tenure</p>
-            <p className="mt-1">
-              Office‑bearers usually serve for a defined academic session, with
-              clearly notified start and end dates consistent with college
-              calendars.
-            </p>
+      <BounceSection id="mandate-tenure" icon={<CalendarClock />}>
+        <div className="space-y-8">
+          <div>
+            <h3 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white">Selection & Tenure</h3>
+            <p className="mt-2 text-base font-medium text-slate-600 dark:text-zinc-400">Standard procedures for appointment, promotion, and removal.</p>
           </div>
-          <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Selection & eligibility
-            </p>
-            <p className="mt-1">
-              Selection takes into account academic standing, prior performance,
-              discipline, and demonstrated competence in relevant domains, using
-              processes outlined by the Secretariat and faculty.
-            </p>
-          </div>
-          <div className="rounded-2xl bg-slate-50/80 p-4">
-            <p className="font-semibold text-slate-900">
-              Promotion & removal
-            </p>
-            <p className="mt-1">
-              Members may be promoted, reassigned, or removed based on
-              performance and conduct, with all such decisions recorded and
-              subject to review under the Constitution and Code of Conduct.
-            </p>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm dark:bg-zinc-800/40 dark:border-white/5 hover:border-blue-500/20 transition-all">
+              <p className="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-4 font-mono">Academic Session</p>
+              <h4 className="font-black text-slate-900 dark:text-white mb-2 tracking-tight">Standard Tenure</h4>
+              <p className="text-sm font-medium text-slate-600 dark:text-zinc-400 leading-relaxed">Office-bearers serve for a defined academic session, consistent with college calendars.</p>
+            </div>
+            <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm dark:bg-zinc-800/40 dark:border-white/5 hover:border-blue-500/20 transition-all">
+              <p className="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-4 font-mono">Criteria</p>
+              <h4 className="font-black text-slate-900 dark:text-white mb-2 tracking-tight">Eligibility</h4>
+              <p className="text-sm font-medium text-slate-600 dark:text-zinc-400 leading-relaxed">Selection is based on academic standing, performance record, and domain-specific competence.</p>
+            </div>
+            <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm dark:bg-zinc-800/40 dark:border-white/5 hover:border-blue-500/20 transition-all">
+              <p className="text-[11px] font-black uppercase tracking-widest text-blue-600 mb-4 font-mono">Protocols</p>
+              <h4 className="font-black text-slate-900 dark:text-white mb-2 tracking-tight">Promotion & Removal</h4>
+              <p className="text-sm font-medium text-slate-600 dark:text-zinc-400 leading-relaxed">Reassignments are performance-based and subject to review under the institutional code of conduct.</p>
+            </div>
           </div>
         </div>
       </BounceSection>
 
       {/* 6. Executive Board */}
-      <BounceSection id="mandate-eb" icon={<GavelIcon />}>
-        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-          Executive Board
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          The Executive Board is the intellectual and procedural core of each
-          committee, typically comprising a Chair, Vice‑Chair, and Rapporteur,
-          responsible for moderation, academic depth, and accurate
-          documentation.
-        </p>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-700">
-          <li>
-            Prepares background guides and ensures research depth and thematic
-            coherence for each committee.
-          </li>
-          <li>
-            Moderates debate impartially and evaluates delegate performance
-            against academic and procedural standards.
-          </li>
-          <li>
-            Records key decisions, signatories, and evidence for awards and
-            post‑conference reports.
-          </li>
-        </ul>
+      <BounceSection id="mandate-eb" icon={<ClipboardList />}>
+        <div className="flex flex-col md:flex-row gap-12">
+          <div className="flex-1 space-y-6">
+            <h3 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white">Executive Board (EB)</h3>
+            <p className="text-base font-medium text-slate-600 dark:text-zinc-400">
+              The intellectual and procedural core of each committee, responsible for academic depth.
+            </p>
+            <div className="space-y-3">
+              {[
+                "Prepares committee background guides.",
+                "Moderates debate impartially and evaluates performance.",
+                "Records key committee decisions and signatories."
+              ].map((text, i) => (
+                <div key={i} className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-white/5">
+                  <div className="h-2 w-2 rounded-full bg-blue-600" />
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="w-full md:w-80 rounded-[3rem] border border-slate-100 p-8 dark:border-white/5 flex flex-col justify-center gap-6">
+            <div className="space-y-1">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tier A</p>
+              <h4 className="text-xl font-black text-slate-950 dark:text-white">Committee Chair</h4>
+            </div>
+            <div className="space-y-1">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tier B</p>
+              <h4 className="text-xl font-black text-slate-950 dark:text-white">Vice-Chair</h4>
+            </div>
+            <div className="space-y-1">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tier C</p>
+              <h4 className="text-xl font-black text-slate-950 dark:text-white">Rapporteur</h4>
+            </div>
+          </div>
+        </div>
       </BounceSection>
 
       {/* 7. Conducting a Conference */}
-      <BounceSection id="mandate-playbook" icon={<ClipboardIcon />}>
-        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
-          Operational blueprint
-        </h3>
-        <p className="mt-1 text-sm text-slate-600">
-          Conducting a SECMUN conference is treated as a structured project,
-          moving from pre‑event planning and technical readiness to live
-          execution and post‑event documentation under a unified run‑of‑show.
-        </p>
-        <div className="mt-3 grid gap-4 text-xs text-slate-700 md:grid-cols-4">
-          <TimelineColumn
-            label="Pre‑planning"
-            items={[
-              "Confirm Secretariat, Executive Board, and departmental structures.",
-              "Draft initial budgets, sponsorship plans, and outreach strategy.",
-            ]}
-          />
-          <TimelineColumn
-            label="T‑4 to T‑2 weeks"
-            items={[
-              "Release background guides, portfolios, and core communication to delegates and institutions.",
-              "Lock venues, vendors, and broad logistics for ceremonies and committees.",
-            ]}
-          />
-          <TimelineColumn
-            label="T‑1 week to T‑1 day"
-            items={[
-              "Finalise registrations, room allocations, seating charts, and printed material.",
-              "Conduct full technical rehearsals and dry runs with Senior Secretariat and EB.",
-            ]}
-          />
-          <TimelineColumn
-            label="Conference days"
-            items={[
-              "Execute the run‑of‑show with Conference Management as central command.",
-              "Maintain decorum, manage crises, and ensure thorough documentation for reports and certificates.",
-            ]}
-          />
+      <BounceSection id="mandate-playbook" icon={<ScrollText />}>
+        <div className="space-y-12">
+          <div>
+            <h3 className="text-3xl font-black tracking-tight text-slate-950 dark:text-white">Operational Blueprint</h3>
+            <p className="mt-2 text-base font-medium text-slate-600 dark:text-zinc-400">The project lifecycle of a SECMUN conference.</p>
+          </div>
+
+          <div className="relative pl-8 md:pl-12">
+            {/* Continuous Vertical Timeline Line */}
+            <div className="absolute left-[11px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-blue-500 via-blue-400/50 to-transparent" />
+
+            <div className="space-y-16">
+              <TimelineItem
+                label="Pre-Planning Phase"
+                items={[
+                  "Confirm Secretariat and EB structures.",
+                  "Draft formal budgets and sponsorship outreach."
+                ]}
+              />
+              <TimelineItem
+                label="Launch Phase (T-4 Weeks)"
+                items={[
+                  "Release background guides and portfolios.",
+                  "Lock venues and institutional vendor agreements."
+                ]}
+              />
+              <TimelineItem
+                label="Readiness Phase (T-1 Week)"
+                items={[
+                  "Finalize registrations and seating charts.",
+                  "Conduct full-scale dry runs and tech rehearsals."
+                ]}
+              />
+              <TimelineItem
+                label="Execution (Conference Days)"
+                items={[
+                  "Central command via Conference Management.",
+                  "Crisis monitoring and decorum management."
+                ]}
+              />
+            </div>
+          </div>
         </div>
       </BounceSection>
-      <br />
+      <div className="text-center pt-8">
+        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 font-mono italic">Operational Mandate v2.6</p>
+      </div>
     </div>
   )
 }
 
-/* ---------- Reusable animated wrappers ---------- */
+function MiniRoleCard({
+  icon,
+  title,
+  lines,
+  accent = "slate"
+}: {
+  icon?: React.ReactNode
+  title: string
+  lines: string[]
+  accent?: "blue" | "slate"
+}) {
+  return (
+    <div className={`group p-6 rounded-[2.5rem] border transition-all duration-500 hover:-translate-y-1 ${accent === "blue"
+      ? "bg-gradient-to-br from-blue-50 to-white border-blue-200 shadow-xl shadow-blue-500/5 dark:from-blue-900/10 dark:to-zinc-900 dark:border-blue-500/20"
+      : "bg-white border-slate-100 dark:bg-zinc-800/40 dark:border-white/5"
+      }`}>
+      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform group-hover:scale-110 ${accent === "blue" ? "bg-white text-blue-600 dark:bg-blue-600 dark:text-white" : "bg-slate-950 text-white dark:bg-white dark:text-black"
+        }`}>
+        {icon}
+      </div>
+      <h4 className={`text-lg font-black mb-3 tracking-tight ${accent === "blue" ? "text-blue-900 dark:text-white" : "text-slate-900 dark:text-white"}`}>
+        {title}
+      </h4>
+      <ul className={`space-y-2 text-xs font-medium leading-relaxed ${accent === "blue" ? "text-blue-700/80 dark:text-zinc-400" : "text-slate-600 dark:text-zinc-400"}`}>
+        {lines.map((l, i) => (
+          <li key={i} className="flex gap-2">
+            <span className={`opacity-50 tracking-tighter ${accent === "blue" ? "text-blue-400" : ""}`}>—</span>
+            {l}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function DeptCard({
+  icon,
+  title,
+  structure,
+  mandatePoints,
+  narrativeTitle,
+  narrativePoints,
+}: {
+  icon?: React.ReactNode
+  title: string
+  structure: string
+  mandatePoints: string[]
+  narrativeTitle: string
+  narrativePoints: string[]
+}) {
+  return (
+    <div className="group rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm transition-all hover:bg-slate-50 hover:shadow-2xl hover:shadow-blue-500/5 dark:bg-zinc-900/60 dark:border-white/5 dark:hover:bg-zinc-800/60">
+      <div className="flex items-start justify-between mb-8">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-[1.25rem] bg-slate-950 text-white flex items-center justify-center shadow-xl dark:bg-white dark:text-black transition-transform group-hover:scale-105">
+            {icon}
+          </div>
+          <div>
+            <h4 className="text-xl font-black tracking-tight text-slate-950 dark:text-white">{title}</h4>
+            <p className="text-[10px] font-black uppercase tracking-widest text-blue-600 mt-1">{structure}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-4 font-mono">Operations</p>
+          <ul className="space-y-3">
+            {mandatePoints.map((m, i) => (
+              <li key={i} className="text-sm font-medium text-slate-600 leading-relaxed flex gap-3 dark:text-zinc-400">
+                <span className="text-blue-500 font-bold">•</span>
+                {m}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="pt-6 border-t border-slate-100 dark:border-white/5">
+          <p className="text-[11px] font-black uppercase tracking-widest text-slate-400 mb-4 font-mono">{narrativeTitle}</p>
+          <ul className="space-y-3">
+            {narrativePoints.map((n, i) => (
+              <li key={i} className="text-sm font-bold text-slate-900 leading-relaxed flex gap-3 dark:text-white">
+                <ChevronRight className="w-4 h-4 mt-0.5 text-blue-500 shrink-0" />
+                {n}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TimelineItem({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div className="relative group">
+      {/* Node Dot */}
+      <div className="absolute -left-[27px] md:-left-[31px] top-1 h-5 w-5 rounded-full border-4 border-white bg-blue-600 shadow-lg shadow-blue-500/30 transition-transform group-hover:scale-125 dark:border-zinc-900" />
+
+      <p className="text-xs font-black uppercase tracking-widest text-blue-600 font-mono mb-4">{label}</p>
+      <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:bg-white/5 dark:border-white/5">
+        <ul className="space-y-4">
+          {items.map((item, i) => (
+            <li key={i} className="text-sm font-medium text-slate-600 leading-relaxed flex gap-4 dark:text-zinc-400">
+              <div className="h-px w-4 bg-slate-200 mt-[10px] shrink-0 dark:bg-white/10" />
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
 
 function BounceSection({
   id,
@@ -454,220 +574,21 @@ function BounceSection({
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 30, scale: 0.98 }}
+      initial={{ opacity: 0, y: 40, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="overflow-hidden rounded-[2.5rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-zinc-900/90"
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+      className="relative overflow-hidden rounded-[3rem] border border-blue-200/40 bg-white p-10 shadow-2xl shadow-blue-500/[0.02] dark:border-white/5 dark:bg-zinc-900/60"
     >
+      <div className="absolute top-0 right-0 h-32 w-32 bg-blue-500/5 blur-[80px]" />
       {icon && (
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-900 dark:bg-white/5 dark:text-white">
+        <div className="mb-10 flex items-center justify-between">
+          <div className="flex h-14 w-14 items-center justify-center rounded-[1.25rem] bg-slate-950 text-white shadow-xl dark:bg-white dark:text-black">
             {icon}
           </div>
-          <div className="h-px flex-1 ml-6 bg-slate-100 dark:bg-white/5" />
         </div>
       )}
       {children}
     </motion.section>
   )
-}
-
-function MiniRoleCard({
-  icon,
-  title,
-  lines,
-}: {
-  icon?: React.ReactNode
-  title: string
-  lines: string[]
-}) {
-  return (
-    <motion.article
-      initial={{ opacity: 0, y: 16, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 230,
-        damping: 20,
-      }}
-      className="flex flex-col gap-2 rounded-3xl border border-slate-200 bg-slate-50/50 p-4 transition-all hover:bg-slate-50 dark:border-white/5 dark:bg-white/5"
-    >
-      <div className="flex items-center gap-2">
-        {icon && (
-          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-white text-slate-900 shadow-sm dark:bg-white/10 dark:text-white">
-            {icon}
-          </div>
-        )}
-        <p className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white">{title}</p>
-      </div>
-      <ul className="mt-1 list-disc space-y-1 pl-4 text-[11px] text-slate-700">
-        {lines.map((l) => (
-          <li key={l}>{l}</li>
-        ))}
-      </ul>
-    </motion.article>
-  )
-}
-
-interface DeptCardProps {
-  icon?: React.ReactNode
-  title: string
-  structure: string
-  reporting: string
-  mandatePoints: string[]
-  narrativeTitle: string
-  narrativePoints: string[]
-}
-
-function DeptCard({
-  icon,
-  title,
-  structure,
-  reporting,
-  mandatePoints,
-  narrativeTitle,
-  narrativePoints,
-}: DeptCardProps) {
-  return (
-    <motion.article
-      initial={{ opacity: 0, y: 20, scale: 0.92 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 230,
-        damping: 20,
-      }}
-      className="flex flex-col gap-6 rounded-[2rem] border border-blue-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/5 dark:bg-white/5"
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex items-start gap-4">
-          {icon && (
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-50 text-slate-900 dark:bg-white/10 dark:text-white">
-              {icon}
-            </div>
-          )}
-          <div>
-            <h4 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">{title}</h4>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-blue-700 dark:bg-blue-500/10">
-                {structure}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <p className="text-[11px] font-semibold text-slate-900">
-          Mandate & key functions
-        </p>
-        <ul className="mt-1 list-disc space-y-1 pl-4 text-[11px] text-slate-700">
-          {mandatePoints.map((m) => (
-            <li key={m}>{m}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="rounded-2xl bg-slate-50/80 p-3">
-        <p className="text-[11px] font-semibold text-slate-900">
-          {narrativeTitle}
-        </p>
-        <ul className="mt-1 list-disc space-y-1 pl-4 text-[11px] text-slate-700">
-          {narrativePoints.map((n) => (
-            <li key={n}>{n}</li>
-          ))}
-        </ul>
-      </div>
-    </motion.article>
-  )
-}
-
-function TimelineColumn({
-  label,
-  items,
-}: {
-  label: string
-  items: string[]
-}) {
-  return (
-    <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-        {label}
-      </p>
-      <ul className="mt-1 list-disc space-y-1 pl-4">
-        {items.map((i) => (
-          <li key={i} className="text-[11px] text-slate-700">
-            {i}
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-/* ---------- Icon helper components ---------- */
-
-function BuildingIcon() {
-  return <Building2 className="h-4 w-4" />
-}
-
-function CrownIcon({ small }: { small?: boolean }) {
-  return <Crown className={small ? "h-3.5 w-3.5" : "h-4 w-4"} />
-}
-
-function ScrollUserIcon() {
-  return <ScrollText className="h-3.5 w-3.5" />
-}
-
-function UserRoundIcon() {
-  return <UserRound className="h-3.5 w-3.5" />
-}
-
-function UsersIcon() {
-  return <Users className="h-4 w-4" />
-}
-
-function NetworkIconBig() {
-  return <Network className="h-4 w-4" />
-}
-
-function PRIcon() {
-  return <Megaphone className="h-4 w-4" />
-}
-
-function ITIcon() {
-  return <Palette className="h-4 w-4" />
-}
-
-function MegaphoneIcon() {
-  return <Megaphone className="h-4 w-4" />
-}
-
-function WalletIcon() {
-  return <Wallet className="h-4 w-4" />
-}
-
-function HandshakeIcon() {
-  return <Handshake className="h-4 w-4" />
-}
-
-function TruckIcon() {
-  return <Truck className="h-4 w-4" />
-}
-
-function ClipboardIcon() {
-  return <ClipboardList className="h-4 w-4" />
-}
-
-function GraduationCapIcon() {
-  return <GraduationCap className="h-4 w-4" />
-}
-
-function CalendarIcon() {
-  return <CalendarClock className="h-4 w-4" />
-}
-
-function GavelIcon() {
-  return <ShieldCheck className="h-4 w-4 rotate-12" />
 }

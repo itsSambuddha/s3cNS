@@ -45,7 +45,12 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#030712]/80 backdrop-blur-md border-b border-slate-200/60 dark:border-white/5">
+    <header className={cn(
+      "sticky top-0 z-40 transition-all duration-300",
+      scrolled
+        ? "bg-transparent border-none py-2" // py-2 to give pill some breathing room
+        : "bg-white/80 dark:bg-[#030712]/80 backdrop-blur-md border-b border-slate-200/60 dark:border-white/5"
+    )}>
       <div className="mx-auto max-w-6xl px-3 sm:px-4">
         {/* DESKTOP */}
         <div className="hidden h-16 items-center sm:flex">
@@ -169,7 +174,10 @@ export default function Navbar() {
         </div>
 
         {/* MOBILE */}
-        <div className="flex h-14 items-center justify-between sm:hidden px-2">
+        <div className={cn(
+          "flex h-14 items-center justify-between sm:hidden px-2 transition-all duration-300",
+          scrolled && "bg-white/80 dark:bg-[#030712]/80 backdrop-blur-md border-b border-slate-200/60 dark:border-white/5"
+        )}>
           <div className="flex items-center gap-3">
             <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="h-8 w-8 rounded-lg shadow-sm" />
             <span className="text-sm font-black tracking-tight text-slate-900 dark:text-white">s3cNS</span>

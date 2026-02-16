@@ -8,39 +8,29 @@ import { ConstitutionContent } from "./ConstitutionContent"
 import Sidebar from "@/components/layout/Sidebar"
 import Navbar from "@/components/layout/Navbar"
 import MobileNav from "@/components/layout/MobileNav"
+import { Sparkles, FileText, X } from "lucide-react"
 
 type TabKey = "mandate" | "constitution"
 
 const NAV_ITEMS: { id: string; label: string; group: TabKey }[] = [
   // Mandate
-  { id: "mandate-overview", label: "Mandate overview", group: "mandate" },
-  { id: "mandate-structure", label: "Secretariat structure", group: "mandate" },
-  {
-    id: "mandate-departments",
-    label: "Departments in brief",
-    group: "mandate",
-  },
-  { id: "mandate-playbook", label: "Conference playbook", group: "mandate" },
+  { id: "mandate-overview", label: "Secretariat Nucleus", group: "mandate" },
+  { id: "mandate-structure", label: "Leadership Command", group: "mandate" },
+  { id: "mandate-departments", label: "Operational Offices", group: "mandate" },
+  { id: "mandate-junior-secretariat", label: "Junior Secretariat", group: "mandate" },
+  { id: "mandate-tenure", label: "Tenure & Protocols", group: "mandate" },
+  { id: "mandate-eb", label: "Executive Board", group: "mandate" },
+  { id: "mandate-playbook", label: "Operational Blueprint", group: "mandate" },
   // Constitution
-  { id: "const-preamble", label: "Preamble", group: "constitution" },
-  { id: "const-1", label: "Art. 1 – Name & purpose", group: "constitution" },
-  { id: "const-2", label: "Art. 2 – Membership", group: "constitution" },
-  { id: "const-3", label: "Art. 3 – Structure", group: "constitution" },
-  {
-    id: "const-4",
-    label: "Art. 4–6 – Roles & tenure",
-    group: "constitution",
-  },
-  {
-    id: "const-5",
-    label: "Art. 7–10 – Operations",
-    group: "constitution",
-  },
-  {
-    id: "const-6",
-    label: "Art. 11–13 – Conduct & dissolution",
-    group: "constitution",
-  },
+  { id: "const-preamble", label: "Formal Preamble", group: "constitution" },
+  { id: "const-1", label: "Art. 01 – Name & Purpose", group: "constitution" },
+  { id: "const-2", label: "Art. 02 – Membership", group: "constitution" },
+  { id: "const-3", label: "Art. 03 – Structure", group: "constitution" },
+  { id: "const-4", label: "Art. 04 – Roles & Hierarchy", group: "constitution" },
+  { id: "const-6", label: "Art. 06 – Selection", group: "constitution" },
+  { id: "const-7", label: "Art. 07 – Operations", group: "constitution" },
+  { id: "const-10", label: "Art. 10 – Ethics", group: "constitution" },
+  { id: "const-12", label: "Art. 12 – Certification", group: "constitution" },
 ]
 
 export default function ConstitutionPage() {
@@ -94,34 +84,33 @@ export default function ConstitutionPage() {
               style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/baseFilter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
           </div>
 
-          <div className="mx-auto w-full max-w-6xl relative px-4 pt-10 lg:px-6">
-            <section className="mb-16 text-center space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
-                Institutional Memory
+          <div className="mx-auto w-full max-w-7xl relative px-4 pt-16 lg:px-6">
+            <section className="mb-20 text-center space-y-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 dark:bg-blue-500/10 dark:border-blue-500/20">
+                Official Institutional Ledger
               </div>
-              <h1 className="text-4xl font-black tracking-tight text-slate-900 sm:text-6xl dark:text-white leading-[1.1]">
-                Mandate & <br className="sm:hidden" /> Constitution
+              <h1 className="text-6xl font-black tracking-tighter text-slate-950 sm:text-9xl dark:text-white leading-[0.85]">
+                Mandate & <br /> <span className="text-blue-600">Constitution.</span>
               </h1>
-              <p className="mx-auto max-w-2xl text-lg font-medium text-slate-500 leading-relaxed dark:text-zinc-400">
-                A single, navigable space for how SECMUN is structured, how
-                conferences run, and the Articles that formally govern every role and
-                decision.
+              <p className="mx-auto max-w-2xl text-xl font-medium text-slate-500 leading-relaxed dark:text-zinc-400">
+                The supreme governing framework of the SECMUN Secretariat. <br className="hidden md:block" />
+                A single point of truth for protocol, structure, and institutional ethics.
               </p>
             </section>
 
             {/* Layout: left nav + right content */}
-            <section className="grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,2fr)]">
+            <section className="grid gap-16 lg:grid-cols-[320px,1fr]">
               {/* Sidebar */}
-              <aside className="self-start space-y-4 lg:sticky lg:top-20">
+              <aside className="self-start space-y-8 lg:sticky lg:top-24">
                 {/* Tab switch */}
-                <div className="rounded-3xl border border-blue-200/60 bg-white/80 p-2 text-xs backdrop-blur shadow-xl shadow-blue-500/5 dark:bg-zinc-900/90">
-                  <div className="grid grid-cols-2 gap-1">
+                <div className="rounded-[2.5rem] border border-blue-200/60 bg-white/80 p-2 backdrop-blur-3xl shadow-2xl shadow-blue-500/10 dark:bg-zinc-900/90 dark:border-white/5 transition-all hover:bg-white">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => setActiveTab("mandate")}
-                      className={`rounded-2xl px-3 py-2.5 font-black uppercase tracking-wider transition-all duration-300 ${activeTab === "mandate"
-                          ? "bg-slate-900 text-white shadow-lg dark:bg-white dark:text-slate-900"
-                          : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                      className={`rounded-[2rem] px-3 py-3 font-black text-[11px] uppercase tracking-widest transition-all duration-700 ${activeTab === "mandate"
+                        ? "bg-blue-600 text-white shadow-2xl shadow-blue-600/30 ring-4 ring-blue-600/10"
+                        : "text-slate-400 hover:text-slate-900 dark:text-zinc-500 dark:hover:text-white"
                         }`}
                     >
                       Mandate
@@ -129,9 +118,9 @@ export default function ConstitutionPage() {
                     <button
                       type="button"
                       onClick={() => setActiveTab("constitution")}
-                      className={`rounded-2xl px-3 py-2.5 font-black uppercase tracking-wider transition-all duration-300 ${activeTab === "constitution"
-                          ? "bg-slate-900 text-white shadow-lg dark:bg-white dark:text-slate-900"
-                          : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                      className={`rounded-[2rem] px-3 py-3 font-black text-[11px] uppercase tracking-widest transition-all duration-700 ${activeTab === "constitution"
+                        ? "bg-blue-600 text-white shadow-2xl shadow-blue-600/30 ring-4 ring-blue-600/10"
+                        : "text-slate-400 hover:text-slate-900 dark:text-zinc-500 dark:hover:text-white"
                         }`}
                     >
                       Articles
@@ -140,19 +129,22 @@ export default function ConstitutionPage() {
                 </div>
 
                 {/* Outline */}
-                <div className="rounded-3xl border border-blue-200/60 bg-white/90 p-6 text-xs shadow-xl shadow-blue-500/5 backdrop-blur dark:bg-zinc-900/90">
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                    Outline · {activeTab}
+                <div className="rounded-[3rem] border border-blue-200/60 bg-white/80 p-10 shadow-2xl shadow-blue-500/[0.03] backdrop-blur-3xl dark:bg-zinc-900/90 dark:border-white/5">
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-10 font-mono">
+                    Navigation Index
                   </p>
-                  <ul className="mt-6 space-y-2">
+                  <ul className="space-y-1">
                     {NAV_ITEMS.filter((i) => i.group === activeTab).map((item) => (
                       <li key={item.id}>
                         <button
                           type="button"
                           onClick={() => scrollTo(item.id)}
-                          className="w-full rounded-xl px-3 py-2 text-left text-[12px] font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
+                          className="w-full group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-300 hover:bg-blue-50 dark:hover:bg-white/5"
                         >
-                          {item.label}
+                          <div className="h-1.5 w-1.5 rounded-full bg-blue-200 transition-colors group-hover:bg-blue-600" />
+                          <span className="text-[13px] font-bold text-slate-600 group-hover:text-slate-950 dark:text-zinc-400 dark:group-hover:text-white">
+                            {item.label}
+                          </span>
                         </button>
                       </li>
                     ))}
@@ -160,78 +152,67 @@ export default function ConstitutionPage() {
                 </div>
 
                 {/* Email + help */}
-                <div className="space-y-3 rounded-2xl border border-slate-200 bg-white/90 p-4 text-xs shadow-sm backdrop-blur">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Get the Constitution by email
+                <div className="relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white/90 p-8 shadow-sm backdrop-blur-2xl dark:bg-zinc-900/40 dark:border-white/5">
+                  <div className="absolute -right-4 -top-4 opacity-[0.05]">
+                    <Sparkles className="w-24 h-24 text-blue-600" />
+                  </div>
+                  <p className="relative z-10 text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 mb-6 font-mono">
+                    Dispatch Copy
                   </p>
-                  <form onSubmit={handleSend} className="space-y-2">
-                    <div className="flex gap-2">
+                  <form onSubmit={handleSend} className="relative z-10 space-y-4">
+                    <div className="space-y-2">
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="your.email@example.com"
-                        className="h-8 flex-1 rounded-full border border-slate-200 px-3 text-[11px] text-slate-800 outline-none ring-blue-200 placeholder:text-slate-400 focus:ring-2"
+                        placeholder="officer.email@secmun.org"
+                        className="w-full h-12 rounded-2xl border border-slate-200 bg-slate-50/50 px-4 text-xs text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white dark:bg-black/20 dark:border-white/10 dark:text-white"
                       />
                       <button
                         type="submit"
                         disabled={sending}
-                        className="inline-flex h-8 items-center justify-center rounded-full bg-slate-900 px-3 text-[11px] font-semibold text-white disabled:opacity-60"
+                        className="w-full h-12 flex items-center justify-center rounded-2xl bg-slate-950 px-4 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-blue-600 disabled:opacity-60 dark:bg-white dark:text-black dark:hover:bg-blue-600 dark:hover:text-white shadow-lg"
                       >
-                        {sending ? "Sending…" : "Send"}
+                        {sending ? "Dispatching..." : "Send to Inbox"}
                       </button>
                     </div>
                     {sent === "ok" && (
-                      <p className="text-[11px] text-emerald-600">Sent to {email}.</p>
+                      <p className="text-[10px] font-bold text-emerald-600 text-center uppercase tracking-wider">Transmission Successful</p>
                     )}
                     {sent === "error" && (
-                      <p className="text-[11px] text-red-600">
-                        Could not send. Try again later.
-                      </p>
+                      <p className="text-[10px] font-bold text-red-600 text-center uppercase tracking-wider">Transmission Interrupted</p>
                     )}
                   </form>
-
-                  <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-blue-50 px-3 py-2 text-[11px] text-blue-800">
-                    <span>wanna know how s3cNS helps your work get easier?</span>
-                    <a
-                      href="/help"
-                      className="rounded-full bg-blue-700 px-3 py-1 text-[11px] font-semibold text-white"
-                    >
-                      Click here
-                    </a>
-                  </div>
                 </div>
 
-                {/* Appendix PDF – mini A4 card + fullscreen on click */}
+                {/* Appendix PDF Card */}
                 <button
                   type="button"
                   onClick={() => setShowAppendixFull(true)}
-                  className="w-full rounded-2xl border border-slate-200 bg-white/95 p-3 text-xs shadow-sm backdrop-blur text-left hover:border-blue-300 hover:shadow-md transition"
+                  className="group relative w-full overflow-hidden rounded-[2.5rem] border border-blue-200/60 bg-white/95 p-8 text-left transition-all duration-500 hover:border-blue-500/40 hover:shadow-2xl hover:shadow-blue-500/10 dark:bg-zinc-900/60 dark:border-white/5"
                 >
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Appendix
+                  <div className="absolute right-8 top-8 opacity-20 transition-transform duration-500 group-hover:scale-110">
+                    <FileText className="w-10 h-10 text-blue-600" />
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">
+                    Official Appendix
                   </p>
-                  <p className="mt-1 text-[12px] font-semibold text-slate-900">
-                    Constitution Appendix (PDF)
-                  </p>
-                  <p className="mt-1 text-[11px] text-slate-500">
-                    Click to view the full appendix.
-                  </p>
+                  <h4 className="text-xl font-black text-slate-900 dark:text-white leading-tight mb-4">
+                    Institutional <br /> Annexures
+                  </h4>
 
-                  {/* Mini A4-style dummy preview */}
-                  <div className="mt-2 flex justify-center">
-                    <div className="relative h-40 w-28 overflow-hidden rounded-[6px] border border-slate-200 bg-slate-50 shadow-sm">
-                      <div className="absolute inset-0 flex flex-col">
-                        <div className="h-4 bg-slate-200/80" />
-                        <div className="mt-2 space-y-1 px-2">
-                          <div className="h-1.5 rounded bg-slate-200" />
-                          <div className="h-1.5 w-5/6 rounded bg-slate-200" />
-                          <div className="h-1.5 w-4/6 rounded bg-slate-200" />
-                          <div className="h-1.5 w-2/3 rounded bg-slate-200" />
-                        </div>
+                  <div className="mt-6 flex justify-center">
+                    <div className="relative h-44 w-32 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 dark:border-white/10 dark:bg-black">
+                      <div className="absolute top-0 left-0 h-4 w-full bg-slate-100 dark:bg-white/5" />
+                      <div className="mt-8 space-y-2 px-3">
+                        <div className="h-1.5 w-full rounded bg-slate-100 dark:bg-white/5" />
+                        <div className="h-1.5 w-5/6 rounded bg-slate-100 dark:bg-white/5" />
+                        <div className="h-1.5 w-4/6 rounded bg-slate-100 dark:bg-white/5" />
+                        <div className="pt-2 h-1.5 w-full rounded bg-slate-100 dark:bg-white/5" />
+                        <div className="h-1.5 w-2/3 rounded bg-slate-100 dark:bg-white/5" />
                       </div>
-                      <div className="pointer-events-none absolute inset-0 rounded-[6px] ring-1 ring-slate-900/5" />
+                      <div className="absolute bottom-4 left-3 right-3 h-1 w-full bg-blue-500/10" />
                     </div>
                   </div>
                 </button>
@@ -240,14 +221,10 @@ export default function ConstitutionPage() {
               {/* Main content – tabs render different components */}
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 220,
-                  damping: 18,
-                }}
-                className="space-y-8"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-12"
               >
                 {activeTab === "mandate" ? (
                   <MandateContent />
