@@ -8,7 +8,8 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { AlertCircle, CheckCircle, Loader2 } from "lucide-react"
+import { AlertCircle, CheckCircle, Loader2, User, Mail, Phone, ArrowRight } from "lucide-react"
+import clsx from "clsx"
 
 type EventType = "INTRA_SECMUN" | "INTER_SECMUN" | "WORKSHOP" | "EDBLAZON_TIMES"
 type InterestType = "DELEGATE" | "CAMPUS_AMBASSADOR" | "JOURNALIST" | "VIDEO_JOURNALIST" | "PARTICIPANT"
@@ -234,191 +235,177 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-white px-4 py-8">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 py-8">
       {/* ===== Animated gradient background ===== */}
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background"></div>
       <div className="pointer-events-none absolute inset-0 -z-10">
         <motion.div
-          className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-blue-500/20 blur-3xl"
-          animate={{ x: [0, 120, 0], y: [0, 60, 0] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-primary/20 blur-[100px]"
+          animate={{
+            x: [0, 50, -50, 0],
+            y: [0, -30, 30, 0],
+            scale: [1, 1.1, 0.9, 1]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute bottom-[-6rem] right-[-6rem] h-[24rem] w-[24rem] rounded-full bg-sky-400/15 blur-3xl"
-          animate={{ x: [0, -100, 0], y: [0, -80, 0] }}
-          transition={{ duration: 45, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-1/4 right-1/4 h-80 w-80 rounded-full bg-purple-500/10 blur-[80px]"
+          animate={{
+            x: [0, -40, 40, 0],
+            y: [0, 40, -40, 0],
+            scale: [1, 0.9, 1.1, 1]
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         />
-        <div className="absolute left-1/2 top-1/3 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-white/60 blur-3xl" />
       </div>
 
       {/* ===== Form card ===== */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="relative w-full max-w-lg rounded-2xl border border-border/60 bg-white p-8 shadow-[0_12px_40px_rgba(0,0,0,0.08)]"
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="relative w-full max-w-lg glass-card rounded-3xl p-8 sm:p-10"
       >
         {!submitted ? (
           <>
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Register for {eventTypeToName(eventType)}
-            </h1>
-            <p className="mt-1 text-sm text-gray-600">
-              Submit your interest. Delegate Affairs will contact you shortly.
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-center mb-8"
+            >
+              <h1 className="text-3xl font-bold font-heading bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Register Interest
+              </h1>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Join us for <span className="font-semibold text-foreground">{eventTypeToName(eventType)}</span>
+              </p>
+            </motion.div>
 
             {/* General error message display */}
             {validationErrors.general && (
               <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 flex items-start gap-3 rounded-lg bg-red-50 p-4 border border-red-200"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                className="mb-6 flex items-start gap-3 rounded-xl bg-destructive/10 p-4 border border-destructive/20"
               >
-                <AlertCircle className="h-5 w-5 mt-0.5 text-red-600 flex-shrink-0" />
-                <p className="text-sm text-red-700">{validationErrors.general}</p>
+                <AlertCircle className="h-5 w-5 mt-0.5 text-destructive flex-shrink-0" />
+                <p className="text-sm text-destructive font-medium">{validationErrors.general}</p>
               </motion.div>
             )}
 
-            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Interest type */}
-              <div>
-                <p className="mb-3 text-sm font-semibold text-gray-900">
-                  Registering as
-                </p>
+              <div className="space-y-3">
+                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">
+                  I am registering as a
+                </label>
                 <RadioGroup
                   value={interestType}
                   onValueChange={(v) => setInterestType(v as InterestType)}
-                  className="flex flex-col gap-3 sm:flex-row sm:gap-6"
+                  className="grid grid-cols-1 gap-2 sm:grid-cols-2"
                 >
-                  {/* EdBlazon Times: Journalist / Video Journalist */}
-                  {eventType === "EDBLAZON_TIMES" && (
-                    <>
-                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
-                        <RadioGroupItem value="JOURNALIST" id="journalist-radio" />
-                        <span>Journalist</span>
-                      </label>
-                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
-                        <RadioGroupItem value="VIDEO_JOURNALIST" id="vj-radio" />
-                        <span>Video Journalist</span>
-                      </label>
-                    </>
-                  )}
-
-                  {/* Workshop: Participant only */}
-                  {eventType === "WORKSHOP" && (
-                    <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
-                      <RadioGroupItem value="PARTICIPANT" id="participant-radio" />
-                      <span>Participant</span>
-                    </label>
-                  )}
-
-                  {/* SECMUN (Intra/Inter): Delegate / Campus Ambassador */}
-                  {(eventType === "INTRA_SECMUN" || eventType === "INTER_SECMUN") && (
-                    <>
-                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
-                        <RadioGroupItem value="DELEGATE" id="delegate-radio" />
-                        <span>Delegate</span>
-                      </label>
-                      <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-blue-600 transition-colors">
-                        <RadioGroupItem value="CAMPUS_AMBASSADOR" id="ambassador-radio" />
-                        <span>Campus Ambassador</span>
-                      </label>
-                    </>
-                  )}
+                  {/* Helper for rendering card radios */}
+                  {((eventType === "EDBLAZON_TIMES" ? ["JOURNALIST", "VIDEO_JOURNALIST"] :
+                    eventType === "WORKSHOP" ? ["PARTICIPANT"] :
+                      ["DELEGATE", "CAMPUS_AMBASSADOR"]) as InterestType[]).map((type) => (
+                        <label
+                          key={type}
+                          className={clsx(
+                            "relative flex cursor-pointer flex-col rounded-xl border p-4 transition-all hover:bg-muted/50",
+                            interestType === type
+                              ? "border-primary bg-primary/5 shadow-sm ring-1 ring-primary/20"
+                              : "border-border/50 bg-background/50 hover:border-primary/50"
+                          )}
+                        >
+                          <RadioGroupItem value={type} id={type} className="sr-only" />
+                          <span className="text-sm font-medium font-heading">
+                            {type.replace("_", " ")}
+                          </span>
+                          {interestType === type && (
+                            <motion.div
+                              layoutId="active-check"
+                              className="absolute right-3 top-3 text-primary"
+                            >
+                              <CheckCircle className="h-4 w-4" />
+                            </motion.div>
+                          )}
+                        </label>
+                      ))}
                 </RadioGroup>
               </div>
 
               {/* Form inputs */}
               <div className="space-y-4">
-                {/* Full name input */}
-                <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-900 mb-2">
-                    Full Name
-                  </label>
+                <div className="relative group">
+                  <div className="absolute left-3 top-3 text-muted-foreground/50 group-focus-within:text-primary transition-colors">
+                    <User className="h-5 w-5" />
+                  </div>
                   <Input
                     id="fullName"
-                    placeholder="Enter your full name"
+                    placeholder="Full Name"
                     value={fullName}
                     onChange={(e) => handleFieldChange("fullName", e.target.value)}
                     onBlur={() => handleBlur("fullName")}
-                    className={`${touched.fullName && validationErrors.fullName
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                      : "border-gray-300"
-                      } transition-colors`}
+                    className={clsx(
+                      "pl-10 h-11 bg-background/50 border-input/50 focus:bg-background transition-all",
+                      touched.fullName && validationErrors.fullName && "border-destructive focus:ring-destructive/30"
+                    )}
                     disabled={loading}
                   />
                   {touched.fullName && validationErrors.fullName && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-1 text-xs text-red-600 flex items-center gap-1"
-                    >
-                      <AlertCircle className="h-3 w-3" />
+                    <p className="mt-1 text-xs text-destructive font-medium ml-1">
                       {validationErrors.fullName}
-                    </motion.p>
+                    </p>
                   )}
                 </div>
 
-                {/* Email input */}
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
-                    Email Address
-                  </label>
+                <div className="relative group">
+                  <div className="absolute left-3 top-3 text-muted-foreground/50 group-focus-within:text-primary transition-colors">
+                    <Mail className="h-5 w-5" />
+                  </div>
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email address"
+                    placeholder="Email Address"
                     value={email}
                     onChange={(e) => handleFieldChange("email", e.target.value)}
                     onBlur={() => handleBlur("email")}
-                    className={`${touched.email && validationErrors.email
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                      : "border-gray-300"
-                      } transition-colors`}
+                    className={clsx(
+                      "pl-10 h-11 bg-background/50 border-input/50 focus:bg-background transition-all",
+                      touched.email && validationErrors.email && "border-destructive focus:ring-destructive/30"
+                    )}
                     disabled={loading}
                   />
                   {touched.email && validationErrors.email && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-1 text-xs text-red-600 flex items-center gap-1"
-                    >
-                      <AlertCircle className="h-3 w-3" />
+                    <p className="mt-1 text-xs text-destructive font-medium ml-1">
                       {validationErrors.email}
-                    </motion.p>
+                    </p>
                   )}
                 </div>
 
-                {/* Phone input */}
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-900 mb-2">
-                    WhatsApp Number
-                  </label>
+                <div className="relative group">
+                  <div className="absolute left-3 top-3 text-muted-foreground/50 group-focus-within:text-primary transition-colors">
+                    <Phone className="h-5 w-5" />
+                  </div>
                   <Input
                     id="phone"
                     type="tel"
-                    placeholder="Enter your phone number"
+                    placeholder="WhatsApp Number"
                     value={phone}
                     onChange={(e) => handleFieldChange("phone", e.target.value)}
                     onBlur={() => handleBlur("phone")}
-                    className={`${touched.phone && validationErrors.phone
-                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
-                      : "border-gray-300"
-                      } transition-colors`}
+                    className={clsx(
+                      "pl-10 h-11 bg-background/50 border-input/50 focus:bg-background transition-all",
+                      touched.phone && validationErrors.phone && "border-destructive focus:ring-destructive/30"
+                    )}
                     disabled={loading}
                   />
                   {touched.phone && validationErrors.phone && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-1 text-xs text-red-600 flex items-center gap-1"
-                    >
-                      <AlertCircle className="h-3 w-3" />
+                    <p className="mt-1 text-xs text-destructive font-medium ml-1">
                       {validationErrors.phone}
-                    </motion.p>
+                    </p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500">
-                    We'll use this for event updates and communication
-                  </p>
                 </div>
               </div>
 
@@ -426,21 +413,23 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
               <Button
                 type="submit"
                 disabled={loading || !fullName.trim() || !email.trim() || !phone.trim()}
-                className="w-full rounded-full h-11 font-medium transition-all duration-200 flex items-center justify-center gap-2"
+                className="w-full h-12 rounded-xl text-base font-medium shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-[1.02]"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Submitting...
+                    <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    Processing...
                   </>
                 ) : (
-                  "Submit Interest"
+                  <>
+                    Submit Interest
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
                 )}
               </Button>
 
-              {/* Additional info */}
-              <p className="text-xs text-gray-500 text-center mt-4">
-                By submitting, you agree to our terms and will receive updates via email and WhatsApp.
+              <p className="text-[10px] text-muted-foreground text-center">
+                By submitting, you agree to receive updates via email and WhatsApp.
               </p>
             </form>
           </>
@@ -450,118 +439,60 @@ export function RegisterForm({ eventType, eventId }: { eventType: EventType; eve
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="flex flex-col items-center justify-center py-12"
+            className="flex flex-col items-center justify-center py-6"
           >
             {/* Success icon */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="relative mb-6"
             >
-              <div className="relative flex items-center justify-center">
-                <div className="absolute inset-0 animate-pulse bg-green-400/20 rounded-full blur-2xl" />
-                <CheckCircle className="h-16 w-16 text-green-600 relative" />
+              <div className="absolute inset-0 animate-pulse bg-emerald-500/30 rounded-full blur-xl" />
+              <div className="relative h-20 w-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
+                <CheckCircle className="h-10 w-10 text-emerald-600 dark:text-emerald-400" />
               </div>
             </motion.div>
 
             {/* Success message */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mt-6 text-center"
-            >
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Interest Submitted!
+            <div className="text-center space-y-2 mb-8">
+              <h2 className="text-2xl font-bold font-heading">
+                Interest Registered!
               </h2>
-              <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-                Thank you for registering your interest in{" "}
-                <span className="font-semibold">{eventTypeToName(eventType)}</span>. We'll review your
-                application and contact you within <span className="font-semibold">48 hours</span> via
-                email and WhatsApp.
+              <p className="text-muted-foreground text-sm max-w-xs mx-auto">
+                We've received your details for {eventTypeToName(eventType)}. Check your inbox for confirmation.
               </p>
-            </motion.div>
+            </div>
 
-            {/* Success details */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mt-6 w-full rounded-lg bg-green-50 p-4 border border-green-200"
+            {/* Next steps card */}
+            <div className="w-full bg-muted/40 rounded-xl p-5 mb-8 border border-border/50">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-3">Next Steps</h3>
+              <div className="space-y-4">
+                <div className="flex gap-3 text-sm">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">1</div>
+                  <p>Application review (approx. 48h)</p>
+                </div>
+                <div className="flex gap-3 text-sm">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">2</div>
+                  <p>Allotment confirmation via email</p>
+                </div>
+                <div className="flex gap-3 text-sm">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">3</div>
+                  <p>Final registration & payment</p>
+                </div>
+              </div>
+            </div>
+
+            <Button
+              variant="outline"
+              className="w-full rounded-xl h-11"
+              onClick={() => window.location.href = "/"}
             >
-              <h3 className="text-sm font-semibold text-green-900 mb-2">
-                What happens next?
-              </h3>
-              <ul className="space-y-2 text-sm text-green-800">
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 h-5 w-5 flex items-center justify-center bg-green-600 text-white rounded-full text-xs font-bold">
-                    1
-                  </span>
-                  <span>We'll review your application</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 h-5 w-5 flex items-center justify-center bg-green-600 text-white rounded-full text-xs font-bold">
-                    2
-                  </span>
-                  <span>You'll receive an allotment confirmation via email</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="flex-shrink-0 h-5 w-5 flex items-center justify-center bg-green-600 text-white rounded-full text-xs font-bold">
-                    3
-                  </span>
-                  <span>Complete your registration and join us!</span>
-                </li>
-              </ul>
-            </motion.div>
-
-            {/* Support info */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-6 text-center text-xs text-gray-500"
-            >
-              <p>
-                Have questions? Contact us at{" "}
-                <a
-                  href="mailto:sidhusamsk@gmail.com"
-                  className="text-blue-600 hover:underline font-medium"
-                >
-                  support@secmun.org
-                </a>
-              </p>
-            </motion.div>
-
-            {/* Action buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mt-8 flex gap-3 w-full"
-            >
-              <Button
-                variant="outline"
-                className="flex-1 rounded-full"
-                onClick={() => window.location.href = "/"}
-              >
-                Back to Home
-              </Button>
-              {/* <Button
-                className="flex-1 rounded-full"
-                onClick={() => router.push("/events")}
-              >
-                View Events
-              </Button> */}
-            </motion.div>
-
-            {/* Footer note */}
-            <p className="mt-6 text-xs text-gray-400 text-center">
-              Registration ID saved to your browser
-            </p>
+              Back to Home
+            </Button>
           </motion.div>
         )}
       </motion.div>
     </main>
   )
 }
-
