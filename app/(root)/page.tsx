@@ -2,24 +2,32 @@
 'use client'
 
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/useAuth'
 import { signOut } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/auth/firebase'
-import { SeniorSecretariatCarousel } from '@/components/secretariat/SeniorSecretariatCarousel'
-import { SecretariatMembersShowcase } from '@/components/secretariat/SecretariatMembersShowcase'
 import { LandingNavbar } from '@/components/layout/LandingNavbar'
+import dynamic from 'next/dynamic'
 
 import { Hero } from '@/components/landing/Hero'
-import { SecmunFeatures } from '@/components/landing/secmunFeatures'
-import { SecmunGlobe } from '@/components/landing/secmunGlobe'
-import { LampContainer } from '@/components/ui/lamp'
-import { Lamp } from 'lucide-react'
-import { LampSection } from '@/components/landing/LampSection'
 import { PwaInstallButton } from '@/components/ui/PwaInstallButton'
-import { ParticipationSection } from '@/components/public/ParticipationSection'
-import { ConstitutionPreview } from '@/components/landing/constitution-preview'
+
+// Lazy load heavy components
+const ConstitutionPreview = dynamic(() => import('@/components/landing/constitution-preview').then(mod => mod.ConstitutionPreview), {
+  loading: () => <div className="h-96 w-full animate-pulse bg-muted/20" />
+})
+const SeniorSecretariatCarousel = dynamic(() => import('@/components/secretariat/SeniorSecretariatCarousel').then(mod => mod.SeniorSecretariatCarousel), {
+  loading: () => <div className="h-96 w-full animate-pulse bg-muted/20" />
+})
+const SecmunFeatures = dynamic(() => import('@/components/landing/secmunFeatures').then(mod => mod.SecmunFeatures), {
+  loading: () => <div className="h-[800px] w-full animate-pulse bg-muted/20" />
+})
+const SecmunGlobe = dynamic(() => import('@/components/landing/secmunGlobe').then(mod => mod.SecmunGlobe), {
+  ssr: false,
+  loading: () => <div className="h-96 w-full animate-pulse bg-muted/20" />
+})
+const ParticipationSection = dynamic(() => import('@/components/public/ParticipationSection').then(mod => mod.ParticipationSection))
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 18 },
@@ -49,10 +57,10 @@ export default function LandingPage() {
   }
 
   return (
-    
+
     <div className="space-y-16 pb-16 sm:space-y-24 sm:pb-24">
       <Hero />
-      
+
       {/* BEFORE / AFTER SECTION */}
       <ConstitutionPreview />
       <motion.section
@@ -62,9 +70,9 @@ export default function LandingPage() {
         viewport={{ once: true, amount: 0.25 }}
         variants={staggerContainer}
       >
-       {/* <LampSection />  */}
+        {/* <LampSection />  */}
         <div className="mx-auto grid max-w-6xl gap-8 px-3 py-10 sm:px-4 sm:py-14 md:grid-cols-2">
-          
+
           <motion.div variants={fadeInUp}>
             <h2 className="text-2xl font-semibold sm:text-3xl">
               Before s3cNS
@@ -96,30 +104,30 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </motion.section>
-      
+
       {/* LEADERSHIP CAROUSEL */}
-<section className="mt-12 px-4 sm:px-6 lg:px-8">
-  <motion.div
-  
-    className="mx-auto max-w-5xl"
-    initial={{ opacity: 0, y: 24, scale: 0.96 }}
-    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-    viewport={{ once: true, amount: 0.4 }}
-    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
-  >
-    
-    <SeniorSecretariatCarousel />
-    
-  </motion.div>
-  <div className="mt-8 flex justify-center">
-    <Link href="/secretariat">
-      <Button variant="outline" size="lg">
-        Click here to see the complete secretariat
-      </Button>
-    </Link>
-  </div>
-</section>
-{/* <section className="mt-10 px-4 sm:px-6 lg:px-8">
+      <section className="mt-12 px-4 sm:px-6 lg:px-8">
+        <motion.div
+
+          className="mx-auto max-w-5xl"
+          initial={{ opacity: 0, y: 24, scale: 0.96 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+        >
+
+          <SeniorSecretariatCarousel />
+
+        </motion.div>
+        <div className="mt-8 flex justify-center">
+          <Link href="/secretariat">
+            <Button variant="outline" size="lg">
+              Click here to see the complete secretariat
+            </Button>
+          </Link>
+        </div>
+      </section>
+      {/* <section className="mt-10 px-4 sm:px-6 lg:px-8">
   <div className="mx-auto max-w-5xl">
     <SecretariatMembersShowcase />
   </div>
@@ -132,7 +140,7 @@ export default function LandingPage() {
         viewport={{ once: true, amount: 0.25 }}
         variants={staggerContainer}
       >
-{/* <LampSection /> */}
+        {/* <LampSection /> */}
 
 
         {/* <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -164,10 +172,10 @@ export default function LandingPage() {
         </div> */}
       </motion.section>
       <ParticipationSection />
-          <SecmunFeatures />
-          <SecmunGlobe />
+      <SecmunFeatures />
+      <SecmunGlobe />
 
-      
+
       {/* FINAL CTA */}
       <motion.section
         className="mx-auto max-w-6xl px-3 sm:px-4"
