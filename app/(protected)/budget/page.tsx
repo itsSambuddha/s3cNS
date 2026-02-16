@@ -1,7 +1,8 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { LayoutGrid, PieChart, TrendingUp, Wallet, ShieldCheck, Zap } from "lucide-react"
+import { LayoutGrid, PieChart, TrendingUp, ShieldCheck, Zap } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 const planningAreas = [
   {
