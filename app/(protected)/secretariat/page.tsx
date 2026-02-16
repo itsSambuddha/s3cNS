@@ -1,4 +1,6 @@
-// app/(protected)/secretariat/page.tsx
+"use client"
+
+import { motion } from 'framer-motion'
 import { SeniorSecretariatCarousel } from '@/components/secretariat/SeniorSecretariatCarousel'
 import { SecretariatMembersShowcase } from '@/components/secretariat/SecretariatMembersShowcase'
 
