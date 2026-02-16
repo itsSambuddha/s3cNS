@@ -11,6 +11,7 @@ import { signOut } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/auth/firebase'
 import MobileNav from './MobileNav'
 import { NotificationBell } from '@/components/notifications/NotificationBell'
+import { cn } from '@/lib/utils'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -44,7 +45,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#030712]/80 backdrop-blur-md border-b border-slate-200/60 dark:border-white/5">
       <div className="mx-auto max-w-6xl px-3 sm:px-4">
         {/* DESKTOP */}
         <div className="hidden h-16 items-center sm:flex">
@@ -63,7 +64,7 @@ export default function Navbar() {
                     S3
                     
                   </span> */}
-                  <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-15 w-25 rounded-lg"/>
+                  <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-15 w-25 rounded-lg" />
                   <div className="flex flex-col leading-tight">
                     <span className="text-m font-semibold">s3cNS</span>
                     <span className="text-[12px] text-muted-foreground">
@@ -118,28 +119,26 @@ export default function Navbar() {
                 exit={{ opacity: 0, y: 8, scale: 0.96 }}
                 transition={{ type: 'spring', stiffness: 360, damping: 30 }}
               >
-                <div className="flex max-w-xl flex-1 items-center justify-between rounded-full border bg-background px-5 py-2 shadow-sm">
-                  <div className="flex items-center gap-2">
-<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>
+                <div className="flex max-w-xl flex-1 items-center justify-between rounded-full border border-blue-200/60 bg-white/90 px-5 py-2.5 shadow-xl shadow-blue-500/5 dark:bg-zinc-900/90 dark:border-white/10">
+                  <div className="flex items-center gap-3">
+                    <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="h-8 w-8 rounded-lg shadow-sm font-black" />
                     <div className="flex flex-col leading-tight">
-                      {/* <span className="text-sm font-semibold">s3cNS</span>
-                      <span className="text-[10px] text-muted-foreground">
-                        SECMUN Platform
-                      </span> */}
+                      <span className="text-xs font-black tracking-tight text-slate-900 dark:text-white"></span>
                     </div>
                   </div>
-                  <nav className="flex items-center gap-4 text-sm">
+                  <nav className="flex items-center gap-6 text-[13px] font-bold">
                     {navLinks.map((link) => {
                       const active = pathname === link.href
                       return (
                         <Link
                           key={link.href}
                           href={link.href}
-                          className={
+                          className={cn(
+                            "transition-colors",
                             active
-                              ? 'text-foreground underline-offset-4 hover:underline'
-                              : 'text-muted-foreground transition hover:text-foreground'
-                          }
+                              ? 'text-blue-600 dark:text-blue-400'
+                              : 'text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-zinc-200'
+                          )}
                         >
                           {link.label}
                         </Link>
@@ -170,10 +169,10 @@ export default function Navbar() {
         </div>
 
         {/* MOBILE */}
-        <div className="flex h-14 items-center justify-between sm:hidden">
-          <div className="flex items-center gap-2">
-<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>
-            <span className="text-sm font-semibold">s3cNS</span>
+        <div className="flex h-14 items-center justify-between sm:hidden px-2">
+          <div className="flex items-center gap-3">
+            <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="h-8 w-8 rounded-lg shadow-sm" />
+            <span className="text-sm font-black tracking-tight text-slate-900 dark:text-white">s3cNS</span>
           </div>
           <MobileNav />
         </div>

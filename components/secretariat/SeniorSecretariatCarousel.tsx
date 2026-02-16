@@ -148,21 +148,30 @@ export function SeniorSecretariatCarousel() {
   if (!cards.length) return null
 
   return (
-    <section className="rounded-3xl border bg-slate-50/80 p-6 shadow-sm backdrop-blur-sm sm:p-8">
-      <header className="mb-6 text-center">
-        <p className="text-[30px] font-semibold uppercase tracking-[0.18em] text-sky-600">
-          SECMUN Senior Secretariat
-        </p>
-        <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          Meet the Senior Secretariat of SECMUN of {currentYear}-{nextYear}
-        </h2>
-        <p className="text-xs text-muted-foreground sm:text-sm">
-          President, Secretary General, Director General, and Teachers in
-          Charge.
+    <section className="relative rounded-[2.5rem] border border-blue-200/60 dark:border-white/5 bg-white dark:bg-[#030712]/60 p-8 sm:p-12 shadow-xl shadow-blue-500/5 overflow-hidden group">
+      {/* Dynamic Background Atmosphere */}
+      <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-blue-500/5 blur-[120px] pointer-events-none group-hover:bg-blue-500/10 transition-colors duration-1000" />
+      <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-emerald-500/5 blur-[120px] pointer-events-none" />
+
+      <header className="relative z-10 mb-16 text-center space-y-6">
+        <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.3em] text-blue-700">
+          Executive High Command
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-4xl font-black tracking-tight sm:text-5xl text-slate-900 dark:text-white leading-none">
+            The Senior Secretariat
+          </h2>
+          <p className="text-lg font-bold text-blue-600/80 dark:text-blue-400">
+            SECMUN Session {currentYear}—{nextYear}
+          </p>
+        </div>
+        <p className="max-w-2xl mx-auto text-sm text-slate-500 dark:text-zinc-400 leading-relaxed font-medium">
+          The central executive body responsible for the strategic direction,
+          operational integrity, and legacy of St. Edmund's Model United Nations.
         </p>
       </header>
 
-      <div className="w-full">
+      <div className="relative z-10 w-full lg:px-4">
         <Carousel
           items={cards.map((card, index) => (
             <AppleCard key={card.title + index} card={card} index={index} />
@@ -170,5 +179,6 @@ export function SeniorSecretariatCarousel() {
         />
       </div>
     </section>
+
   )
 }

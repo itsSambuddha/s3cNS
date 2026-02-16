@@ -66,7 +66,7 @@ export default function DashboardPage() {
     appUser.displayName ?? appUser.email ?? "Secretariat member"
 
   // SHOW DA CARD ONLY FOR: role === ADMIN AND secretariatOffice === DELEGATION_AFFAIRS
-const showDaCard = canUseDaModule(appUser)
+  const showDaCard = canUseDaModule(appUser)
 
 
   return (
@@ -79,28 +79,34 @@ const showDaCard = canUseDaModule(appUser)
       {/* Header strip */}
       <motion.div
         variants={scaleIn}
-        className="flex flex-col gap-3 rounded-2xl border bg-gradient-to-r from-primary/5 via-background to-emerald-50/40 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-5"
+        className="group relative overflow-hidden rounded-[2rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-[#030712]/80"
       >
-        <div className="space-y-1">
-          <p className="text-xs font-medium uppercase tracking-wide text-primary/80">
-            Dashboard
-          </p>
-          <h1 className="text-xl font-semibold sm:text-2xl">
-            Welcome back, {displayName}.
-          </h1>
-          <p className="text-xs text-muted-foreground sm:text-sm">
-            This overview will soon reflect your real events, finances, and
-            approvals based on your role.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Link href="/profile">
-            <Button size="sm" variant="outline">
-              View my profile
+        <div className="absolute top-0 right-0 w-[40%] h-full bg-blue-400/5 blur-[80px] pointer-events-none group-hover:bg-blue-400/10 transition-colors" />
+        <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
+              Authorized Workspace
+            </div>
+            <div className="space-y-1">
+              <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-4xl leading-tight">
+                Welcome back, {displayName}.
+              </h1>
+              <p className="max-w-xl text-sm font-medium text-slate-500 dark:text-zinc-400">
+                This overview will soon reflect your real events, finances, and
+                approvals based on your role.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/profile">
+              <Button size="lg" variant="outline" className="rounded-full px-6 font-bold shadow-sm transition-all hover:bg-slate-50">
+                View my profile
+              </Button>
+            </Link>
+            <Button size="lg" className="rounded-full px-6 font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/10 transition-all hover:scale-[1.03]">
+              Create quick note
             </Button>
-          </Link>
-
-          <Button size="sm">Create quick note</Button>
+          </div>
         </div>
       </motion.div>
 
@@ -113,50 +119,62 @@ const showDaCard = canUseDaModule(appUser)
           variants={fadeInUp}
           whileHover={{
             y: -4,
-            boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+            transition: { duration: 0.3 }
           }}
-          transition={{ type: "spring", stiffness: 260, damping: 22 }}
-          className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
+          className="group relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/5 dark:bg-white/5"
         >
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-            Events
-          </p>
-          <p className="mt-2 text-2xl font-semibold">3</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Active SEC‑NEXUS events
-          </p>
-          <Link
-            href="/events"
-            className="mt-3 inline-block text-xs font-medium text-primary"
-          >
-            Open events →
-          </Link>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                Events
+              </p>
+              <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+            </div>
+            <div>
+              <p className="text-4xl font-black text-slate-900 dark:text-white">3</p>
+              <p className="mt-1 text-xs font-bold text-slate-500 dark:text-zinc-500">
+                Active SEC‑NEXUS events
+              </p>
+            </div>
+            <Link
+              href="/events"
+              className="inline-flex h-9 items-center justify-center rounded-full bg-slate-50 px-4 text-[11px] font-black uppercase tracking-wider text-slate-900 transition-colors hover:bg-slate-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+            >
+              Open events →
+            </Link>
+          </div>
         </motion.div>
-<FinanceCard />
-        
+
+        <FinanceCard />
 
         <motion.div
           variants={fadeInUp}
           whileHover={{
             y: -4,
-            boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+            transition: { duration: 0.3 }
           }}
-          transition={{ type: "spring", stiffness: 260, damping: 22 }}
-          className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
+          className="group relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-emerald-500/5 dark:border-white/5 dark:bg-white/5"
         >
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-            Approvals
-          </p>
-          <p className="mt-2 text-2xl font-semibold">5</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Pending across all modules
-          </p>
-          <Link
-            href="/admin"
-            className="mt-3 inline-block text-xs font-medium text-primary"
-          >
-            Open approvals →
-          </Link>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                Approvals
+              </p>
+              <div className="h-2 w-2 rounded-full bg-emerald-500" />
+            </div>
+            <div>
+              <p className="text-4xl font-black text-slate-900 dark:text-white">5</p>
+              <p className="mt-1 text-xs font-bold text-slate-500 dark:text-zinc-500">
+                Pending across all modules
+              </p>
+            </div>
+            <Link
+              href="/admin"
+              className="inline-flex h-9 items-center justify-center rounded-full bg-slate-50 px-4 text-[11px] font-black uppercase tracking-wider text-slate-900 transition-colors hover:bg-slate-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+            >
+              Open approvals →
+            </Link>
+          </div>
         </motion.div>
       </motion.div>
 
@@ -190,26 +208,26 @@ const showDaCard = canUseDaModule(appUser)
           <motion.div
             key={group.title}
             variants={fadeInUp}
-            whileHover={{ y: -3, scale: 1.01 }}
+            whileHover={{ y: -5, scale: 1.01 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="group flex flex-col justify-between rounded-xl border bg-card p-4 shadow-sm"
+            className="group flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/5 dark:bg-white/5"
           >
-            <div>
-              <h2 className="text-sm font-semibold sm:text-base">
+            <div className="space-y-3">
+              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
                 {group.title}
               </h2>
-              <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+              <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">
                 {group.desc}
               </p>
             </div>
-            <div className="mt-3 flex items-center justify-between text-xs">
+            <div className="mt-6 flex items-center justify-between">
               <Link
                 href={group.href}
-                className="font-medium text-primary group-hover:underline"
+                className="inline-flex h-10 items-center justify-center rounded-full bg-primary/10 px-4 text-[11px] font-black uppercase tracking-wider text-primary transition-colors hover:bg-primary/20"
               >
                 View modules →
               </Link>
-              <span className="rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-slate-500 dark:bg-white/5 dark:text-zinc-500">
                 Protected
               </span>
             </div>

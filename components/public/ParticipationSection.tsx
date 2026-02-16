@@ -63,26 +63,26 @@ export function ParticipationSection() {
         item.type === "INTRA_SECMUN"
           ? "Intra SECMUN"
           : item.type === "INTER_SECMUN"
-          ? "Inter SECMUN"
-          : item.type === "WORKSHOP"
-          ? "Workshops"
-          : "EdBlazon Times",
+            ? "Inter SECMUN"
+            : item.type === "WORKSHOP"
+              ? "Workshops"
+              : "EdBlazon Times",
       description:
         item.type === "INTRA_SECMUN"
           ? "Closed-door intra-college conference for SEC delegates."
           : item.type === "INTER_SECMUN"
-          ? "Flagship inter-institution MUN with curated committees."
-          : item.type === "WORKSHOP"
-          ? "Skill-building sessions on research, diplomacy, and debate."
-          : "SECMUN's official press and media vertical.",
+            ? "Flagship inter-institution MUN with curated committees."
+            : item.type === "WORKSHOP"
+              ? "Skill-building sessions on research, diplomacy, and debate."
+              : "SECMUN's official press and media vertical.",
       src:
         item.type === "INTRA_SECMUN"
           ? "/images/intra.jpg"
           : item.type === "INTER_SECMUN"
-          ? "/images/inter.jpg"
-          : item.type === "WORKSHOP"
-          ? "/images/workshop.jpg"
-          : "/images/edblazon.jpg",
+            ? "/images/inter.jpg"
+            : item.type === "WORKSHOP"
+              ? "/images/workshop.jpg"
+              : "/images/edblazon.jpg",
     }
     return { ...base, event: item.event }
   })
@@ -103,20 +103,21 @@ export function ParticipationSection() {
 
 function Header() {
   return (
-    <div className="mb-8 text-center">
-      <p className="text-xl font-bold uppercase tracking-[0.2em] text-blue-600">
-        Participation
-      </p>
-      <h2 className="mt-2 text-2xl font-semibold text-slate-900 sm:text-3xl">
+    <div className="mb-16 text-center space-y-4">
+      <div className="inline-block px-4 py-1.5 rounded-full border border-blue-500/10 bg-blue-500/5 text-[10px] font-black tracking-[0.2em] text-blue-600 dark:text-blue-400 uppercase">
+        Participation Tracks
+      </div>
+      <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl lg:text-5xl leading-[1.1]">
         Choose how you participate in SECMUN
       </h2>
-      <p className="mt-2 text-sm text-slate-600 sm:text-base">
+      <p className="max-w-2xl mx-auto text-base text-slate-600 dark:text-zinc-400 leading-relaxed font-medium">
         Explore active conferences, workshops, and media roles curated by the
-        Secretariat.
+        Secretariat for the current session.
       </p>
     </div>
   )
 }
+
 
 function ExpandableCards({ cards }: { cards: CardData[] }) {
   const [active, setActive] = useState<CardData | boolean | null>(null)

@@ -38,7 +38,7 @@ const secretariatLinks = [
 // Admin-only links; shown only when role === "ADMIN"
 const adminLinks = [
   { href: "/admin", label: "Admin Controls", icon: IconShield },
-    // { href: "/secretariat/usg-approvals", label: "USG Approvals" },
+  // { href: "/secretariat/usg-approvals", label: "USG Approvals" },
 ]
 
 type AnyLink = {
@@ -68,10 +68,10 @@ export default function Sidebar() {
     ...baseLinks.map((l) => ({ ...l, section: "Navigation" as const })),
     ...(isLoggedIn && isSecretariat
       ? secretariatLinks.map((l) => ({
-          ...l,
-          icon: IconUsersGroup,
-          section: "Secretariat" as const,
-        }))
+        ...l,
+        icon: IconUsersGroup,
+        section: "Secretariat" as const,
+      }))
       : []),
     ...(isLoggedIn && isAdmin
       ? adminLinks.map((l) => ({ ...l, section: "Admin" as const }))
@@ -87,11 +87,14 @@ export default function Sidebar() {
         onMouseLeave={() => setHovered(false)}
         animate={{ width: open ? 260 : 80 }}
         className={cn(
-          "relative flex h-full flex-col overflow-hidden border-r",
-          "border-white/60 bg-white/70 shadow-[0_18px_60px_rgba(15,23,42,0.16)] backdrop-blur-xl",
-          "dark:border-white/10 dark:bg-white/5 dark:shadow-[0_18px_60px_rgba(0,0,0,0.7)]",
+          "relative flex h-full flex-col overflow-hidden border-r transition-all duration-500",
+          "border-slate-200 bg-white/80 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl",
+          "dark:border-white/5 dark:bg-[#030712]/80 dark:shadow-[0_18px_60px_rgba(0,0,0,0.5)]",
         )}
       >
+        {/* Grainy Texture Overlay */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay dark:opacity-[0.05]"
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/baseFilter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
         {/* logo */}
         <div className="px-3 pt-4">
           {open ? <Logo /> : <LogoIcon />}
@@ -187,17 +190,23 @@ function SidebarItem({
     <Link
       href={link.href}
       className={cn(
-        "group flex items-center gap-2 rounded-xl px-2 py-1.5 text-xs transition-colors",
+        "group relative flex items-center gap-3 rounded-2xl px-3 py-2 text-[13px] font-medium transition-all duration-300",
         active
-          ? "bg-sky-500/10 text-sky-600"
-          : "text-slate-500 hover:bg-slate-100/80 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/80 dark:hover:text-slate-50",
+          ? "bg-sky-500/10 text-sky-600 shadow-[inset_0_0_0_1px_rgba(14,165,233,0.1)]"
+          : "text-slate-500 hover:bg-slate-100/80 hover:text-slate-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white",
       )}
     >
+      {active && (
+        <motion.div
+          layoutId="sidebar-active"
+          className="absolute left-0 top-1/2 -translate-y-1/2 h-5 w-0.5 rounded-full bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.8)]"
+        />
+      )}
       {Icon && (
         <Icon
           className={cn(
-            "h-4 w-4 shrink-0",
-            active ? "text-sky-600" : "text-slate-400 dark:text-slate-500",
+            "h-4 w-4 shrink-0 transition-transform group-hover:scale-110",
+            active ? "text-sky-600" : "text-slate-400 dark:text-zinc-500",
           )}
         />
       )}
@@ -211,13 +220,13 @@ const Logo = () => (
     href="/dashboard"
     className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-slate-900 dark:text-slate-50"
   >
-    <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" width={32} height={32} className="rounded-md"/>
-    
+    <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" width={32} height={32} className="rounded-md" />
+
     {/* <div className="h-6 w-7 shrink-0 rounded-tl-xl rounded-tr-sm rounded-br-xl rounded-bl-sm bg-slate-900 dark:bg-slate-50" /> */}
     <motion.span
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="whitespace-pre text-sm font-semibold tracking-tight"
+      className="whitespace-pre text-sm font-black tracking-tight text-slate-900 dark:text-white"
     >
       s3cNS
     </motion.span>
@@ -229,7 +238,7 @@ const LogoIcon = () => (
     href="/dashboard"
     className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-slate-900 dark:text-slate-50"
   >
-        <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" width={32} height={32} className="rounded-md"/>
+    <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" width={32} height={32} className="rounded-md" />
     {/* <div className="h-6 w-7 shrink-0 rounded-tl-xl rounded-tr-sm rounded-br-xl rounded-bl-sm bg-slate-900 dark:bg-slate-50" /> */}
   </a>
 )

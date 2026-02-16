@@ -103,11 +103,11 @@ export default function MobileNav() {
         <div className="mt-3 flex flex-col gap-5">
           {/* Brand */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-<img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="mt-2 h-10 w-25 rounded-lg"/>
+            <div className="flex items-center gap-3">
+              <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="h-10 w-10 rounded-xl shadow-lg shadow-blue-500/10" />
               <div className="flex flex-col leading-tight">
-                <span className="text-sm font-semibold">s3cNS</span>
-                <span className="text-[11px] text-muted-foreground">
+                <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white">s3cNS</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">
                   SECMUN Platform
                 </span>
               </div>

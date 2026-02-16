@@ -195,9 +195,12 @@ export function RegistrationsTab() {
     <div className="space-y-4">
       {/* Header + filters */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">Registrations</h2>
-          <p className="text-xs text-gray-500">
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
+            Database Interface
+          </div>
+          <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Registrations</h2>
+          <p className="text-sm font-medium text-slate-500 max-w-lg dark:text-zinc-400">
             Filter by event and interest type, then send emails in bulk or per
             registrant.
           </p>
@@ -207,7 +210,7 @@ export function RegistrationsTab() {
           <select
             value={selectedEventId}
             onChange={(e) => setSelectedEventId(e.target.value)}
-            className="h-9 rounded-md border px-3 text-xs"
+            className="h-10 rounded-xl border border-slate-200 bg-white px-4 text-xs font-bold transition-all focus:ring-2 focus:ring-blue-500/20 dark:bg-white/5 dark:border-white/10"
           >
             <option value="">All events</option>
             {uniqueEvents.map((e) => (
@@ -226,7 +229,7 @@ export function RegistrationsTab() {
                   : (e.target.value as InterestType),
               )
             }
-            className="h-9 rounded-md border px-3 text-xs"
+            className="h-10 rounded-xl border border-slate-200 bg-white px-4 text-xs font-bold transition-all focus:ring-2 focus:ring-blue-500/20 dark:bg-white/5 dark:border-white/10"
           >
             <option value="ALL">All interests</option>
             <option value="DELEGATE">Delegate</option>
@@ -235,20 +238,22 @@ export function RegistrationsTab() {
 
           <Button
             variant="outline"
-            size="sm"
+            size="lg"
             disabled={sendingInterest || !selectedEventId}
             onClick={() => sendBulk("INTEREST")}
+            className="rounded-xl font-bold border-slate-200 shadow-sm"
           >
-            {sendingInterest ? "Sending interest emails..." : "Send all interest"}
+            {sendingInterest ? "Sending..." : "Bulk Interest"}
           </Button>
           <Button
-            size="sm"
+            size="lg"
             disabled={sendingRegistration || !selectedEventId}
             onClick={() => sendBulk("REGISTRATION")}
+            className="rounded-xl font-bold bg-slate-900 text-white shadow-lg shadow-slate-900/10 dark:bg-white dark:text-slate-900"
           >
             {sendingRegistration
-              ? "Sending registration emails..."
-              : "Send all registration"}
+              ? "Sending..."
+              : "Bulk Registration"}
           </Button>
         </div>
       </div>
@@ -264,19 +269,19 @@ export function RegistrationsTab() {
       ) : rows.length === 0 ? (
         <p className="text-sm text-gray-500">No registrations found.</p>
       ) : (
-        <div className="overflow-x-auto rounded-md border">
+        <div className="overflow-x-auto rounded-[2rem] border border-blue-200/60 bg-white shadow-xl shadow-blue-500/5 dark:bg-zinc-900/40">
           <table className="min-w-full text-left text-sm">
-            <thead className="bg-gray-50 text-xs font-medium text-gray-500">
+            <thead className="bg-slate-50/50 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:bg-white/5">
               <tr>
-                <th className="px-3 py-2">Name</th>
-                <th className="px-3 py-2">Email</th>
-                <th className="px-3 py-2">WhatsApp</th>
-                <th className="px-3 py-2">Type</th>
-                <th className="px-3 py-2">Status</th>
-                <th className="px-3 py-2">Interest sent</th>
-                <th className="px-3 py-2">Registration sent</th>
-                <th className="px-3 py-2">Actions</th>
-                <th className="px-3 py-2">Created</th>
+                <th className="px-6 py-4">Participant</th>
+                <th className="px-4 py-4">Email</th>
+                <th className="px-4 py-4">WhatsApp</th>
+                <th className="px-4 py-4">Type</th>
+                <th className="px-4 py-4">Status</th>
+                <th className="px-4 py-4">Interest</th>
+                <th className="px-4 py-4">Reg. Link</th>
+                <th className="px-4 py-4">Actions</th>
+                <th className="px-6 py-4">Created</th>
               </tr>
             </thead>
             <tbody className="divide-y bg-white">

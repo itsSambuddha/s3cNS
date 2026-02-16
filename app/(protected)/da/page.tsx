@@ -20,36 +20,56 @@ export default function DaPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-6">
-      <div className="mx-auto max-w-7xl space-y-6">
+    <main className="relative min-h-screen bg-background px-4 py-8 overflow-hidden">
+      {/* Atmosphere Background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[120px]" />
+        <div className="absolute right-[-10%] top-[35%] h-[600px] w-[600px] rounded-full bg-emerald-100/40 blur-[140px]" />
+        {/* Grainy Texture */}
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/baseFilter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+      </div>
+
+      <div className="mx-auto max-w-7xl space-y-12">
         <header>
           <motion.div
             variants={scaleIn}
-            className="flex flex-col gap-3 rounded-2xl border bg-gradient-to-r from-slate-50 via-background to-emerald-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-5"
+            className="group relative overflow-hidden rounded-[2rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-[#030712]/80"
           >
-            <div className="space-y-1.5">
-              <p className="text-xs font-medium uppercase tracking-wide text-emerald-700/80">
-                DELEGATE AFFAIRS MODULE
-              </p>
-              <h1 className="text-xl font-semibold sm:text-2xl">
-                The Psuedo-Ultimate DA Toolkit
-              </h1>
-              <p className="text-xs text-muted-foreground sm:text-sm">
-                View and manage all DA records along with Gmail and WhatsApp integration.
-              </p>
+            <div className="absolute top-0 right-0 w-[40%] h-full bg-emerald-400/5 blur-[80px] pointer-events-none transition-colors group-hover:bg-emerald-400/10" />
+
+            <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">
+                  Delegate Affairs Module
+                </div>
+                <div className="space-y-1">
+                  <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                    DA Management Toolkit
+                  </h1>
+                  <p className="max-w-xl text-sm font-medium text-slate-500 dark:text-zinc-400">
+                    View and manage all DA records along with Gmail and WhatsApp integration.
+                  </p>
+                </div>
+              </div>
             </div>
           </motion.div>
         </header>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="registrations">Registrations</TabsTrigger>
-            <TabsTrigger value="committee">Committee</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="inline-flex h-14 w-full items-center justify-start gap-2 rounded-3xl border border-blue-200/20 bg-slate-100/50 p-2 text-slate-500 dark:bg-white/5 sm:w-auto">
+            {["overview", "events", "registrations", "committee"].map((tab) => (
+              <TabsTrigger
+                key={tab}
+                value={tab}
+                className="rounded-[1.25rem] px-6 py-2 text-xs font-black uppercase tracking-wider transition-all data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-lg dark:data-[state=active]:bg-zinc-800 dark:data-[state=active]:text-white"
+              >
+                {tab}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
-          <div className="mt-6 rounded-2xl border border-border bg-card p-6 space-y-4">
+          <div className="rounded-[2.5rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-[#030712]/40 backdrop-blur-sm">
             {/* Simple event selector shared across tabs */}
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground">Selected Event ID:</span>

@@ -84,15 +84,22 @@ export function SecretariatMembersShowcase() {
   const nextYear = currentYear + 1
 
   return (
-    <section className="mt-10 rounded-3xl border bg-slate-50/80 p-6 shadow-sm backdrop-blur-sm sm:p-8">
-      <header className="mb-6 text-center sm:text-center">
-        <p className="text-[30px] font-semibold uppercase tracking-[0.18em] text-sky-600">
-          SECMUN Under Secretary General Secretariat
-        </p>
-        <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
-          Meet the USG Secretariat of SECMUN of {currentYear}-{nextYear}
-        </h2>
-        <p className="text-xs text-muted-foreground sm:text-sm">
+    <section className="mt-16 relative overflow-hidden rounded-[2.5rem] border border-blue-200/60 bg-white dark:bg-[#030712]/60 p-8 sm:p-12 shadow-xl shadow-blue-500/5 group">
+      <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-emerald-500/5 blur-[100px] pointer-events-none" />
+
+      <header className="relative z-10 mb-16 text-center space-y-6">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.3em] text-emerald-700">
+          Operational Secretariat
+        </div>
+        <div className="space-y-2">
+          <h2 className="text-4xl font-black tracking-tight sm:text-5xl text-slate-900 dark:text-white leading-none">
+            The USG Bureau
+          </h2>
+          <p className="text-lg font-bold text-emerald-600/80 dark:text-emerald-400">
+            Strategic Pillar of {currentYear}-{nextYear}
+          </p>
+        </div>
+        <p className="max-w-2xl mx-auto text-sm text-slate-500 dark:text-zinc-400 leading-relaxed font-medium">
           Under Secretaries‑General and secretariat members for Delegation
           Affairs, Sponsorship, Marketing, Finance, IT, PR, Conference
           Management, and Logistics.

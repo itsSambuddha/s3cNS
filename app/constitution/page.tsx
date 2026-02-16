@@ -86,21 +86,23 @@ export default function ConstitutionPage() {
         <main className="relative flex-1 px-3 pt-4 pb-0 sm:px-6 sm:pt-6 sm:pb-0 overflow-hidden">
           {/* soft background gradient */}
           <div className="pointer-events-none absolute inset-0 -z-10">
-            <div className="absolute left-[-15%] top-[-10%] h-64 w-64 rounded-full bg-blue-200/30 blur-3xl" />
-            <div className="absolute right-[-10%] top-[35%] h-72 w-72 rounded-full bg-sky-200/30 blur-3xl" />
-            <div className="absolute bottom-0 left-[20%] h-52 w-52 rounded-full bg-indigo-200/25 blur-3xl" />
+            <div className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[120px]" />
+            <div className="absolute right-[-10%] top-[35%] h-[600px] w-[600px] rounded-full bg-sky-100/40 blur-[140px]" />
+            <div className="absolute bottom-0 left-[20%] h-[400px] w-[400px] rounded-full bg-indigo-100/30 blur-[100px]" />
+            {/* Grainy Texture */}
+            <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
+              style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3BaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/baseFilter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
           </div>
 
           <div className="mx-auto w-full max-w-6xl relative px-4 pt-10 lg:px-6">
-            {/* Hero */}
-            <section className="mb-8 text-center">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-600">
-                SECMUN Governance · 2025–26
-              </p>
-              <h1 className="mt-2 text-3xl font-semibold text-slate-900 sm:text-4xl">
-                The SECMUN Secretariat Mandate & Constitution
+            <section className="mb-16 text-center space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
+                Institutional Memory
+              </div>
+              <h1 className="text-4xl font-black tracking-tight text-slate-900 sm:text-6xl dark:text-white leading-[1.1]">
+                Mandate & <br className="sm:hidden" /> Constitution
               </h1>
-              <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600">
+              <p className="mx-auto max-w-2xl text-lg font-medium text-slate-500 leading-relaxed dark:text-zinc-400">
                 A single, navigable space for how SECMUN is structured, how
                 conferences run, and the Articles that formally govern every role and
                 decision.
@@ -112,45 +114,43 @@ export default function ConstitutionPage() {
               {/* Sidebar */}
               <aside className="self-start space-y-4 lg:sticky lg:top-20">
                 {/* Tab switch */}
-                <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-2 text-xs backdrop-blur">
+                <div className="rounded-3xl border border-blue-200/60 bg-white/80 p-2 text-xs backdrop-blur shadow-xl shadow-blue-500/5 dark:bg-zinc-900/90">
                   <div className="grid grid-cols-2 gap-1">
                     <button
                       type="button"
                       onClick={() => setActiveTab("mandate")}
-                      className={`rounded-xl px-3 py-2 font-semibold transition ${
-                        activeTab === "mandate"
-                          ? "bg-white text-blue-700 shadow-sm"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
+                      className={`rounded-2xl px-3 py-2.5 font-black uppercase tracking-wider transition-all duration-300 ${activeTab === "mandate"
+                          ? "bg-slate-900 text-white shadow-lg dark:bg-white dark:text-slate-900"
+                          : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                        }`}
                     >
-                      Mandate & Secretariat
+                      Mandate
                     </button>
                     <button
                       type="button"
                       onClick={() => setActiveTab("constitution")}
-                      className={`rounded-xl px-3 py-2 font-semibold transition ${
-                        activeTab === "constitution"
-                          ? "bg-white text-blue-700 shadow-sm"
-                          : "text-slate-600 hover:text-slate-900"
-                      }`}
+                      className={`rounded-2xl px-3 py-2.5 font-black uppercase tracking-wider transition-all duration-300 ${activeTab === "constitution"
+                          ? "bg-slate-900 text-white shadow-lg dark:bg-white dark:text-slate-900"
+                          : "text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                        }`}
                     >
-                      Constitution & Articles
+                      Articles
                     </button>
                   </div>
                 </div>
 
                 {/* Outline */}
-                <div className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-xs shadow-sm backdrop-blur">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    Navigate {activeTab === "mandate" ? "mandate" : "constitution"}
+                <div className="rounded-3xl border border-blue-200/60 bg-white/90 p-6 text-xs shadow-xl shadow-blue-500/5 backdrop-blur dark:bg-zinc-900/90">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    Outline · {activeTab}
                   </p>
-                  <ul className="mt-3 space-y-1">
+                  <ul className="mt-6 space-y-2">
                     {NAV_ITEMS.filter((i) => i.group === activeTab).map((item) => (
                       <li key={item.id}>
                         <button
                           type="button"
                           onClick={() => scrollTo(item.id)}
-                          className="w-full rounded-lg px-2 py-1 text-left text-[12px] text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                          className="w-full rounded-xl px-3 py-2 text-left text-[12px] font-bold text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
                         >
                           {item.label}
                         </button>

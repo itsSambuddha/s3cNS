@@ -34,35 +34,35 @@ export function MandateContent() {
     <div className="space-y-8">
       {/* 1. Structure of the Secretariat */}
       <BounceSection id="mandate-overview" icon={<BuildingIcon />}>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-blue-600">
-          Mandate & Secretariat
-        </p>
-        <h2 className="mt-2 text-lg font-semibold text-slate-900">
-          The SECMUN Secretariat in brief
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-600">
+            Mandate & Secretariat
+          </p>
+        </div>
+        <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+          The Secretariat operational nucleus
         </h2>
-        <p className="mt-1 text-sm text-slate-600">
-          The Secretariat is the operational nucleus of SECMUN, a
-          multi‑departmental body designed for precision and synergy, with each
-          department commanded by an Under‑Secretary‑General responsible for
-          both strategic direction and day‑to‑day execution.
-        </p>
-        <p className="mt-2 text-sm text-slate-600">
-          Departments function with semi‑independence during planning but are
-          designed to converge seamlessly under Conference Management during the
-          event, ensuring that specialised tasks are handled by experts while
-          critical decisions remain centrally coordinated.
-        </p>
-        <p className="mt-2 text-sm text-slate-600">
-          Clear lines of authority, defined responsibilities, and unwavering
-          accountability form the backbone of this structure so that every
-          member understands their role and impact on the collective mission.
-        </p>
+        <div className="mt-4 space-y-4 text-sm font-medium text-slate-500 leading-relaxed dark:text-zinc-400">
+          <p>
+            The Secretariat is the operational nucleus of SECMUN, a
+            multi‑departmental body designed for precision and synergy, with each
+            department commanded by an Under‑Secretary‑General responsible for
+            both strategic direction and day‑to‑day execution.
+          </p>
+          <p>
+            Departments function with semi‑independence during planning but are
+            designed to converge seamlessly under Conference Management during the
+            event, ensuring that specialised tasks are handled by experts while
+            critical decisions remain centrally coordinated.
+          </p>
+        </div>
       </BounceSection>
 
       {/* 2. Senior Secretariat */}
       <BounceSection id="mandate-structure" icon={<CrownIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Senior Secretariat: command and control
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          Senior Secretariat command
         </h3>
         <p className="mt-1 text-sm text-slate-600">
           The Senior Secretariat is the highest tier of leadership, providing
@@ -127,8 +127,8 @@ export function MandateContent() {
 
       {/* 3. USG Offices / Departments */}
       <BounceSection id="mandate-departments" icon={<NetworkIconBig />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Under‑Secretary‑General offices and operational structure
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          Operational structure
         </h3>
         <p className="mt-1 text-sm text-slate-600">
           Under‑Secretary‑General offices are specialised departments led by a
@@ -270,8 +270,8 @@ export function MandateContent() {
         id="mandate-junior-secretariat"
         icon={<GraduationCapIcon />}
       >
-        <h3 className="text-sm font-semibold text-slate-900">
-          Junior Secretariat (under the General Secretary)
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          Junior Secretariat
         </h3>
         <p className="mt-1 text-sm text-slate-600">
           The Junior Secretariat is a foundational unit that supports
@@ -327,8 +327,8 @@ export function MandateContent() {
 
       {/* 5. Tenure, Selection & Promotion */}
       <BounceSection id="mandate-tenure" icon={<CalendarIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Tenure, selection, and promotion protocol
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          Tenure & selection
         </h3>
         <p className="mt-1 text-sm text-slate-600">
           The Mandate sets standard durations of office, eligibility criteria,
@@ -369,8 +369,8 @@ export function MandateContent() {
 
       {/* 6. Executive Board */}
       <BounceSection id="mandate-eb" icon={<GavelIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          The Executive Board (Dias)
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          Executive Board
         </h3>
         <p className="mt-1 text-sm text-slate-600">
           The Executive Board is the intellectual and procedural core of each
@@ -396,8 +396,8 @@ export function MandateContent() {
 
       {/* 7. Conducting a Conference */}
       <BounceSection id="mandate-playbook" icon={<ClipboardIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Conducting a conference: operational blueprint
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          Operational blueprint
         </h3>
         <p className="mt-1 text-sm text-slate-600">
           Conducting a SECMUN conference is treated as a structured project,
@@ -435,7 +435,7 @@ export function MandateContent() {
           />
         </div>
       </BounceSection>
-      <br/>
+      <br />
     </div>
   )
 }
@@ -454,21 +454,18 @@ function BounceSection({
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 24, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 220,
-        damping: 18,
-      }}
-      className="rounded-3xl border border-slate-200 bg-white/95 p-5 sm:p-6 backdrop-blur"
+      initial={{ opacity: 0, y: 30, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="overflow-hidden rounded-[2.5rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-zinc-900/90"
     >
       {icon && (
-        <div className="mb-2 flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-900 dark:bg-white/5 dark:text-white">
             {icon}
           </div>
-          <div className="h-px flex-1 bg-slate-100" />
+          <div className="h-px flex-1 ml-6 bg-slate-100 dark:bg-white/5" />
         </div>
       )}
       {children}
@@ -494,15 +491,15 @@ function MiniRoleCard({
         stiffness: 230,
         damping: 20,
       }}
-      className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-slate-50/80 p-3"
+      className="flex flex-col gap-2 rounded-3xl border border-slate-200 bg-slate-50/50 p-4 transition-all hover:bg-slate-50 dark:border-white/5 dark:bg-white/5"
     >
       <div className="flex items-center gap-2">
         {icon && (
-          <div className="flex h-6 w-6 items-center justify-center rounded-xl bg-white text-blue-600">
+          <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-white text-slate-900 shadow-sm dark:bg-white/10 dark:text-white">
             {icon}
           </div>
         )}
-        <p className="text-[11px] font-semibold text-slate-900">{title}</p>
+        <p className="text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white">{title}</p>
       </div>
       <ul className="mt-1 list-disc space-y-1 pl-4 text-[11px] text-slate-700">
         {lines.map((l) => (
@@ -541,20 +538,23 @@ function DeptCard({
         stiffness: 230,
         damping: 20,
       }}
-      className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white/95 p-4 text-xs shadow-sm backdrop-blur"
+      className="flex flex-col gap-6 rounded-[2rem] border border-blue-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/5 dark:bg-white/5"
     >
-      <div className="flex items-start gap-2">
-        {icon && (
-          <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-            {icon}
+      <div className="flex items-start justify-between">
+        <div className="flex items-start gap-4">
+          {icon && (
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-50 text-slate-900 dark:bg-white/10 dark:text-white">
+              {icon}
+            </div>
+          )}
+          <div>
+            <h4 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">{title}</h4>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-blue-700 dark:bg-blue-500/10">
+                {structure}
+              </span>
+            </div>
           </div>
-        )}
-        <div>
-          <h4 className="text-sm font-semibold text-slate-900">{title}</h4>
-          <p className="mt-1 text-[11px] text-slate-600">
-            Structure: {structure}
-          </p>
-          <p className="mt-0.5 text-[11px] text-slate-600">{reporting}</p>
         </div>
       </div>
 

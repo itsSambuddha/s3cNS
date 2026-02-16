@@ -232,243 +232,259 @@ export default function FinanceDashboardPage() {
   }
 
   return (
-    <motion.div
-      className="space-y-6"
-      initial="hidden"
-      animate="visible"
-      variants={pageStagger}
-    >
-      {/* Hero strip */}
-      <motion.div
-        variants={scaleIn}
-        className="flex flex-col gap-3 rounded-2xl border bg-gradient-to-r from-emerald-50 via-background to-sky-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-5"
-      >
-        <div className="space-y-1.5">
-          <p className="text-xs font-medium uppercase tracking-wide text-emerald-700/80">
-            Finance
-          </p>
-          <h1 className="text-xl font-semibold sm:text-2xl">
-            SEC‑MUN Finance & Assets
-          </h1>
-          <p className="text-xs text-muted-foreground sm:text-sm">
-            Track budgets, expenses, reimbursements, dues, and inventory — all from a single control room.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => router.push('/finance/records?mode=expense')}
-          >
-            Add expense
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => router.push('/finance/records?mode=budget')}
-          >
-            Add budget
-          </Button>
-          <Button
-            size="sm"
-            onClick={() => router.push('/finance/inventory')}
-          >
-            Manage inventory
-          </Button>
-        </div>
-      </motion.div>
+    <main className="relative min-h-screen bg-background px-4 py-8 overflow-hidden">
+      {/* Atmosphere Background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[120px]" />
+        <div className="absolute right-[-10%] top-[35%] h-[600px] w-[600px] rounded-full bg-emerald-100/40 blur-[140px]" />
+        {/* Grainy Texture */}
+        <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
+          style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3EaseFilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/baseFilter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
+      </div>
 
-      {/* Error banner */}
-      {error && (
+      <motion.div
+        className="mx-auto max-w-7xl space-y-12"
+        initial="hidden"
+        animate="visible"
+        variants={pageStagger}
+      >
+        {/* Hero strip */}
+        <header>
+          <motion.div
+            variants={scaleIn}
+            className="group relative overflow-hidden rounded-[2rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-[#030712]/80"
+          >
+            <div className="absolute top-0 right-0 w-[40%] h-full bg-emerald-400/5 blur-[80px] pointer-events-none transition-colors group-hover:bg-emerald-400/10" />
+
+            <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-700">
+                  Finance Management
+                </div>
+                <div className="space-y-1">
+                  <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+                    SEC‑MUN Finance & Assets
+                  </h1>
+                  <p className="max-w-xl text-sm font-medium text-slate-500 dark:text-zinc-400">
+                    Track budgets, expenses, reimbursements, dues, and inventory — all from a single control room.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full px-6 font-bold shadow-sm transition-all hover:bg-slate-50"
+                  onClick={() => router.push('/finance/records?mode=expense')}
+                >
+                  Add expense
+                </Button>
+                <Button
+                  size="lg"
+                  className="rounded-full px-6 font-bold bg-slate-900 text-white shadow-lg shadow-slate-900/10 transition-all hover:scale-[1.03] dark:bg-white dark:text-slate-900"
+                  onClick={() => router.push('/finance/inventory')}
+                >
+                  Manage inventory
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </header>
+
+        {/* Error banner */}
+        {error && (
+          <motion.div
+            variants={fadeInUp}
+            className="rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-xs text-destructive"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {/* KPI row */}
         <motion.div
-          variants={fadeInUp}
-          className="rounded-xl border border-destructive/40 bg-destructive/5 px-4 py-3 text-xs text-destructive"
+          className="grid gap-6 md:grid-cols-2 xl:grid-cols-4"
+          variants={pageStagger}
         >
-          {error}
+          <KpiCard
+            label="Total budget planned"
+            value={formatCurrency(totalBudget)}
+            hint="All budget records for this cycle"
+          />
+          <KpiCard
+            label="Total expenses logged"
+            value={formatCurrency(totalExpenses)}
+            hint="Approved and pending expenses"
+          />
+          <KpiCard
+            label="Pending reimbursements"
+            value={formatCurrency(pending.totalAmount)}
+            badge={`${pending.count} requests`}
+            accent="sky"
+          />
+          <KpiCard
+            label="Outstanding dues"
+            value={formatCurrency(dues.totalAmount)}
+            badge={`${dues.count} members`}
+            accent="amber"
+          />
         </motion.div>
-      )}
 
-      {/* KPI row */}
-      <motion.div
-        className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
-        variants={pageStagger}
-      >
-        <KpiCard
-          label="Total budget planned"
-          value={formatCurrency(totalBudget)}
-          hint="All budget records for this cycle"
-        />
-        <KpiCard
-          label="Total expenses logged"
-          value={formatCurrency(totalExpenses)}
-          hint="Approved and pending expenses"
-        />
-        <KpiCard
-          label="Pending reimbursements"
-          value={formatCurrency(pending.totalAmount)}
-          badge={`${pending.count} request${pending.count === 1 ? '' : 's'}`}
-          accent="sky"
-        />
-        <KpiCard
-          label="Outstanding dues"
-          value={formatCurrency(dues.totalAmount)}
-          badge={`${dues.count} member${dues.count === 1 ? '' : 's'}`}
-          accent="amber"
-        />
-      </motion.div>
-
-      {/* Charts + insights row */}
-      <motion.div
-        className="grid gap-4 lg:grid-cols-3"
-        variants={pageStagger}
-      >
-        {/* Placeholder chart card */}
-        <motion.div variants={fadeInUp} className="lg:col-span-2">
-          <Card className="h-full rounded-2xl border bg-card/80 p-4 shadow-sm sm:p-5">
-            <div className="flex items-center justify-between gap-2">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                  Spending by category
-                </p>
-                <p className="text-sm font-semibold">
+        {/* Charts + insights row */}
+        <motion.div
+          className="grid gap-6 lg:grid-cols-3"
+          variants={pageStagger}
+        >
+          {/* Placeholder chart card */}
+          <motion.div variants={fadeInUp} className="lg:col-span-2">
+            <Card className="h-full rounded-[2.5rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-zinc-900/40">
+              <div className="flex flex-col gap-2">
+                <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
+                  Analytics
+                </div>
+                <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Spending trends</h3>
+                <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">
                   Visual overview of where money is going
                 </p>
               </div>
-            </div>
-            <div className="mt-4 h-[220px] rounded-xl border border-dashed border-slate-200/80 bg-slate-50/60 p-4 text-center text-xs text-muted-foreground">
-              {/* Later: integrate Recharts / another chart lib here */}
-              <div className="flex h-full flex-col items-center justify-center gap-2">
-                <span className="rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-slate-50">
-                  Chart coming soon
-                </span>
-                <p className="max-w-xs text-[11px]">
-                  Hook this card to <code>summary.expensesByCategory</code> for a donut or bar chart.
-                  The data is already available in the API.
-                </p>
+              <div className="mt-8 h-[240px] rounded-3xl border border-dashed border-slate-200 bg-slate-50/50 p-4 text-center dark:border-white/10 dark:bg-white/5">
+                <div className="flex h-full flex-col items-center justify-center gap-4">
+                  <span className="rounded-full bg-slate-900 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-white dark:bg-white dark:text-slate-900">
+                    Engine processing data
+                  </span>
+                  <p className="max-w-xs text-xs font-medium text-slate-400">
+                    Standardizing categories and preparing visual projection for this cycle.
+                  </p>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </motion.div>
+
+          {/* Insights card */}
+          <motion.div variants={fadeInUp}>
+            <Card className="h-full rounded-[2.5rem] border border-slate-900 bg-[#030712] p-8 text-white shadow-2xl">
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">
+                  Strategic Intelligence
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-black tracking-tight leading-tight">Financial Insights</h3>
+                  <div className="space-y-4 text-sm font-medium text-zinc-400 leading-relaxed">
+                    <p>
+                      Use this space to call out anomalies — spikes in printing, over‑budget events, or pending reimbursements that need leadership attention.
+                    </p>
+                    <p>
+                      Once you add more data, you can surface automatic “flags” here (e.g., “Hospitality exceeded budget by 18% for SEC‑MUN 2026.”).
+                    </p>
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-white/5 p-4">
+                  <p className="text-[11px] font-bold text-zinc-500">
+                    Prudential Tip: Keep all reimbursements inside the system to have an audit‑ready trail for college authorities.
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
         </motion.div>
 
-        {/* Insights card */}
+        {/* Recent activity table */}
         <motion.div variants={fadeInUp}>
-          <Card className="h-full rounded-2xl border bg-slate-950 text-slate-50">
-            <div className="space-y-3 p-4 sm:p-5">
-              <p className="text-[11px] font-medium uppercase tracking-[0.22em] text-slate-400">
-                Finance insights
-              </p>
-              <div className="space-y-2 text-xs text-slate-200">
-                <p>
-                  Use this space to call out anomalies — spikes in printing, over‑budget events, or pending reimbursements that need leadership attention.
-                </p>
-                <p className="text-slate-400">
-                  Once you add more data, you can surface automatic “flags” here (e.g., “Hospitality exceeded budget by 18% for SEC‑MUN 2026.”).
-                </p>
+          <Card className="rounded-[2.5rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-zinc-900/40">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
+                  Audit Trail
+                </div>
+                <h3 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Recent Ledger</h3>
               </div>
-              <div className="mt-3 space-y-1 text-[11px] text-slate-400">
-                <p>Tip: Keep all reimbursements inside the system to have an audit‑ready trail for college authorities.</p>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-full font-bold"
+                  onClick={exportRecentToCSV}
+                  disabled={!recent.length}
+                >
+                  Export CSV
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-full font-bold"
+                  onClick={printRecent}
+                  disabled={!recent.length}
+                >
+                  Print table
+                </Button>
+                <Button
+                  size="sm"
+                  className="rounded-full bg-slate-900 font-bold text-white transition-transform hover:scale-[1.03] dark:bg-white dark:text-slate-900"
+                  onClick={() => router.push('/finance/records')}
+                >
+                  Open full ledger
+                </Button>
+              </div>
+            </div>
+
+            <div
+              id="recent-expenses-print"
+              className="mt-8 overflow-hidden rounded-3xl border border-blue-200/60 bg-white dark:border-white/5 dark:bg-[#030712]/40"
+            >
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse text-sm">
+                  <thead className="bg-slate-50/50 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:bg-white/5">
+                    <tr>
+                      <th className="px-6 py-4 text-left">Date</th>
+                      <th className="px-4 py-4 text-left">Event</th>
+                      <th className="px-4 py-4 text-left">Category</th>
+                      <th className="px-4 py-4 text-right">Amount</th>
+                      <th className="px-4 py-4 text-left">Status</th>
+                      <th className="px-6 py-4 text-left">Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+                    {recent.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="px-6 py-12 text-center text-sm font-medium text-slate-400"
+                        >
+                          No expenses have been logged yet.
+                        </td>
+                      </tr>
+                    )}
+                    {recent.map((r) => (
+                      <tr
+                        key={r._id}
+                        className="group transition-colors hover:bg-slate-50/50 dark:hover:bg-white/5"
+                      >
+                        <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">
+                          {new Date(r.date).toLocaleDateString('en-IN')}
+                        </td>
+                        <td className="px-4 py-4 font-medium text-slate-500 dark:text-zinc-400">
+                          {r.eventName || <span className="opacity-40">–</span>}
+                        </td>
+                        <td className="px-4 py-4 font-bold text-slate-900 dark:text-white">{r.category}</td>
+                        <td className="px-4 py-4 text-right font-black text-slate-900 dark:text-white">
+                          {formatCurrency(r.amount)}
+                        </td>
+                        <td className="px-4 py-4">
+                          <StatusPill status={r.status} />
+                        </td>
+                        <td className="px-6 py-4 max-w-xs truncate text-xs font-medium text-slate-500 dark:text-zinc-400">
+                          {r.notes || <span className="opacity-40">–</span>}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </Card>
         </motion.div>
       </motion.div>
-
-      {/* Recent activity table */}
-      <motion.div variants={fadeInUp}>
-        <Card className="rounded-2xl border bg-card/80 p-4 shadow-sm sm:p-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Recent expenses
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Last 10 entries logged in the system.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={exportRecentToCSV}
-                disabled={!recent.length}
-              >
-                Export CSV
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={printRecent}
-                disabled={!recent.length}
-              >
-                Print table
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => router.push('/finance/records')}
-              >
-                Open full ledger
-              </Button>
-            </div>
-          </div>
-
-          <div
-            id="recent-expenses-print"
-            className="mt-4 overflow-hidden rounded-xl border bg-background"
-          >
-            <div className="max-h-[360px] overflow-auto">
-              <table className="min-w-full border-collapse text-xs">
-                <thead className="bg-muted/60 text-[11px] uppercase tracking-wide text-muted-foreground">
-                  <tr>
-                    <th className="border-b px-3 py-2 text-left">Date</th>
-                    <th className="border-b px-3 py-2 text-left">Event</th>
-                    <th className="border-b px-3 py-2 text-left">Category</th>
-                    <th className="border-b px-3 py-2 text-right">Amount</th>
-                    <th className="border-b px-3 py-2 text-left">Status</th>
-                    <th className="border-b px-3 py-2 text-left">Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recent.length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={6}
-                        className="px-3 py-4 text-center text-[11px] text-muted-foreground"
-                      >
-                        No expenses have been logged yet.
-                      </td>
-                    </tr>
-                  )}
-                  {recent.map((r) => (
-                    <tr
-                      key={r._id}
-                      className="border-t text-[11px] hover:bg-muted/40"
-                    >
-                      <td className="px-3 py-2">
-                        {new Date(r.date).toLocaleDateString('en-IN')}
-                      </td>
-                      <td className="px-3 py-2">
-                        {r.eventName || <span className="text-muted-foreground">–</span>}
-                      </td>
-                      <td className="px-3 py-2">{r.category}</td>
-                      <td className="px-3 py-2 text-right">
-                        {formatCurrency(r.amount)}
-                      </td>
-                      <td className="px-3 py-2">
-                        <StatusPill status={r.status} />
-                      </td>
-                      <td className="px-3 py-2 max-w-xs truncate">
-                        {r.notes || <span className="text-muted-foreground">–</span>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </Card>
-      </motion.div>
-    </motion.div>
+    </main>
   )
 }
 
@@ -485,30 +501,30 @@ function KpiCard({
   badge?: string
   accent?: 'emerald' | 'sky' | 'amber'
 }) {
-  const accentClass =
-    accent === 'sky'
-      ? 'bg-sky-50 text-sky-800 border-sky-100'
-      : accent === 'amber'
-      ? 'bg-amber-50 text-amber-800 border-amber-100'
-      : 'bg-emerald-50 text-emerald-800 border-emerald-100'
-
   return (
     <motion.div
       variants={fadeInUp}
-      whileHover={{ y: -4, boxShadow: '0 18px 40px rgba(15, 23, 42, 0.08)' }}
+      whileHover={{ y: -4, scale: 1.02 }}
       transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-      className="rounded-xl border bg-card p-4 shadow-sm"
+      className="group relative overflow-hidden rounded-3xl border border-blue-200/60 bg-white p-6 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-zinc-900/40"
     >
-      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+      <div className={cn(
+        "absolute top-0 right-0 w-24 h-24 blur-[40px] pointer-events-none opacity-20",
+        accent === 'sky' ? "bg-sky-400" : accent === 'amber' ? "bg-amber-400" : "bg-emerald-400"
+      )} />
+
+      <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-zinc-400">
         {label}
       </p>
-      <div className="mt-2 flex items-baseline justify-between gap-2">
-        <p className="text-xl font-semibold sm:text-2xl">{value}</p>
+      <div className="mt-4 flex items-baseline justify-between gap-2">
+        <p className="text-3xl font-black tracking-tight text-slate-900 dark:text-white leading-none">{value}</p>
         {badge && (
           <span
             className={cn(
-              'rounded-full px-2 py-0.5 text-[10px] font-medium',
-              accentClass,
+              'rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wider shadow-sm border',
+              accent === 'sky' ? 'bg-sky-50 text-sky-700 border-sky-100' :
+                accent === 'amber' ? 'bg-amber-50 text-amber-700 border-amber-100' :
+                  'bg-emerald-50 text-emerald-700 border-emerald-100'
             )}
           >
             {badge}
@@ -516,7 +532,7 @@ function KpiCard({
         )}
       </div>
       {hint && (
-        <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p>
+        <p className="mt-4 text-[11px] font-bold text-slate-400">{hint}</p>
       )}
     </motion.div>
   )
@@ -524,8 +540,7 @@ function KpiCard({
 
 function StatusPill({ status }: { status: string }) {
   const normalized = status.toUpperCase()
-  let color =
-    'bg-slate-100 text-slate-700 border-slate-200'
+  let color = 'bg-slate-100 text-slate-700 border-slate-200'
 
   if (normalized === 'PENDING') {
     color = 'bg-amber-50 text-amber-800 border-amber-200'
@@ -538,7 +553,7 @@ function StatusPill({ status }: { status: string }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide',
+        'inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-black uppercase tracking-wide',
         color,
       )}
     >

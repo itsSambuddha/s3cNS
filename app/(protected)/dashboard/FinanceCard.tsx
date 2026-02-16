@@ -44,34 +44,38 @@ export function FinanceCard() {
       variants={fadeInUp}
       whileHover={{
         y: -4,
-        boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
+        transition: { duration: 0.3 }
       }}
-      transition={{ type: "spring", stiffness: 260, damping: 22 }}
-      className="flex h-full cursor-pointer flex-col justify-between rounded-xl border bg-card/80 p-4 shadow-sm"
+      className="group relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/5 dark:bg-white/5 cursor-pointer"
       onClick={() => router.push("/finance/records?tab=budgets")}
     >
-      <div className="space-y-1">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-          Finance
-        </p>
-        <p className="text-2xl font-semibold">
-          {onTrack}{" "}
-          <span className="text-base text-muted-foreground">/ {total}</span>
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Budgets currently on track
-        </p>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+            Finance
+          </p>
+          <div className="h-2 w-2 rounded-full bg-blue-500" />
+        </div>
+        <div>
+          <div className="flex items-baseline gap-1">
+            <p className="text-4xl font-black text-slate-900 dark:text-white">
+              {onTrack}
+            </p>
+            <span className="text-lg font-bold text-slate-400">/ {total}</span>
+          </div>
+          <p className="mt-1 text-xs font-bold text-slate-500 dark:text-zinc-500">
+            Budgets currently on track
+          </p>
+        </div>
+
         {error && (
-          <p className="mt-1 text-[11px] text-destructive">{error}</p>
+          <p className="text-[10px] font-bold text-destructive">{error}</p>
         )}
+
+        <button className="inline-flex h-9 items-center justify-center rounded-full bg-slate-50 px-4 text-[11px] font-black uppercase tracking-wider text-slate-900 transition-colors hover:bg-slate-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
+          Open finance →
+        </button>
       </div>
-      <Button
-        variant="link"
-        size="sm"
-        className="mt-2 px-0 text-xs font-medium"
-      >
-        Open finance →
-      </Button>
     </motion.div>
   )
 }

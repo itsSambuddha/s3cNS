@@ -30,10 +30,13 @@ export function ConstitutionContent() {
     <div className="space-y-8">
       {/* Preamble */}
       <BounceSection id="const-preamble" icon={<ScrollTextIcon />}>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-          Constitution
-        </p>
-        <h2 className="mt-2 text-lg font-semibold text-slate-900">Preamble</h2>
+        <div className="flex items-center gap-2">
+          <div className="h-2 w-2 rounded-full bg-slate-400" />
+          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500">
+            Constitution
+          </p>
+        </div>
+        <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-900 dark:text-white">Preamble</h2>
         <div className="mt-1 space-y-3 text-sm text-slate-700">
           <p>
             We, the members of the SECMUN (St. Edmund&apos;s College Model United Nations) Club,
@@ -67,8 +70,8 @@ export function ConstitutionContent() {
 
       {/* Article 1 */}
       <BounceSection id="const-1" icon={<GavelIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">
-          Article 1: Name and Purpose
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+          Art. 1: Name & Purpose
         </h3>
         <div className="mt-2 space-y-2 text-sm text-slate-700">
           <p><strong>1.1 Name:</strong> The club shall be known as SECMUN (St. Edmund&apos;s College Model United Nations).</p>
@@ -78,7 +81,7 @@ export function ConstitutionContent() {
 
       {/* Article 2 */}
       <BounceSection id="const-2" icon={<UsersIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">Article 2: Membership</h3>
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Art. 2: Membership</h3>
         <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
           <div className="rounded-2xl bg-slate-50/80 p-4">
             <p className="font-semibold text-slate-900">Eligibility & Rights</p>
@@ -112,7 +115,7 @@ export function ConstitutionContent() {
               <li><strong>Faculty Advisor / Teacher-in-Charge:</strong> Provides institutional oversight, ensures academic and disciplinary integrity, and approves structural and financial decisions.</li>
             </ul>
           </div>
-          
+
           <div>
             <p className="font-semibold">3.2 Offices Under Secretary General (1 Head + Deputies):</p>
             <div className="mt-2 grid grid-cols-2 gap-2 text-xs md:grid-cols-3">
@@ -126,14 +129,14 @@ export function ConstitutionContent() {
               <span>Conference Mgmt (1)</span>
             </div>
           </div>
-          
+
           {/* <p><strong>3.3 Junior Secretariat:</strong> Under General Secretary. Assists all Offices and functions as a preparatory cohort for future leadership.</p> */}
         </div>
       </BounceSection>
 
       {/* Articles 4-5 */}
       <BounceSection id="const-4" icon={<LayersIcon />}>
-        <h3 className="text-sm font-semibold text-slate-900">Articles 4–5: Roles & Hierarchy</h3>
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Art. 4–5: Roles</h3>
         <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
           <div className="rounded-2xl bg-slate-50/80 p-4">
             <p className="font-semibold text-slate-900">Article 4: Roles and Responsibilities</p>
@@ -156,17 +159,17 @@ export function ConstitutionContent() {
 
       {/* Article 6 */}
       <BounceSection id="const-6" icon={<CalendarClock className="h-4 w-4" />}>
-        <h3 className="text-sm font-semibold text-slate-900">Article 6: Tenure and Selection</h3>
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Art. 6: Selection</h3>
         <div className="mt-3 space-y-3 text-xs text-slate-700">
           <p><strong>6.1 Tenure:</strong> All office-bearers shall serve a one-year term aligned with the operational calendar of SECMUN, commencing from the date of their official appointment. This term shall not extend beyond the academic year in which the appointment was made.</p>
-          
+
           <p className="font-semibold">Academic Eligibility:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>President/Secretary-General:</strong> Senior-most semester after 6th Semester (typically Semester 4).</li>
             {/* <li><strong>Junior Secretariat:</strong> Junior-most semester (typically Semester 1 or 2).</li> */}
             <li><strong>Other roles:</strong> Open to all enrolled members meeting role requirements.</li>
           </ul>
-          
+
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <div className="rounded-2xl bg-slate-50/80 p-3">
               <p className="font-semibold text-slate-900 text-xs">6.2 Selection Process</p>
@@ -189,7 +192,7 @@ export function ConstitutionContent() {
 
       {/* Articles 7-9 */}
       <BounceSection id="const-7" icon={<FileText className="h-4 w-4" />}>
-        <h3 className="text-sm font-semibold text-slate-900">Articles 7–9: Operations</h3>
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Art. 7–9: Operations</h3>
         <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-3">
           <div className="rounded-2xl bg-slate-50/80 p-4">
             <p className="font-semibold text-slate-900 mb-2">Article 7: Meetings</p>
@@ -220,7 +223,7 @@ export function ConstitutionContent() {
 
       {/* Articles 10-11 */}
       <BounceSection id="const-10" icon={<ShieldCheck className="h-4 w-4" />}>
-        <h3 className="text-sm font-semibold text-slate-900">Articles 10–11: Governance</h3>
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Art. 10–11: Ethics</h3>
         <div className="mt-2 grid gap-4 text-xs text-slate-700 md:grid-cols-2">
           <div className="rounded-2xl bg-slate-50/80 p-4">
             <p className="font-semibold text-slate-900">Article 10: Feedback & Amendments</p>
@@ -242,7 +245,7 @@ export function ConstitutionContent() {
 
       {/* Article 12 */}
       <BounceSection id="const-12" icon={<Award className="h-4 w-4" />}>
-        <h3 className="text-sm font-semibold text-slate-900">Article 12: Certification</h3>
+        <h3 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Art. 12: Certificates</h3>
         <div className="mt-2 space-y-3 text-sm text-slate-700">
           <p><strong>12.1 Certification of Service:</strong> Issued to all Secretariat members upon term completion, stating designation, tenure, and responsibilities.</p>
           <p><strong>12.2 Recognition:</strong> Distinguished contributions acknowledged in assemblies/documentation.</p>
@@ -257,7 +260,7 @@ export function ConstitutionContent() {
           The club may only be dissolved upon unanimous agreement of the President, Secretary-General, and General Secretary, and with formal consent from the Teacher-in-Charge.
         </p>
       </BounceSection>
-      <br/>
+      <br />
     </div>
   )
 }
@@ -276,21 +279,18 @@ function BounceSection({
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 24, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 220,
-        damping: 18,
-      }}
-      className="rounded-3xl border border-slate-200 bg-white/95 p-5 sm:p-6 backdrop-blur"
+      initial={{ opacity: 0, y: 30, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="overflow-hidden rounded-[2.5rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-zinc-900/90"
     >
       {icon && (
-        <div className="mb-2 flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+        <div className="mb-8 flex items-center justify-between">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-900 dark:bg-white/5 dark:text-white">
             {icon}
           </div>
-          <div className="h-px flex-1 bg-slate-100" />
+          <div className="h-px flex-1 ml-6 bg-slate-100 dark:bg-white/5" />
         </div>
       )}
       {children}

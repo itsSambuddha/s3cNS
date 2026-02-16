@@ -35,68 +35,82 @@ export const WhatsAppLogo = ({ className }: { className?: string }) => (
 
 export function SecmunFeatures() {
   return (
-    <section className="relative bg-white py-16 dark:bg-black">
-      <div className="mx-auto max-w-6xl px-4">
+    <section className="relative bg-white py-16 dark:bg-[#030712] overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+        <div className="absolute top-[10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/5 blur-[100px]" />
+        <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-500/5 blur-[100px]" />
+      </div>
+
+      <div className="mx-auto max-w-7xl px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.45, type: 'spring', stiffness: 160, damping: 22 }}
-          className="text-center"
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-16"
         >
-          <h3 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white md:text-3xl">
+          <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-primary/10 bg-primary/5 text-[10px] font-black tracking-[0.2em] text-primary uppercase">
+            Operational Intelligence
+          </div>
+          <h3 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white md:text-5xl lg:text-6xl max-w-4xl mx-auto leading-[1.1]">
             A Control Room for everything SECMUN does.
           </h3>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-slate-600 dark:text-neutral-300">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-zinc-400 leading-relaxed">
             Automation, Finance, Communication and execution live in one system,
-            instead of scattered sheets, chats, and drives.
+            eliminating fragmented workflows and spreadsheets.
           </p>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.98 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.5, type: 'spring', stiffness: 150, damping: 20 }}
-          className="relative mt-10"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="relative"
         >
-          {/* 3 rows, 6 columns; rows auto-size */}
-          <div className="grid grid-cols-1 rounded-2xl border border-neutral-200/80 bg-white/80 shadow-sm backdrop-blur dark:border-neutral-800 dark:bg-neutral-950/80 lg:grid-cols-6 lg:grid-rows-[auto_auto_auto]">
-            {/* Finance: top-left, spans 2 rows */}
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2.5rem] border border-neutral-200/80 bg-neutral-200/50 dark:border-white/5 dark:bg-white/5 lg:grid-cols-6 lg:grid-rows-[auto_auto_auto]">
+            {/* Automation Card: top-left, spans 2 rows */}
             <FeatureCard
               index={0}
-              className="col-span-1 lg:col-span-4 lg:row-span-2 border-b lg:border-b-0 lg:border-r border-neutral-200/80 dark:border-neutral-800"
+              className="col-span-1 lg:col-span-4 lg:row-span-2 bg-white dark:bg-[#030712] p-8 sm:p-10"
             >
-              <FeatureTitle><strong>AUTOMATION</strong> For Conferences</FeatureTitle>
-              <FeatureDescription>
-                One Stop Solution to manage and automate finances, communication, archives and on-ground execution for SECMUN.
-              </FeatureDescription>
-              <motion.div
-                whileHover={{ scale: 1.02, translateY: -4 }}
-                transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-                className="relative mt-3 w-full overflow-hidden rounded-lg border border-neutral-200/80 bg-slate-100 aspect-[4/3] dark:border-neutral-800 dark:bg-neutral-900"
-              >
-                <Image
-                  src="/landing/finance-dashboard.jpg"
-                  alt="Finance dashboard"
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
+              <div className="flex flex-col h-full">
+                <div className="space-y-4 mb-8">
+                  <FeatureTitle><strong>AUTOMATION</strong> For Conferences</FeatureTitle>
+                  <FeatureDescription>
+                    The definitive solution to manage and automate finances, communication, archives and on-ground execution for high-stakes SECMUN events.
+                  </FeatureDescription>
+                </div>
+                <motion.div
+                  whileHover={{ scale: 1.01, translateY: -4 }}
+                  transition={{ type: 'spring', stiffness: 150, damping: 20 }}
+                  className="relative mt-auto w-full overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/5 bg-slate-100 aspect-[16/9] dark:bg-zinc-900 shadow-2xl"
+                >
+                  <Image
+                    src="/landing/finance-dashboard.jpg"
+                    alt="Finance dashboard"
+                    fill
+                    className="object-cover opacity-90 transition-opacity hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                </motion.div>
+              </div>
             </FeatureCard>
 
             {/* Automation rail: right, spans all 3 rows */}
             <FeatureCard
               index={1}
-              className="col-span-1 lg:col-span-2 lg:row-span-3 border-t lg:border-t-0 border-neutral-200/80 dark:border-neutral-800 flex flex-col"
+              className="col-span-1 lg:col-span-2 lg:row-span-3 bg-white/95 dark:bg-[#060b18] p-8 sm:p-10 flex flex-col"
             >
-              <FeatureTitle>Automated, real-time communication</FeatureTitle>
-              <FeatureDescription>
-                Updates, reminders, allotments, etc all sent automatically
-                via Gmail, WhatsApp, and in-app alerts — all triggered by actions
-                in s3cNS.
-              </FeatureDescription>
-              <div className="flex-1 flex items-end">
+              <div className="space-y-4 mb-8">
+                <FeatureTitle>Automated, real-time communication</FeatureTitle>
+                <FeatureDescription>
+                  Updates, reminders, allotments, and alerts sent automatically
+                  via integrated channels — all triggered by core s3cNS actions.
+                </FeatureDescription>
+              </div>
+              <div className="flex-1 flex flex-col justify-center">
                 <AutomationRail />
               </div>
             </FeatureCard>
@@ -104,54 +118,63 @@ export function SecmunFeatures() {
             {/* Institutional memory: under finance */}
             <FeatureCard
               index={2}
-              className="col-span-1 lg:col-span-4 lg:row-span-1 border-t lg:border-t border-neutral-200/80 dark:border-neutral-800"
+              className="col-span-1 lg:col-span-4 lg:row-span-1 bg-white/90 dark:bg-[#070d1d] p-8 sm:p-10"
             >
-              <FeatureTitle>Institutional memory that persists</FeatureTitle>
-              <FeatureDescription>
-                Archive circulars, allotments, minutes, amenity lists, and
-                vendor details so every new Secretariat starts ahead.
-              </FeatureDescription>
-              <motion.div
-                whileHover={{ scale: 1.02, translateY: -4 }}
-                transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-                className="mt-3 h-48 md:h-56 w-full overflow-hidden rounded-lg border border-neutral-200/80 bg-slate-100 dark:border-neutral-800 dark:bg-neutral-900"
-              >
-                <Image
-                  src="/landing/inventory.jpg"
-                  alt="Institutional memory"
-                  width={1400}
-                  height={800}
-                  className="h-full w-full object-cover"
-                />
-              </motion.div>
+              <div className="flex flex-col md:flex-row gap-10 items-center">
+                <div className="flex-1 space-y-4">
+                  <FeatureTitle>Institutional memory that persists</FeatureTitle>
+                  <FeatureDescription>
+                    Archive circulars, allotments, minutes, and vendor details so every new Secretariat starts with a complete operational history.
+                  </FeatureDescription>
+                </div>
+                <motion.div
+                  whileHover={{ scale: 1.02, x: 10 }}
+                  transition={{ type: 'spring', stiffness: 150, damping: 20 }}
+                  className="flex-1 h-48 w-full overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/5 bg-slate-100 dark:bg-zinc-900 shadow-xl"
+                >
+                  <Image
+                    src="/landing/inventory.jpg"
+                    alt="Institutional memory"
+                    width={1400}
+                    height={800}
+                    className="h-full w-full object-cover opacity-80"
+                  />
+                </motion.div>
+              </div>
             </FeatureCard>
 
-            {/* Card section: bottom-left */}
+            {/* Platform card: bottom-left */}
             <FeatureCard
               index={3}
-              className="col-span-1 lg:col-span-2 lg:row-span-1 border-t border-neutral-200/80 lg:border-r dark:border-neutral-800"
+              className="col-span-1 lg:col-span-2 lg:row-span-1 bg-white dark:bg-[#040916] p-8 border-t border-neutral-200 dark:border-white/5"
             >
-              <CardTitle>One interface, web and app</CardTitle>
-              <CardDescription>
-                Secretariat runs SECMUN from a full web dashboard while
-                on‑ground teams use a focused mobile view for quick updates.
-              </CardDescription>
-              <div className="mt-3">
-                <CardDemo />
+              <div className="space-y-4">
+                <CardTitle className="text-xl">One interface, web and app</CardTitle>
+                <CardDescription className="text-zinc-400">
+                  A comprehensive web dashboard for administration, paired with a focused mobile view for on-ground execution.
+                </CardDescription>
+                <div className="pt-4">
+                  <CardDemo />
+                </div>
               </div>
             </FeatureCard>
 
             {/* Compare section: bottom-middle */}
             <FeatureCard
               index={4}
-              className="col-span-1 lg:col-span-4 lg:row-span-1 border-t border-neutral-200/80 dark:border-neutral-800"
+              className="col-span-1 lg:col-span-4 lg:row-span-1 bg-white dark:bg-[#050a1b] p-8 border-t border-neutral-200 dark:border-white/5"
             >
-              <FeatureTitle>From scattered tools to one control room</FeatureTitle>
-              <FeatureDescription>
-                Slide between the old “spreadsheets + chats + drives” setup and
-                a single SECMUN workspace.
-              </FeatureDescription>
-              <HassleFreeCompare />
+              <div className="flex flex-col items-center text-center">
+                <div className="space-y-4 max-w-2xl mb-8">
+                  <FeatureTitle>From scattered tools to one control room</FeatureTitle>
+                  <FeatureDescription className="mx-auto">
+                    Seamlessly transition from the friction of spreadsheets and fragmented chats to a unified, professional workspace.
+                  </FeatureDescription>
+                </div>
+                <div className="w-full">
+                  <HassleFreeCompare />
+                </div>
+              </div>
             </FeatureCard>
           </div>
         </motion.div>
@@ -173,17 +196,18 @@ function FeatureCard({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
       transition={{
-        delay: 0.05 * index,
-        type: 'spring',
-        stiffness: 200,
-        damping: 22,
+        delay: 0.1 * index,
+        duration: 0.8,
+        ease: [0.16, 1, 0.3, 1],
       }}
-      className={cn('relative overflow-hidden p-4 sm:p-6', className)}
+      className={cn('relative overflow-hidden group/card', className)}
     >
+      {/* Subtle hover overlay */}
+      <div className="absolute inset-0 bg-primary/0 group-hover/card:bg-primary/[0.01] transition-colors duration-500 pointer-events-none" />
       {children}
     </motion.div>
   )
@@ -191,15 +215,15 @@ function FeatureCard({
 
 function FeatureTitle({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-left text-base font-semibold tracking-tight text-slate-900 dark:text-white md:text-lg">
+    <p className="text-left text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
       {children}
     </p>
   )
 }
 
-function FeatureDescription({ children }: { children: React.ReactNode }) {
+function FeatureDescription({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <p className="mt-1 max-w-sm text-left text-xs text-slate-600 dark:text-neutral-300 md:text-sm">
+    <p className={cn("max-w-md text-left text-sm text-slate-500 dark:text-zinc-400 leading-relaxed font-medium transition-colors group-hover/card:text-slate-600 dark:group-hover/card:text-zinc-300", className)}>
       {children}
     </p>
   )
@@ -292,16 +316,16 @@ function AutomationRail() {
   const resumeLoop = () => setLooping(true)
 
   return (
-    <div className="mt-3 h-full" onMouseLeave={resumeLoop}>
-      <div className="flex h-full items-stretch gap-3 rounded-xl border border-neutral-200/80 bg-neutral-50/90 p-3 text-[11px] shadow-[0_12px_40px_rgba(15,23,42,0.12)] dark:border-neutral-800 dark:bg-neutral-900/95">
+    <div className="mt-6 h-full" onMouseLeave={resumeLoop}>
+      <div className="flex h-full items-stretch gap-4 rounded-3xl border border-neutral-200/50 bg-white/50 p-4 text-[11px] shadow-2xl shadow-slate-200/50 backdrop-blur-sm dark:border-white/5 dark:bg-zinc-900/50 dark:shadow-none">
         {/* Rail */}
-        <div className="relative flex w-10 items-center justify-center">
-          <div className="h-full w-[2px] rounded-full bg-gradient-to-b from-slate-200 via-slate-400 to-slate-200 dark:from-neutral-800 dark:via-neutral-500 dark:to-neutral-800" />
+        <div className="relative flex w-12 items-center justify-center">
+          <div className="h-full w-[1px] rounded-full bg-slate-200 dark:bg-white/10" />
           {stops.map((s) => (
             <div
               key={s.id}
-              className="pointer-events-none absolute left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-slate-300 dark:bg-neutral-600"
-              style={{ top: `${((s.pos + 1) / 2) * 100}%`, marginTop: -3 }}
+              className="pointer-events-none absolute left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-slate-300 dark:bg-white/20"
+              style={{ top: `${((s.pos + 1) / 2) * 100}%`, marginTop: -2 }}
             />
           ))}
 
@@ -312,24 +336,24 @@ function AutomationRail() {
           >
             <motion.div
               animate={{
-                scale: [1, 1.04, 1],
+                scale: [1, 1.1, 1],
                 boxShadow: [
                   '0 0 0 rgba(56,189,248,0)',
-                  '0 0 24px rgba(56,189,248,0.9)',
+                  '0 0 20px rgba(56,189,248,0.6)',
                   '0 0 0 rgba(56,189,248,0)',
                 ],
               }}
-              transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               className="relative flex items-center justify-center"
             >
-              <div className="h-8 w-3 rounded-full bg-gradient-to-b from-sky-400 via-sky-500 to-sky-400" />
-              <span className="absolute h-7 w-7 rounded-full border border-sky-300/60 bg-sky-400/15 blur-[1px]" />
+              <div className="h-10 w-1.5 rounded-full bg-sky-500 shadow-[0_0_15px_rgba(14,165,233,0.5)]" />
+              <div className="absolute h-6 w-6 rounded-full border-[0.5px] border-sky-400/40 bg-sky-400/10 blur-[2px]" />
             </motion.div>
           </motion.div>
         </div>
 
         {/* Channels */}
-        <div className="flex flex-1 flex-col justify-between space-y-3">
+        <div className="flex flex-1 flex-col justify-between space-y-4">
           {stops.map((s) => {
             const meta = channelMeta[s.id]
             const isClosest = closest === s.id
@@ -342,63 +366,63 @@ function AutomationRail() {
                 type="button"
                 onMouseEnter={() => snapTo(s.id)}
                 whileHover={{ scale: 1.02, x: 2 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 className={cn(
-                  'flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors',
+                  'flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all duration-300',
                   isClosest
-                    ? 'bg-white shadow-sm ring-1 ring-sky-200 dark:bg-neutral-950 dark:ring-sky-500/60'
-                    : 'bg-white/80 ring-1 ring-transparent hover:ring-slate-200/80 dark:bg-neutral-950/70 dark:hover:ring-neutral-700/70',
+                    ? 'bg-white shadow-xl shadow-slate-200/50 ring-[0.5px] ring-sky-500/20 dark:bg-zinc-800 dark:shadow-none dark:ring-white/10'
+                    : 'bg-transparent hover:bg-slate-50 dark:hover:bg-white/5',
                 )}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   <motion.div
                     animate={
                       shouldWiggle
-                        ? { rotate: [-4, 4, -3, 3, 0], scale: [1, 1.04, 1] }
+                        ? { rotate: [-2, 2, -1, 1, 0], scale: [1, 1.05, 1] }
                         : { rotate: 0, scale: 1 }
                     }
                     transition={
                       shouldWiggle
-                        ? { duration: 0.5, ease: 'easeInOut' }
+                        ? { duration: 0.6, ease: 'easeInOut' }
                         : { duration: 0.2 }
                     }
-                    className="relative h-9 w-9 overflow-hidden rounded-full bg-neutral-100 shadow-[0_0_0_1px_rgba(148,163,184,0.3)] dark:bg-neutral-800"
+                    className="relative h-11 w-11 overflow-hidden rounded-xl bg-slate-50 dark:bg-zinc-900 border border-slate-200/50 dark:border-white/5 p-1.5 shadow-sm"
                   >
                     <Image
                       src={meta.icon}
                       alt={meta.name}
-                      width={36}
-                      height={36}
+                      width={44}
+                      height={44}
                       className="h-full w-full object-contain"
                     />
                     {isClosest && (
                       <span
                         className={cn(
-                          'pointer-events-none absolute inset-0 rounded-full bg-gradient-to-b opacity-80',
+                          'pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b opacity-10',
                           meta.color,
                         )}
                       />
                     )}
                   </motion.div>
-                  <div className="space-y-0.5">
-                    <p className="text-[12px] md:text-sm font-semibold text-slate-900 dark:text-neutral-50">
+                  <div className="space-y-1">
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">
                       {meta.name}
                     </p>
-                    <p className="text-[11px] md:text-[12px] text-slate-500 dark:text-neutral-400">
+                    <p className="text-[11px] text-slate-500 dark:text-zinc-400 font-medium leading-tight">
                       {meta.description}
                     </p>
                   </div>
                 </div>
-                {/* Live pill removed */}
               </motion.button>
             )
           })}
-          <p className="mt-1 text-[10px] text-slate-500 dark:text-neutral-400">
-            One change in SEC‑MUN runs down this rail and reaches every channel in under a second.
+          <p className="mt-2 text-[10px] text-slate-400 dark:text-zinc-500 font-bold uppercase tracking-widest text-center">
+            One update · Instant propagation
           </p>
         </div>
       </div>
     </div>
+
   )
 }
 
@@ -582,7 +606,7 @@ export const CardSkeletonContainer = ({
       'z-40 h-[15rem] rounded-xl md:h-[20rem]',
       className,
       showGradient &&
-        'bg-neutral-300 dark:bg-[rgba(40,40,40,0.70)] [mask-image:radial-gradient(50%_50%_at_50%_50%,white_0%,transparent_100%)]',
+      'bg-neutral-300 dark:bg-[rgba(40,40,40,0.70)] [mask-image:radial-gradient(50%_50%_at_50%_50%,white_0%,transparent_100%)]',
     )}
   >
     {children}

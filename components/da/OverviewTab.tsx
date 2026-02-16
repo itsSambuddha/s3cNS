@@ -228,12 +228,15 @@ export function OverviewTab() {
       className="space-y-8 print:p-8"
     >
       {/* Page header */}
-      <motion.div variants={item} className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between border-b border-border/40 pb-6">
-        <div>
-          <h2 className="text-3xl font-heading font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
-            Delegate Affairs
+      <motion.div variants={item} className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between border-b border-border/40 pb-10">
+        <div className="space-y-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
+            Real-time Metrics
+          </div>
+          <h2 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white sm:text-5xl">
+            DA Overview
           </h2>
-          <p className="mt-2 text-base text-muted-foreground max-w-lg">
+          <p className="text-base font-medium text-slate-500 max-w-lg dark:text-zinc-400">
             Manage registrations, track metrics, and configure public forms for your events.
           </p>
         </div>
@@ -523,14 +526,14 @@ export function OverviewTab() {
 
 function StatCard({ title, value, icon, gradient }: { title: string; value: number; icon: ReactNode; gradient: string }) {
   return (
-    <Card className={clsx("relative overflow-hidden border-border/40 bg-card/40 p-5 transition-all hover:-translate-y-1 hover:shadow-lg")}>
-      <div className={clsx("absolute inset-0 bg-gradient-to-br opacity-50", gradient)} />
+    <Card className={clsx("relative overflow-hidden rounded-3xl border-border/40 bg-white dark:bg-zinc-900/40 p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5")}>
+      <div className={clsx("absolute inset-0 bg-gradient-to-br opacity-10", gradient)} />
       <div className="relative z-10 flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className="mt-2 text-3xl font-heading font-bold">{value}</p>
+          <p className="text-[10px] font-black uppercase tracking-wider text-slate-500 dark:text-zinc-400">{title}</p>
+          <p className="mt-2 text-4xl font-black tracking-tight text-slate-900 dark:text-white leading-none">{value}</p>
         </div>
-        <div className="p-3 rounded-xl bg-background/50 backdrop-blur-sm shadow-sm ring-1 ring-black/5 dark:ring-white/10">
+        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-white/5 shadow-sm">
           {icon}
         </div>
       </div>

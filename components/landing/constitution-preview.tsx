@@ -5,147 +5,129 @@ import { motion } from "motion/react"
 
 export function ConstitutionPreview() {
   return (
-    <section className="mx-auto mt-16 max-w-6xl px-4">
+    <section className="mx-auto mt-24 max-w-7xl px-6">
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.35 }}
-        className="relative overflow-hidden rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-blue-50/70 shadow-[0_18px_60px_rgba(15,23,42,0.12)]"
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-blue-50/70 shadow-[0_24px_80px_rgba(15,23,42,0.08)] dark:border-white/5 dark:from-zinc-900 dark:via-zinc-900/50 dark:to-zinc-800/20"
       >
-        {/* soft blue glow */}
+        {/* soft blue glow - Colors Preserved */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-24 top-0 h-40 w-40 rounded-full bg-blue-300/20 blur-3xl" />
-          <div className="absolute right-[-10%] bottom-[-20%] h-56 w-56 rounded-full bg-sky-200/30 blur-3xl" />
+          <div className="absolute -left-20 top-[-10%] h-[60%] w-[40%] rounded-full bg-blue-300/10 blur-[120px]" />
+          <div className="absolute right-[-5%] bottom-[-10%] h-[60%] w-[40%] rounded-full bg-sky-200/20 blur-[120px]" />
         </div>
 
-        <div className="relative grid gap-10 px-6 py-8 sm:px-9 sm:py-9 lg:grid-cols-[minmax(0,2.1fr)_minmax(0,1.5fr)]">
+        <div className="relative grid gap-16 p-10 sm:p-14 lg:grid-cols-[1.8fr_1.2fr] items-center">
           {/* LEFT: copy + CTA */}
-          <div className="flex flex-col justify-between gap-6">
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-blue-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+          <div className="flex flex-col gap-10">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-blue-200 bg-blue-50/70 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-blue-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
                 Foundational document
               </div>
 
-              <div>
-                <h2 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
-                  SECMUN Secretariat Mandate & Constitution
+              <div className="space-y-4">
+                <h2 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white md:text-5xl leading-[1.1]">
+                  SECMUN Secretariat <br className="hidden md:block" />
+                  Mandate & Constitution
                 </h2>
-                <p className="mt-2 max-w-xl text-sm text-slate-600">
+                <p className="max-w-xl text-lg text-slate-600 dark:text-zinc-400 leading-relaxed font-medium">
                   A single, versioned governance framework defining Secretariat
                   roles, reporting lines, procedures, and the formal SECMUN
                   Constitution.
                 </p>
               </div>
 
-              <dl className="mt-3 grid grid-cols-2 gap-3 text-[11px] text-slate-700 sm:grid-cols-3">
-                <div className="rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm">
-                  <dt className="text-[10px] font-medium uppercase tracking-[0.18em] text-slate-500">
-                    Version
-                  </dt>
-                  <dd className="mt-1 text-sm font-semibold text-blue-700">
-                    1.0
-                  </dd>
-                  <dd className="mt-0.5 text-[10px] text-slate-500">
-                    Secretarial Year 2025–26
-                  </dd>
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm">
-                  <dt className="text-[10px] font-medium uppercase tracking-[0.18em] text-slate-500">
-                    Document type
-                  </dt>
-                  <dd className="mt-1 text-sm font-semibold text-blue-700">
-                    Institutional Governance
-                  </dd>
-                  <dd className="mt-0.5 text-[10px] text-slate-500">
-                    Mandate + Constitution
-                  </dd>
-                </div>
-                <div className="rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm">
-                  <dt className="text-[10px] font-medium uppercase tracking-[0.18em] text-slate-500">
-                    Maintained by
-                  </dt>
-                  <dd className="mt-1 text-sm font-semibold text-blue-700">
-                    General Secretary
-                  </dd>
-                  <dd className="mt-0.5 text-[10px] text-slate-500">
-                    Archival & revisions
-                  </dd>
-                </div>
+              <dl className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {[
+                  { label: "Version", value: "1.0", detail: "Secretarial Year 2025–26" },
+                  { label: "Document type", value: "Institutional Governance", detail: "Mandate + Constitution" },
+                  { label: "Maintained by", value: "General Secretary", detail: "Archival & revisions" }
+                ].map((item, i) => (
+                  <div key={i} className="group relative rounded-2xl border border-slate-200/60 bg-white/50 p-5 shadow-sm transition-all hover:shadow-md hover:-translate-y-1 dark:border-white/5 dark:bg-white/5">
+                    <dt className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">
+                      {item.label}
+                    </dt>
+                    <dd className="text-base font-bold text-blue-700 dark:text-blue-400">
+                      {item.value}
+                    </dd>
+                    <dd className="mt-1 text-[11px] font-medium text-slate-500 dark:text-zinc-500">
+                      {item.detail}
+                    </dd>
+                  </div>
+                ))}
               </dl>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/constitution"
-                className="inline-flex h-9 items-center justify-center rounded-full bg-slate-900 px-4 text-xs font-semibold text-white shadow-sm transition hover:bg-slate-800"
-              >
-                View full document
+            <div className="flex flex-wrap items-center gap-4">
+              <Link href="/constitution">
+                <button className="h-14 px-10 rounded-full bg-slate-900 text-white font-bold text-sm shadow-xl shadow-slate-900/10 hover:bg-slate-800 transition-all hover:scale-[1.03] active:scale-95">
+                  View full document
+                </button>
               </Link>
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-[10px] text-slate-600 shadow-sm">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <div className="inline-flex items-center gap-3 rounded-full border border-slate-200/60 bg-white/80 px-5 py-2 text-[11px] font-bold text-slate-600 shadow-sm dark:bg-zinc-800 dark:text-zinc-400 dark:border-white/5">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
                 Ratified by Core Panel & Teacher‑in‑Charge
               </div>
             </div>
           </div>
 
-          {/* RIGHT: mandate + constitution mini layout */}
+          {/* RIGHT: mandate + constitution mini layout - Colors preserved */}
           <motion.div
-            initial={{ opacity: 0, y: 14, scale: 0.98 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="relative flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="hidden lg:block relative"
           >
-            <div className="pointer-events-none absolute inset-3 rounded-3xl bg-gradient-to-br from-blue-100 via-blue-50 to-slate-50 blur-sm" />
+            <div className="absolute -inset-10 bg-gradient-to-br from-blue-100/50 via-sky-50/50 to-slate-50/50 blur-[40px] rounded-full pointer-events-none" />
 
-            <div className="relative z-10 grid w-full max-w-sm grid-rows-[auto_auto_1fr] gap-3 rounded-3xl border border-slate-200 bg-white/90 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.16)]">
-              <div className="flex items-center justify-between text-[11px] text-slate-600">
-                <span className="font-medium text-slate-900">
-                  Governance snapshot
+            <div className="relative z-10 space-y-4 rounded-[2.5rem] border border-slate-200/80 bg-white p-6 shadow-[0_32px_64px_-16px_rgba(15,23,42,0.15)] dark:bg-zinc-900 dark:border-white/10">
+              <div className="flex items-center justify-between px-2">
+                <span className="text-xs font-black uppercase tracking-widest text-slate-400">
+                  Governance Snapshot
                 </span>
-                <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
-                  Mandate · Constitution
+                <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black text-blue-700 uppercase tracking-wider">
+                  Mandate · Rev 1.0
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 text-[11px]">
-                <div className="rounded-2xl border border-blue-100 bg-blue-50/70 p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-blue-700">
+              <div className="grid gap-3">
+                <div className="rounded-3xl border border-blue-100 bg-blue-50/50 p-5 dark:bg-blue-500/5 dark:border-blue-500/10">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-700 mb-2">
                     Secretariat
                   </p>
-                  <p className="mt-1 text-[11px] text-slate-700">
+                  <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed font-medium">
                     Senior panel, USG Offices, and Junior Secretariat roles and
                     hierarchy.
                   </p>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-700">
+
+                <div className="rounded-3xl border border-slate-100 bg-slate-50/50 p-5 dark:bg-white/5 dark:border-white/5">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700 dark:text-zinc-300 mb-2">
                     Articles 1–13
                   </p>
-                  <p className="mt-1 text-[11px] text-slate-700">
+                  <p className="text-xs text-slate-600 dark:text-zinc-400 leading-relaxed font-medium">
                     Name & Purpose, Membership, Finance, Code of Conduct, and
                     more.
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] text-slate-700">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                    Access
+              <div className="flex items-center justify-between rounded-3xl border border-slate-100 bg-slate-50/30 px-5 py-4 dark:bg-white/5 dark:border-white/5">
+                <div className="space-y-1">
+                  <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    Access Link
                   </p>
-                  <p className="text-[11px]">
-                    Single source of truth for SECMUN governance.
+                  <p className="text-[11px] font-bold text-slate-900 dark:text-white">
+                    Official Source of Truth
                   </p>
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
-                    Versioned
-                  </span>
-                  <span className="text-[9px] text-slate-500">
-                    Archived by General Secretary
+                <div className="text-right">
+                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[9px] font-black text-emerald-700 uppercase tracking-wider dark:bg-emerald-500/10 dark:text-emerald-400">
+                    Live
                   </span>
                 </div>
               </div>
@@ -154,5 +136,6 @@ export function ConstitutionPreview() {
         </div>
       </motion.div>
     </section>
+
   )
 }
