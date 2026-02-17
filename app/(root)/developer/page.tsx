@@ -33,6 +33,7 @@ const developers = {
     sam: {
         name: "Sam",
         role: "Lead Developer",
+        image: "/images/team/sam.jpg",
         initials: "S",
         socials: [
             { name: "LinkedIn", icon: <IconBrandLinkedin size={20} />, href: "https://www.linkedin.com/in/sam-18d/" },
@@ -49,34 +50,44 @@ const leadership = [
     {
         name: "Sir William B.F. Lynrah",
         role: "Teacher in Charge",
+        image: "/images/team/william.jpg",
         initials: "WL",
         message: "Thank you for your guidance and, more importantly, for trusting the vision of a fully digital secretariat. Your belief in this project gave it the green light it needed."
     },
     {
         name: "Naphibansabet Byrsat",
         role: "President",
+        image: "/images/team/naphi.jpg",
         initials: "NB",
         message: "A huge shoutout for backing this initiative from day one. Your presence and enthusiasm throughout the development phase were certainly felt."
     }
 ];
 
 const betaTeam = [
-    { name: "Upasana Sarma", initials: "US" },
-    { name: "Souvik Bhattacharjee", initials: "SB" },
-    { name: "Deiname Hynniewta", initials: "DH" },
-    { name: "Addiel Johanan Surong", initials: "AD" },
+    { name: "Upasana Sarma", initials: "US", image: "/images/team/upasana.jpg" },
+    { name: "Souvik Bhattacharjee", initials: "SB", image: "/images/team/souvik.jpg" },
+    { name: "Deiname Hynniewta", initials: "DH", image: "/images/team/deiname.jpg" },
+    { name: "Addiel Johanan Surong", initials: "AD", image: "/images/team/addiel.jpg" },
 ];
 
 // --- COMPONENTS ---
 
-const ImagePlaceholder = ({ initials, className, landscape = false, large = false }: { initials?: string; className?: string; landscape?: boolean; large?: boolean }) => (
+
+const ImagePlaceholder = ({ initials, image, className, landscape = false, large = false }: { initials?: string; image?: string; className?: string; landscape?: boolean; large?: boolean }) => (
     <div className={cn(
-        "bg-slate-50 border border-slate-200 flex items-center justify-center relative overflow-hidden transition-all duration-700 ease-in-out group/img grayscale group-hover/img:grayscale-0",
+        "bg-slate-50 border border-slate-200 flex items-center justify-center relative overflow-hidden transition-all duration-700 ease-in-out group/img",
+        image ? "grayscale-0" : "grayscale group-hover/img:grayscale-0",
         landscape ? "aspect-[16/9] w-full rounded-[2.5rem]" : "aspect-[4/5] rounded-[1.8rem]",
         className
     )}>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-700" />
-        {initials ? (
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-700 z-10" />
+        {image ? (
+            <img
+                src={image}
+                alt={initials || "Team member"}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+            />
+        ) : initials ? (
             <span className={cn(
                 "font-black tracking-tighter text-slate-200 transition-colors duration-500",
                 large ? "text-8xl md:text-9xl" : "text-4xl md:text-5xl",
@@ -87,7 +98,7 @@ const ImagePlaceholder = ({ initials, className, landscape = false, large = fals
         ) : (
             <IconUser size={large ? 120 : 48} strokeWidth={1} className="text-slate-100 group-hover/img:text-blue-50 transition-colors" />
         )}
-        <div className="absolute inset-0 ring-1 ring-inset ring-slate-900/5 rounded-inherit" />
+        <div className="absolute inset-0 ring-1 ring-inset ring-slate-900/5 rounded-inherit z-20" />
     </div>
 );
 
@@ -154,7 +165,7 @@ export default function CreativeAcknowledgementsPage() {
                         >
                             <div className="relative">
                                 <div className="absolute -inset-8 bg-blue-50/50 rounded-full blur-3xl -z-10 group-hover/img:bg-blue-100/50 transition-colors duration-1000" />
-                                <ImagePlaceholder large initials={developers.sam.initials} className="shadow-2xl group-hover/img:-translate-y-4 transition-transform duration-700" />
+                                <ImagePlaceholder large initials={developers.sam.initials} image={developers.sam.image} className="shadow-2xl group-hover/img:-translate-y-4 transition-transform duration-700" />
                                 <div className="absolute -bottom-6 -right-6 p-6 md:p-8 bg-white shadow-2xl rounded-[2rem] border border-slate-50 group-hover/img:translate-x-4 transition-transform duration-700 hidden sm:block">
                                     <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Technical Lead and Developer</p>
                                     <p className="text-2xl font-black text-slate-900 tracking-tighter">SAM</p>
@@ -213,7 +224,7 @@ export default function CreativeAcknowledgementsPage() {
                             >
                                 <div className="relative">
                                     <div className="absolute -inset-4 bg-slate-50 rounded-[2.5rem] -z-10 opacity-0 group-hover/img:opacity-100 transition-opacity" />
-                                    <ImagePlaceholder initials={leader.initials} className="shadow-xl group-hover/img:-translate-y-2 transition-transform duration-700" />
+                                    <ImagePlaceholder initials={leader.initials} image={leader.image} className="shadow-xl group-hover/img:-translate-y-2 transition-transform duration-700" />
                                 </div>
                                 <div className="space-y-4">
                                     <div>
@@ -242,7 +253,7 @@ export default function CreativeAcknowledgementsPage() {
                                 transition={{ delay: i * 0.1 }}
                                 className="group/img space-y-6 text-center sm:text-left"
                             >
-                                <ImagePlaceholder initials={member.initials} className="shadow-lg group-hover/img:-translate-y-2 transition-transform duration-700" />
+                                <ImagePlaceholder initials={member.initials} image={member.image} className="shadow-lg group-hover/img:-translate-y-2 transition-transform duration-700" />
                                 <div className="space-y-1">
                                     <h4 className={cn("text-xl font-bold text-slate-900 tracking-tight group-hover/img:text-blue-600 transition-colors", montserrat.className)}>{member.name}</h4>
                                     <p className={cn("text-[10px] font-medium uppercase tracking-widest text-slate-400", montserrat.className)}>Verified Tester</p>

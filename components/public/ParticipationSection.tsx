@@ -213,12 +213,13 @@ function ExpandableCards({ cards }: { cards: CardData[] }) {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
+                      className="shrink-0"
                     >
                       <Link
                         href={`/register?eventType=${encodeURIComponent(
                           active.event.type,
                         )}&eventId=${encodeURIComponent(active.event.id)}`}
-                        className="rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm"
+                        className="rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm whitespace-nowrap"
                       >
                         Register now
                       </Link>
