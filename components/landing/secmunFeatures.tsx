@@ -88,7 +88,7 @@ export function SecmunFeatures() {
                   className="relative mt-auto w-full overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/5 bg-slate-100 aspect-[16/9] dark:bg-zinc-900 shadow-2xl"
                 >
                   <Image
-                    src="/landing/finance-dashboard.jpg"
+                    src="/landing/finance-dashboard.png"
                     alt="Finance dashboard"
                     fill
                     className="object-cover opacity-90 transition-opacity hover:opacity-100"
@@ -133,7 +133,7 @@ export function SecmunFeatures() {
                   className="flex-1 h-48 w-full overflow-hidden rounded-2xl border border-neutral-200 dark:border-white/5 bg-slate-100 dark:bg-zinc-900 shadow-xl"
                 >
                   <Image
-                    src="/landing/inventory.jpg"
+                    src="/landing/inventory.png"
                     alt="Institutional memory"
                     width={1400}
                     height={800}
@@ -654,6 +654,8 @@ function HassleFreeCompare() {
             className="h-full w-full rounded-2xl"
             slideMode="hover"
             autoplay
+            firstImageText="BEFORE"
+            secondImageText="AFTER"
           />
         </div>
       </motion.div>

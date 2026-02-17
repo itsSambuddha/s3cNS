@@ -3,6 +3,8 @@ import { Cabin } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/Providers"
 import { Footer } from "@/components/layout/Footer"
+import { SplashScreen } from "@/components/ui/SplashScreen"
+
 
 const cabin = Cabin({ subsets: ["latin"] })
 
@@ -26,8 +28,9 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className={cabin.className}>
+        <SplashScreen />
         <Providers>{children}</Providers>
-        <Footer />
+        <Footer /> {/* Global Footer */}
       </body>
     </html>
   )

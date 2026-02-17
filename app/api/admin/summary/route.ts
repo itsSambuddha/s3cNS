@@ -57,6 +57,7 @@ export async function GET() {
 
     // 0) Security Check
     if (!user) {
+      console.log('[AuthDebug] /api/admin/summary: 401 Unauthorized - No user found')
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 

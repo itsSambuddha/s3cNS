@@ -6,6 +6,8 @@ import { motion, useScroll, useTransform, easeOut, AnimatePresence } from "frame
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
 import { FlipWords } from "@/components/ui/flip-words"
+import Link from 'next/link'
+import Image from 'next/image'
 import {
   Users,
   PieChart,
@@ -25,7 +27,7 @@ const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08 },
+    transition: { staggerChildren: 0.05 },
   },
 }
 
@@ -34,7 +36,7 @@ const fadeInUp = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: easeOut },
+    transition: { duration: 0.3, ease: easeOut },
   },
 }
 
@@ -275,8 +277,19 @@ export function Hero() {
       {/* --- BACKGROUND --- */}
       <motion.div
         style={{ y: yBg }}
-        className="pointer-events-none absolute inset-x-0 -top-40 -z-20 h-[520px] bg-[url('/hero/secmun-hero.jpg')] bg-cover bg-center opacity-[0.16] grayscale-[0.5] contrast-[1.1]"
-      />
+        className="pointer-events-none absolute inset-x-0 -top-40 -z-20 h-[520px] opacity-[0.16] grayscale-[0.5] contrast-[1.1]"
+      >
+        <div className="relative w-full h-full">
+          <Image
+            src="/hero/secmun-hero.png"
+            alt="SECMUN Hero Background"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+        </div>
+      </motion.div>
       <motion.div
         style={{ y: yGlow }}
         className="pointer-events-none absolute inset-0 -z-10"

@@ -14,19 +14,24 @@ import { X, Check } from 'lucide-react'
 import { Hero } from '@/components/landing/Hero'
 import { PwaInstallButton } from '@/components/ui/PwaInstallButton'
 
+import { ConstitutionPreviewSkeleton } from '@/components/skeletons/ConstitutionPreviewSkeleton'
+import { SeniorSecretariatCarouselSkeleton } from '@/components/skeletons/SeniorSecretariatCarouselSkeleton'
+import { SecmunFeaturesSkeleton } from '@/components/skeletons/SecmunFeaturesSkeleton'
+import { SecmunGlobeSkeleton } from '@/components/skeletons/SecmunGlobeSkeleton'
+
 // Lazy load heavy components
 const ConstitutionPreview = dynamic(() => import('@/components/landing/constitution-preview').then(mod => mod.ConstitutionPreview), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-muted/20" />
+  loading: () => <ConstitutionPreviewSkeleton />
 })
 const SeniorSecretariatCarousel = dynamic(() => import('@/components/secretariat/SeniorSecretariatCarousel').then(mod => mod.SeniorSecretariatCarousel), {
-  loading: () => <div className="h-96 w-full animate-pulse bg-muted/20" />
+  loading: () => <SeniorSecretariatCarouselSkeleton />
 })
 const SecmunFeatures = dynamic(() => import('@/components/landing/secmunFeatures').then(mod => mod.SecmunFeatures), {
-  loading: () => <div className="h-[800px] w-full animate-pulse bg-muted/20" />
+  loading: () => <SecmunFeaturesSkeleton />
 })
 const SecmunGlobe = dynamic(() => import('@/components/landing/secmunGlobe').then(mod => mod.SecmunGlobe), {
   ssr: false,
-  loading: () => <div className="h-96 w-full animate-pulse bg-muted/20" />
+  loading: () => <SecmunGlobeSkeleton />
 })
 const ParticipationSection = dynamic(() => import('@/components/public/ParticipationSection').then(mod => mod.ParticipationSection))
 

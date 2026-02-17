@@ -16,6 +16,10 @@ interface CompareProps {
   showHandlebar?: boolean;
   autoplay?: boolean;
   autoplayDuration?: number;
+  firstImageText?: string;
+  secondImageText?: string;
+  firstImageTextClassName?: string;
+  secondImageTextClassName?: string;
 }
 export const Compare = ({
   firstImage = "",
@@ -28,6 +32,10 @@ export const Compare = ({
   showHandlebar = true,
   autoplay = false,
   autoplayDuration = 5000,
+  firstImageText,
+  secondImageText,
+  firstImageTextClassName,
+  secondImageTextClassName,
 }: CompareProps) => {
   const [sliderXPercent, setSliderXPercent] = useState(initialSliderPercentage);
   const [isDragging, setIsDragging] = useState(false);
@@ -215,6 +223,16 @@ export const Compare = ({
                 )}
                 draggable={false}
               />
+              {firstImageText && (
+                <div
+                  className={cn(
+                    "absolute top-4 left-4 z-30 px-3 py-1.5 bg-black/50 backdrop-blur-sm border border-white/10 text-white rounded-lg text-sm font-medium",
+                    firstImageTextClassName
+                  )}
+                >
+                  {firstImageText}
+                </div>
+              )}
             </motion.div>
           ) : null}
         </AnimatePresence>
@@ -222,15 +240,27 @@ export const Compare = ({
 
       <AnimatePresence initial={false}>
         {secondImage ? (
-          <motion.img
-            className={cn(
-              "absolute top-0 left-0 z-[19]  rounded-2xl w-full h-full select-none",
-              secondImageClassname
+          <>
+            <motion.img
+              className={cn(
+                "absolute top-0 left-0 z-[19]  rounded-2xl w-full h-full select-none",
+                secondImageClassname
+              )}
+              alt="second image"
+              src={secondImage}
+              draggable={false}
+            />
+            {secondImageText && (
+              <div
+                className={cn(
+                  "absolute top-4 right-4 z-[19] px-3 py-1.5 bg-black/50 backdrop-blur-sm border border-white/10 text-white rounded-lg text-sm font-medium",
+                  secondImageTextClassName
+                )}
+              >
+                {secondImageText}
+              </div>
             )}
-            alt="second image"
-            src={secondImage}
-            draggable={false}
-          />
+          </>
         ) : null}
       </AnimatePresence>
     </div>

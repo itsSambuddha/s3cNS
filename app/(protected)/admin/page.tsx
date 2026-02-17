@@ -26,6 +26,8 @@ import {
   HardDrive,
 } from "lucide-react"
 
+import { TimetableMockModule } from "./_components/TimetableMockModule"
+
 type SecretariatSummary = {
   total: number
   active: number
@@ -147,6 +149,9 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </section>
+
+      {/* Provisional: Timetable */}
+
 
       {/* 1. Secretariat management */}
       <section className="grid gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.8fr)]">
@@ -333,12 +338,12 @@ export default function AdminDashboardPage() {
               href="/admin/gazette/new"
               primary
             />
-<AdminLinkCard
-  icon={Newspaper}
-  title="Manage issues"
-  description="Edit titles, themes, read time, and visibility of existing issues."
-  href="/admin/gazette/manage"
-/>
+            <AdminLinkCard
+              icon={Newspaper}
+              title="Manage issues"
+              description="Edit titles, themes, read time, and visibility of existing issues."
+              href="/admin/gazette/manage"
+            />
 
           </div>
         </Card>
@@ -461,6 +466,9 @@ export default function AdminDashboardPage() {
             /> */}
           </div>
         </Card>
+
+        {/* Provisional: Timetable */}
+        <TimetableMockModule />
       </section>
     </div>
   )
@@ -488,13 +496,12 @@ function AdminLinkCard({
   return (
     <Link href={href} className="block">
       <motion.div
-        className={`group h-full rounded-xl border p-3 text-xs shadow-sm transition-colors ${
-          danger
-            ? "border-rose-200/80 bg-rose-50/80 hover:border-rose-300 hover:bg-rose-50"
-            : primary
+        className={`group h-full rounded-xl border p-3 text-xs shadow-sm transition-colors ${danger
+          ? "border-rose-200/80 bg-rose-50/80 hover:border-rose-300 hover:bg-rose-50"
+          : primary
             ? "border-slate-200/80 bg-slate-50/80 hover:border-slate-300 hover:bg-white"
             : "border-slate-200/70 bg-slate-50/60 hover:border-slate-300 hover:bg-white"
-        }`}
+          }`}
         whileHover={{ y: -2, scale: 1.01 }}
       >
         <div className="mb-1 flex items-center justify-between gap-2">
@@ -525,9 +532,8 @@ function HealthItem({ icon: Icon, label, ok, message }: HealthItemProps) {
   return (
     <div className="flex items-start gap-2 rounded-lg bg-white/80 px-2 py-2">
       <div
-        className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded-full text-[10px] ${
-          ok ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
-        }`}
+        className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded-full text-[10px] ${ok ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
+          }`}
       >
         <Icon className="h-3 w-3" />
       </div>

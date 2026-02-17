@@ -77,12 +77,12 @@ export function ParticipationSection() {
               : "SECMUN's official press and media vertical.",
       src:
         item.type === "INTRA_SECMUN"
-          ? "/images/intra.jpg"
+          ? "/images/intra.png"
           : item.type === "INTER_SECMUN"
-            ? "/images/inter.jpg"
+            ? "/images/inter.png"
             : item.type === "WORKSHOP"
-              ? "/images/workshop.jpg"
-              : "/images/edblazon.jpg",
+              ? "/images/workshop.png"
+              : "/images/edblazon.png",
     }
     return { ...base, event: item.event }
   })
