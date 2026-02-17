@@ -19,6 +19,9 @@ import {
     IconMessageCircleHeart
 } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
+import InteractiveBackground from "@/components/ui/InteractiveBackground";
+import ContactForm from "@/components/developer/ContactForm";
+
 
 const montserrat = Montserrat({
     subsets: ["latin"],
@@ -73,20 +76,31 @@ const betaTeam = [
 // --- COMPONENTS ---
 
 
-const ImagePlaceholder = ({ initials, image, className, landscape = false, large = false }: { initials?: string; image?: string; className?: string; landscape?: boolean; large?: boolean }) => (
+const ImagePlaceholder = ({ initials, image, className, landscape = false, large = false, variant = 'bw' }: { initials?: string; image?: string; className?: string; landscape?: boolean; large?: boolean; variant?: 'bw' | 'blue' }) => (
     <div className={cn(
         "bg-slate-50 border border-slate-200 flex items-center justify-center relative overflow-hidden transition-all duration-700 ease-in-out group/img",
-        image ? "grayscale-0" : "grayscale group-hover/img:grayscale-0",
+        // Only apply global grayscale filter for 'bw' variant. For 'blue', we handle it inside to allow overlay blending.
+        variant === 'bw' && "grayscale group-hover/img:grayscale-0",
         landscape ? "aspect-[16/9] w-full rounded-[2.5rem]" : "aspect-[4/5] rounded-[1.8rem]",
         className
     )}>
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-700 z-10" />
         {image ? (
-            <img
-                src={image}
-                alt={initials || "Team member"}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105"
-            />
+            <>
+                <img
+                    src={image}
+                    alt={initials || "Team member"}
+                    className={cn(
+                        "absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105",
+                        // For blue variant: use grayscale 
+                        variant === 'blue' && "grayscale group-hover/img:grayscale-0"
+                    )}
+                />
+                {/* Blue Tint Overlay using mix-blend-soft-light for a subtle tint */}
+                {variant === 'blue' && (
+                    <div className="absolute inset-0 bg-blue-500 mix-blend-soft-light opacity-60 group-hover/img:opacity-0 transition-opacity duration-700 z-10 pointer-events-none" />
+                )}
+            </>
         ) : initials ? (
             <span className={cn(
                 "font-black tracking-tighter text-slate-200 transition-colors duration-500",
@@ -98,7 +112,7 @@ const ImagePlaceholder = ({ initials, image, className, landscape = false, large
         ) : (
             <IconUser size={large ? 120 : 48} strokeWidth={1} className="text-slate-100 group-hover/img:text-blue-50 transition-colors" />
         )}
-        <div className="absolute inset-0 ring-1 ring-inset ring-slate-900/5 rounded-inherit z-20" />
+        <div className="absolute inset-0 ring-1 ring-inset ring-slate-900/5 rounded-inherit z-20 pointer-events-none" />
     </div>
 );
 
@@ -134,22 +148,10 @@ const EditorialHeader = ({ title, subtitle }: { title: string; subtitle?: string
 
 export default function CreativeAcknowledgementsPage() {
     return (
-        <div className="min-h-screen bg-white selection:bg-blue-100 selection:text-blue-900 font-sans pb-40 overflow-x-hidden">
-            {/* --- GLASSMORPHISM BACKGROUND --- */}
-            <div className="fixed inset-0 pointer-events-none -z-10 bg-slate-50/30">
-                {/* Decorative Blobs */}
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-100/40 rounded-full blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[10%] right-[-10%] w-[45%] h-[45%] bg-sky-50/50 rounded-full blur-[100px]" />
-                <div className="absolute top-[20%] right-[10%] w-[35%] h-[35%] bg-white/60 rounded-full blur-[80px]" />
-                <div className="absolute bottom-[-5%] left-[10%] w-[30%] h-[30%] bg-blue-50/30 rounded-full blur-[90px]" />
-
-                {/* Glass Filter Layer */}
-                <div className="absolute inset-0 backdrop-blur-[120px]" />
-
-                {/* Subtle Pattern Grid */}
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-200/20 to-transparent" />
-                <div className="absolute inset-0 opacity-[0.03]"
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z' fill='%232563eb' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")` }} />
+        <div className="min-h-screen selection:bg-blue-100 selection:text-blue-900 font-sans pb-40 overflow-x-hidden relative isolate">
+            {/* --- INTERACTIVE BACKGROUND --- */}
+            <div className="fixed inset-0 pointer-events-none -z-10">
+                <InteractiveBackground />
             </div>
 
             <main className="max-w-7xl mx-auto px-6 pt-24 md:pt-40">
@@ -165,7 +167,7 @@ export default function CreativeAcknowledgementsPage() {
                         >
                             <div className="relative">
                                 <div className="absolute -inset-8 bg-blue-50/50 rounded-full blur-3xl -z-10 group-hover/img:bg-blue-100/50 transition-colors duration-1000" />
-                                <ImagePlaceholder large initials={developers.sam.initials} image={developers.sam.image} className="shadow-2xl group-hover/img:-translate-y-4 transition-transform duration-700" />
+                                <ImagePlaceholder variant="blue" large initials={developers.sam.initials} image={developers.sam.image} className="shadow-2xl group-hover/img:-translate-y-4 transition-transform duration-700" />
                                 <div className="absolute -bottom-6 -right-6 p-6 md:p-8 bg-white shadow-2xl rounded-[2rem] border border-slate-50 group-hover/img:translate-x-4 transition-transform duration-700 hidden sm:block">
                                     <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Technical Lead and Developer</p>
                                     <p className="text-2xl font-black text-slate-900 tracking-tighter">SAM</p>
@@ -242,7 +244,7 @@ export default function CreativeAcknowledgementsPage() {
 
                 {/* --- SECTION 3: BETA TEAM (ALL WITH PLACEHOLDERS) --- */}
                 <section className="mb-40">
-                    <EditorialHeader title="Beta Test Team" subtitle="Systems Verification" />
+                    <EditorialHeader title="Test Team" subtitle="Systems Verification" />
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
                         {betaTeam.map((member, i) => (
                             <motion.div
@@ -310,6 +312,12 @@ export default function CreativeAcknowledgementsPage() {
                             </div>
                         </motion.div>
                     </div>
+                </section>
+
+                {/* --- SECTION 5: CONTACT FORM --- */}
+                <section className="mb-40">
+                    <EditorialHeader title="Contact" subtitle="Get in Touch" />
+                    <ContactForm />
                 </section>
 
                 {/* --- FOOTER SYMBOLISM & LOGO --- */}

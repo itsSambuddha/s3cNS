@@ -106,12 +106,12 @@ export function Footer({ className }: { className?: string }) {
             </h4>
             <ul className="space-y-4 text-[13px] font-semibold text-slate-400">
               <li>
-                <Link href="#features" className="transition-colors hover:text-sky-400">
+                <Link href="/" className="transition-colors hover:text-sky-400">
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="#archives" className="transition-colors hover:text-sky-400">
+                <Link href="/archives" className="transition-colors hover:text-sky-400">
                   Archives & Inventory
                 </Link>
               </li>
@@ -130,12 +130,12 @@ export function Footer({ className }: { className?: string }) {
             </h4>
             <ul className="space-y-4 text-[13px] font-semibold text-slate-400">
               <li>
-                <Link href="#use-cases" className="transition-colors hover:text-sky-400">
+                <Link href="/" className="transition-colors hover:text-sky-400">
                   Control Room
                 </Link>
               </li>
               <li>
-                <Link href="#use-cases" className="transition-colors hover:text-sky-400">
+                <Link href="/use-cases" className="transition-colors hover:text-sky-400">
                   Alumni Handover
                 </Link>
               </li>
