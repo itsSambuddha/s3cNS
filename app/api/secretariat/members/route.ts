@@ -29,7 +29,7 @@ export async function GET(req: Request) {
 
   const members = await User.find(filter)
     .select(
-      "displayName email phone secretariatRole office academicDepartment year rollNo memberStatus canManageFinance canManageEvents",
+      "displayName email phone secretariatRole office academicDepartment year rollNo memberStatus canManageFinance canManageEvents photoURL",
     )
     .sort({ secretariatRole: 1, office: 1, displayName: 1 })
     .lean()
