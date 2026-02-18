@@ -17,6 +17,8 @@ export const viewport: Viewport = {
   themeColor: "#002f7a",
 }
 
+import { SmoothScroll } from "@/components/ui/SmoothScroll"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,8 +31,10 @@ export default function RootLayout({
       </head>
       <body className={cabin.className}>
         <SplashScreen />
-        <Providers>{children}</Providers>
-        <Footer /> {/* Global Footer */}
+        <SmoothScroll>
+          <Providers>{children}</Providers>
+          <Footer /> {/* Global Footer */}
+        </SmoothScroll>
       </body>
     </html>
   )

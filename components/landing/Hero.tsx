@@ -214,8 +214,9 @@ export function Hero() {
   }
 
   const { scrollY } = useScroll()
-  const yBg = useTransform(scrollY, [0, 400], [0, 80])
-  const yGlow = useTransform(scrollY, [0, 400], [0, 40])
+  const yBg = useTransform(scrollY, [0, 500], [0, 150]) // Deeper background parallax
+  const yGlow = useTransform(scrollY, [0, 500], [0, 50])
+  const yContent = useTransform(scrollY, [0, 400], [0, -40]) // Slight foreground lift
 
   // --- RENDER: DEAD SCREEN ---
   if (shutdownState === "DEAD") {
@@ -307,6 +308,7 @@ export function Hero() {
         {/* --- LEFT: CONTENT --- */}
         <motion.div
           className="flex-1 space-y-8 lg:max-w-2xl"
+          style={{ y: yContent }}
           initial="hidden"
           animate="visible"
           variants={staggerContainer}

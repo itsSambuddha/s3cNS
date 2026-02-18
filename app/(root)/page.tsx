@@ -93,9 +93,10 @@ export default function LandingPage() {
             <div className="grid gap-8 md:grid-cols-2">
               <motion.div
                 variants={fadeInUp}
+                whileHover={{ y: -5 }}
                 className="group relative overflow-hidden rounded-3xl border border-red-500/10 bg-white dark:bg-zinc-900/50 p-8 shadow-sm transition-all hover:shadow-xl hover:shadow-red-500/5"
               >
-                <div className="absolute top-0 right-0 p-4 opacity-10">
+                <div className="absolute top-0 right-0 p-4 opacity-10 transition-opacity group-hover:opacity-20">
                   <div className="w-24 h-24 rounded-full bg-red-500 blur-3xl" />
                 </div>
 
@@ -115,19 +116,27 @@ export default function LandingPage() {
                     "No unified record of member performance",
                     "High friction during secretariat handovers"
                   ].map((item, i) => (
-                    <li key={i} className="flex gap-3 text-sm text-muted-foreground/80">
+                    <motion.li
+                      key={i}
+                      className="flex gap-3 text-sm text-muted-foreground/80"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                    >
                       <span className="text-red-500 mt-1 flex-shrink-0">•</span>
                       <span>{item}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </motion.div>
 
               <motion.div
                 variants={fadeInUp}
+                whileHover={{ y: -5 }}
                 className="group relative overflow-hidden rounded-3xl border border-emerald-500/10 bg-white dark:bg-zinc-900/50 p-8 shadow-sm transition-all hover:shadow-xl hover:shadow-emerald-500/5"
               >
-                <div className="absolute top-0 right-0 p-4 opacity-10">
+                <div className="absolute top-0 right-0 p-4 opacity-10 transition-opacity group-hover:opacity-20">
                   <div className="w-24 h-24 rounded-full bg-emerald-500 blur-3xl" />
                 </div>
 
@@ -147,10 +156,17 @@ export default function LandingPage() {
                     "Scalable archive of secretariat insights",
                     "Mobile-ready interface for on-ground teams"
                   ].map((item, i) => (
-                    <li key={i} className="flex gap-3 text-sm text-muted-foreground/80">
+                    <motion.li
+                      key={i}
+                      className="flex gap-3 text-sm text-muted-foreground/80"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 + 0.2 }}
+                    >
                       <span className="text-emerald-500 mt-1 flex-shrink-0">✓</span>
                       <span>{item}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               </motion.div>
