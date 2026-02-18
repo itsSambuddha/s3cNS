@@ -30,7 +30,7 @@ const montserrat = Montserrat({
 });
 
 // --- DATA ---
-const samBio = "Building s3cNS wasn't a solo mission. It took a lot of guidance, patience, and late-night feedback to turn this idea into a reality.";
+const samBio = "s3cNS was forged in the silence of late-night sprints and refined by the collective feedback of the people on this page. It stands not just as code, but as a shared vision of a digital-first legacy for SECMUN.";
 
 const developers = {
     sam: {
@@ -170,7 +170,8 @@ export default function CreativeAcknowledgementsPage() {
                                 <ImagePlaceholder variant="blue" large initials={developers.sam.initials} image={developers.sam.image} className="shadow-2xl group-hover/img:-translate-y-4 transition-transform duration-700" />
                                 <div className="absolute -bottom-6 -right-6 p-6 md:p-8 bg-white shadow-2xl rounded-[2rem] border border-slate-50 group-hover/img:translate-x-4 transition-transform duration-700 hidden sm:block">
                                     <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Technical Lead and Developer</p>
-                                    <p className="text-2xl font-black text-slate-900 tracking-tighter">SAM</p>
+                                    <h3 className={cn("text-3xl font-bold text-slate-900 tracking-tight", montserrat.className)}>SAM</h3>
+                                    <p className={cn("text-xs font-medium uppercase tracking-[0.3em] bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500", montserrat.className)}>Secretary General</p>
                                 </div>
                             </div>
                         </motion.div>

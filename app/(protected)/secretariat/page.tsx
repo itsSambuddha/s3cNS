@@ -6,9 +6,9 @@ import { SecretariatMembersShowcase } from '@/components/secretariat/Secretariat
 
 export default function SecretariatPage() {
   return (
-    <main className="relative min-h-screen bg-background px-4 py-8 overflow-hidden">
+    <div className="relative w-full max-w-[100vw] overflow-x-hidden rounded-3xl bg-background px-4 py-8">
       {/* Atmosphere Background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[120px]" />
         <div className="absolute right-[-10%] top-[35%] h-[600px] w-[600px] rounded-full bg-slate-100/40 blur-[140px]" />
         <div className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
@@ -45,6 +45,6 @@ export default function SecretariatPage() {
         <SeniorSecretariatCarousel />
         <SecretariatMembersShowcase />
       </div>
-    </main>
+    </div>
   )
 }

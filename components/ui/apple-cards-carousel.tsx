@@ -33,7 +33,7 @@ export const CarouselContext = createContext<{
   onCardClose: (index: number) => void;
   currentIndex: number;
 }>({
-  onCardClose: () => {},
+  onCardClose: () => { },
   currentIndex: 0,
 });
 
@@ -226,7 +226,7 @@ export const Card = ({
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={handleOpen}
-        className="relative z-10 flex h-80 w-64 min-w-[240px] max-w-sm flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[24rem] md:w-64 dark:bg-neutral-900"
+        className="relative z-10 flex h-80 w-56 min-w-[200px] max-w-sm flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[24rem] md:w-64 md:min-w-[240px] dark:bg-neutral-900"
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
         <div className="relative z-40 p-8">

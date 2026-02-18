@@ -148,7 +148,7 @@ export function SeniorSecretariatCarousel() {
   if (!cards.length) return null
 
   return (
-    <section className="relative rounded-[2.5rem] border border-blue-200/60 dark:border-white/5 bg-white dark:bg-[#030712]/60 p-8 sm:p-12 shadow-xl shadow-blue-500/5 overflow-hidden group">
+    <section className="relative max-w-[100vw] rounded-3xl sm:rounded-[2.5rem] border border-blue-200/60 dark:border-white/5 bg-white dark:bg-[#030712]/60 p-4 sm:p-12 shadow-xl shadow-blue-500/5 overflow-x-hidden group">
       {/* Dynamic Background Atmosphere */}
       <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-blue-500/5 blur-[120px] pointer-events-none group-hover:bg-blue-500/10 transition-colors duration-1000" />
       <div className="absolute bottom-0 left-0 w-[50%] h-[50%] bg-emerald-500/5 blur-[120px] pointer-events-none" />

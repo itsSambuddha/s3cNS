@@ -84,14 +84,13 @@ export function SecretariatMembersShowcase() {
   const nextYear = currentYear + 1
 
   return (
-    <section className="mt-16 relative overflow-hidden rounded-[2.5rem] border border-blue-200/60 bg-white dark:bg-[#030712]/60 p-8 sm:p-12 shadow-xl shadow-blue-500/5 group">
+    <section className="mt-16 relative w-full max-w-[100vw] overflow-x-hidden rounded-3xl sm:rounded-[2.5rem] border border-blue-200/60 bg-white dark:bg-[#030712]/60 p-4 sm:p-12 shadow-xl shadow-blue-500/5 group">
       <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-emerald-500/5 blur-[100px] pointer-events-none" />
 
       <header className="relative z-10 mb-16 text-center space-y-6">
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.3em] text-emerald-700">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200/60 bg-emerald-50/50 px-3 py-1 text-xs font-black uppercase tracking-[0.2em] text-emerald-700">
           Operational Secretariat
-        </div>
-        <div className="space-y-2">
+        </div>        <div className="space-y-2">
           <h2 className="text-4xl font-black tracking-tight sm:text-5xl text-slate-900 dark:text-white leading-none">
             The USG Bureau
           </h2>
