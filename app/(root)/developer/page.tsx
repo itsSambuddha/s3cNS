@@ -331,7 +331,7 @@ export default function CreativeAcknowledgementsPage() {
                             <p className="text-[11px] font-black text-slate-400 uppercase tracking-[1em] mb-4">
                                 s3cNS Secretariat archive
                             </p>
-                            <h2 className={cn("text-8xl md:text-[15rem] font-black tracking-tighter text-slate-200/50 uppercase pointer-events-none select-none group-hover:text-blue-200/50 transition-colors duration-1000", montserrat.className)}>
+                            <h2 className={cn("text-8xl md:text-[15rem] font-black tracking-tighter text-slate-200/50 uppercase pointer-events-none select-none group-hover:text-blue-200/50 transition-colors duration-1000 italic", montserrat.className)}>
                                 SECMUN
                             </h2>
                         </div>

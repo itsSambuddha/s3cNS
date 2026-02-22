@@ -8,7 +8,13 @@ import {
   Instagram,
   Code,
 } from "lucide-react"
+import { Montserrat } from "next/font/google"
 import { cn } from "@/lib/utils"
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["900"],
+})
 
 export function Footer({ className }: { className?: string }) {
   const year = new Date().getFullYear()
@@ -26,7 +32,10 @@ export function Footer({ className }: { className?: string }) {
 
       {/* Ghost Background Text */}
       <div className="absolute top-0 left-0 right-0 flex justify-center opacity-[0.08] select-none pointer-events-none pt-4">
-        <span className="text-[20vw] font-black tracking-tighter leading-none text-white/20">
+        <span className={cn(
+          "text-[20vw] font-black tracking-tighter leading-none text-white/20 italic",
+          montserrat.className
+        )}>
           S3CNS
         </span>
       </div>
