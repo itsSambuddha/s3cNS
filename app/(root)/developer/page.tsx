@@ -168,7 +168,7 @@ export default function CreativeAcknowledgementsPage() {
                             <div className="relative">
                                 <div className="absolute -inset-8 bg-blue-50/50 rounded-full blur-3xl -z-10 group-hover/img:bg-blue-100/50 transition-colors duration-1000" />
                                 <ImagePlaceholder variant="blue" large initials={developers.sam.initials} image={developers.sam.image} className="shadow-2xl group-hover/img:-translate-y-4 transition-transform duration-700" />
-                                <div className="absolute -bottom-6 -right-6 p-6 md:p-8 bg-white shadow-2xl rounded-[2rem] border border-slate-50 group-hover/img:translate-x-4 transition-transform duration-700 hidden sm:block">
+                                <div className="absolute -bottom-6 -right-6 p-6 md:p-8 bg-white shadow-2xl rounded-[2rem] border border-slate-50 group-hover/img:translate-x-4 transition-transform duration-700">
                                     <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Technical Lead and Developer</p>
                                     <h3 className={cn("text-3xl font-bold text-slate-900 tracking-tight", montserrat.className)}>SAM</h3>
                                     <p className={cn("text-xs font-medium uppercase tracking-[0.3em] bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500", montserrat.className)}>Secretary General</p>
