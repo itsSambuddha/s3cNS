@@ -89,7 +89,7 @@ export default function ConstitutionPage() {
               <div className="inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/5 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 dark:bg-blue-500/10 dark:border-blue-500/20">
                 Official Institutional Ledger
               </div>
-              <h1 className="text-6xl font-black tracking-tighter text-slate-950 sm:text-9xl dark:text-white leading-[0.85]">
+              <h1 className="text-4xl sm:text-7xl lg:text-9xl font-black tracking-tighter text-slate-950 dark:text-white leading-[0.85]">
                 Mandate & <br /> <span className="text-blue-600">Constitution.</span>
               </h1>
               <p className="mx-auto max-w-2xl text-xl font-medium text-slate-500 leading-relaxed dark:text-zinc-400">

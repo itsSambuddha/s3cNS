@@ -289,7 +289,7 @@ export default function RefinedWalkthrough() {
               </div>
 
               <EditorialSubtitle>Knowledge Center 0.1</EditorialSubtitle>
-              <h1 className="text-6xl md:text-7xl font-black tracking-tighter leading-tight mb-10 uppercase">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-tight mb-10 uppercase">
                 System<br />
                 <span className="text-blue-600 italic">Manual</span>.
               </h1>
@@ -350,7 +350,7 @@ export default function RefinedWalkthrough() {
 
             <div className="relative">
               {/* DYNAMIC SVG CIRCUIT PATH */}
-              <svg className="absolute left-[23px] md:left-1/2 top-0 bottom-0 w-full h-full -translate-x-[23px] md:-translate-x-1/2 pointer-events-none z-0" style={{ height: 'calc(100% + 40px)' }}>
+              <svg className="absolute left-[31px] md:left-1/2 top-0 bottom-0 w-full h-full -translate-x-[31px] md:-translate-x-1/2 pointer-events-none z-0" style={{ height: 'calc(100% + 40px)' }}>
                 <motion.path
                   d="M 50% 0 L 50% 100%"
                   stroke="url(#circuit-gradient)"
@@ -386,13 +386,13 @@ export default function RefinedWalkthrough() {
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 1, ease: "backOut" }}
                     className={cn(
-                      "group relative flex flex-col md:flex-row items-center gap-10 md:gap-0 w-full",
+                      "group relative flex flex-col md:flex-row items-center md:items-center gap-8 md:gap-0 w-full",
                       i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
                     )}
                   >
                     {/* Card Node */}
-                    <div className="w-full md:w-[42%]">
-                      <div className="relative p-10 rounded-[3.5rem] bg-white border border-slate-100 shadow-[0_5px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_60px_-15px_rgba(59,130,246,0.15)] transition-all duration-700 group/card overflow-hidden">
+                    <div className="w-full md:w-[42%] pl-16 md:pl-0">
+                      <div className="relative p-6 sm:p-10 rounded-[2.5rem] sm:rounded-[3.5rem] bg-white border border-slate-100 shadow-[0_5px_40px_-15px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_60px_-15px_rgba(59,130,246,0.15)] transition-all duration-700 group/card overflow-hidden">
                         {/* Corner Accent */}
                         <div className="absolute top-0 right-0 p-8">
                           <div className="h-6 w-6 border-t-2 border-r-2 border-blue-100 group-hover/card:border-blue-600 transition-colors duration-500" />
@@ -425,14 +425,14 @@ export default function RefinedWalkthrough() {
                     </div>
 
                     {/* CENTRAL NEURAL NODE */}
-                    <div className="relative z-20 flex items-center justify-center group/node">
+                    <div className="relative z-20 flex items-center justify-center group/node self-start md:self-center ml-[7px] md:ml-0">
                       {/* Outer Rings */}
                       <div className="absolute inset-0 scale-[2.5] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
                         <div className="absolute inset-0 border border-blue-400/20 rounded-full animate-[spin_5s_linear_infinite]" />
                         <div className="absolute inset-0 border border-dashed border-blue-400/30 rounded-full animate-[spin_10s_linear_infinite_reverse]" />
                       </div>
 
-                      <div className="w-16 h-16 rounded-[2rem] bg-slate-950 text-white shadow-2xl flex items-center justify-center group-hover:bg-blue-600 transition-all duration-700 rotate-[45deg] group-hover:rotate-[0deg] relative overflow-hidden">
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-[1.5rem] md:rounded-[2rem] bg-slate-950 text-white shadow-2xl flex items-center justify-center group-hover:bg-blue-600 transition-all duration-700 rotate-[45deg] group-hover:rotate-[0deg] relative overflow-hidden">
                         <div className="-rotate-[45deg] group-hover:rotate-0 transition-transform duration-700">
                           {step.icon}
                         </div>

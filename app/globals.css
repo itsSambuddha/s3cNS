@@ -139,7 +139,25 @@ html.lenis body {
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden w-full;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Mobile-first safety: Prevent horizontal scrolling and force width constraints */
+  html,
+  body {
+    max-width: 100vw;
+    position: relative;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Universal Responsive Typography (Optional but recommended) */
+  :root {
+    --text-base: clamp(0.875rem, 0.5vw + 0.75rem, 1rem);
   }
 }
 

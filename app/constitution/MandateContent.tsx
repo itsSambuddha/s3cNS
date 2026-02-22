@@ -500,7 +500,7 @@ function DeptCard({
   narrativePoints: string[]
 }) {
   return (
-    <div className="group rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm transition-all hover:bg-slate-50 hover:shadow-2xl hover:shadow-blue-500/5 dark:bg-zinc-900/60 dark:border-white/5 dark:hover:bg-zinc-800/60">
+    <div className="group rounded-[2rem] sm:rounded-[2.5rem] border border-slate-100 bg-white p-6 sm:p-8 shadow-sm transition-all hover:bg-slate-50 hover:shadow-2xl hover:shadow-blue-500/5 dark:bg-zinc-900/60 dark:border-white/5 dark:hover:bg-zinc-800/60">
       <div className="flex items-start justify-between mb-8">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-[1.25rem] bg-slate-950 text-white flex items-center justify-center shadow-xl dark:bg-white dark:text-black transition-transform group-hover:scale-105">
@@ -548,7 +548,7 @@ function TimelineItem({ label, items }: { label: string; items: string[] }) {
       <div className="absolute -left-[27px] md:-left-[31px] top-1 h-5 w-5 rounded-full border-4 border-white bg-blue-600 shadow-lg shadow-blue-500/30 transition-transform group-hover:scale-125 dark:border-zinc-900" />
 
       <p className="text-xs font-black uppercase tracking-widest text-blue-600 font-mono mb-4">{label}</p>
-      <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:bg-white/5 dark:border-white/5">
+      <div className="p-6 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] bg-white border border-slate-100 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:bg-white/5 dark:border-white/5">
         <ul className="space-y-4">
           {items.map((item, i) => (
             <li key={i} className="text-sm font-medium text-slate-600 leading-relaxed flex gap-4 dark:text-zinc-400">
@@ -578,7 +578,7 @@ function BounceSection({
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-      className="relative overflow-hidden rounded-[3rem] border border-blue-200/40 bg-white p-10 shadow-2xl shadow-blue-500/[0.02] dark:border-white/5 dark:bg-zinc-900/60"
+      className="relative overflow-hidden rounded-[2.5rem] sm:rounded-[3rem] border border-blue-200/40 bg-white p-6 sm:p-10 shadow-2xl shadow-blue-500/[0.02] dark:border-white/5 dark:bg-zinc-900/60"
     >
       <div className="absolute top-0 right-0 h-32 w-32 bg-blue-500/5 blur-[80px]" />
       {icon && (

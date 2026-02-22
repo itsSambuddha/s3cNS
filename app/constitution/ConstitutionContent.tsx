@@ -34,8 +34,8 @@ export function ConstitutionContent() {
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 dark:bg-white/5 dark:border-white/10 dark:text-zinc-500">
             Formal Preamble
           </div>
-          <h2 className="text-4xl font-black tracking-tighter text-slate-950 dark:text-white sm:text-5xl">Preamble</h2>
-          <div className="space-y-6 text-base text-slate-600 leading-relaxed font-medium text-justify dark:text-zinc-400">
+          <h2 className="text-3xl font-black tracking-tighter text-slate-950 dark:text-white sm:text-5xl">Preamble</h2>
+          <div className="space-y-6 text-sm sm:text-base text-slate-600 leading-relaxed font-medium text-justify dark:text-zinc-400">
             <p>
               We, the members of the SECMUN (St. Edmund&apos;s College Model United Nations) Club,
               Recalling the club&apos;s founding in 2014 and recognizing its heritage in fostering

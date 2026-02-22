@@ -390,7 +390,7 @@ export function Hero() {
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ delay: 0.3, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="relative w-[340px] h-[340px] sm:w-[500px] sm:h-[500px] flex items-center justify-center">
+          <div className="relative w-[280px] h-[280px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px] flex items-center justify-center">
             {/* 0. BACKGROUND GRID & MATRIX */}
             <div
               className="absolute inset-[-15%] z-0 rounded-[4rem]"
