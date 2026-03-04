@@ -3,7 +3,9 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { motion } from "motion/react"
+import { useAppUser } from "@/hooks/useAppUser"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -77,8 +79,16 @@ const DEFAULT_SUMMARY: AdminSummary = {
 export default function AdminDashboardPage() {
   const [summary, setSummary] = useState<AdminSummary>(DEFAULT_SUMMARY)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const { user, loading: userLoading } = useAppUser()
 
   useEffect(() => {
+    if (userLoading) return;
+
+    if (!user || user.role !== "ADMIN") {
+      router.replace("/dashboard");
+      return;
+    }
     const load = async () => {
       try {
         setLoading(true)
@@ -86,7 +96,9 @@ export default function AdminDashboardPage() {
           credentials: "include",
         })
         if (!res.ok) {
-          console.error("Failed to load admin summary", res.status)
+          if (res.status !== 401) {
+            console.error("Failed to load admin summary", res.status)
+          }
           setSummary(DEFAULT_SUMMARY)
           return
         }
@@ -104,7 +116,7 @@ export default function AdminDashboardPage() {
       }
     }
     load()
-  }, [])
+  }, [user, userLoading, router])
 
   const currentYear = new Date().getFullYear()
   const { secretariat, gazette, system } = summary

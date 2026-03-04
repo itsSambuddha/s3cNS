@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useAppUser } from "@/hooks/useAppUser"
 import {
   Sheet,
   SheetContent,
@@ -24,6 +25,7 @@ type NotificationItem = {
 export function NotificationBell() {
   const [open, setOpen] = useState(false)
   const [items, setItems] = useState<NotificationItem[]>([])
+  const { user: appUser, loading } = useAppUser()
   const unreadCount = items.filter((n) => !n.readAt).length
 
   async function load() {
@@ -34,8 +36,11 @@ export function NotificationBell() {
   }
 
   useEffect(() => {
-    load()
-  }, [])
+    // Only fetch when we know the user is logged in
+    if (!loading && appUser) {
+      load()
+    }
+  }, [loading, appUser])
 
   async function markRead(id: string, url?: string) {
     setItems((prev) =>
@@ -81,9 +86,8 @@ export function NotificationBell() {
             <button
               key={n.id}
               onClick={() => markRead(n.id, n.url)}
-              className={`w-full rounded-md border px-3 py-2 text-left text-sm transition hover:bg-muted ${
-                !n.readAt ? "border-primary/40 bg-primary/5" : "border-border"
-              }`}
+              className={`w-full rounded-md border px-3 py-2 text-left text-sm transition hover:bg-muted ${!n.readAt ? "border-primary/40 bg-primary/5" : "border-border"
+                }`}
             >
               <div className="flex items-center justify-between gap-2">
                 <span className="font-medium">{n.title}</span>

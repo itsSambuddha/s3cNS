@@ -40,6 +40,8 @@ export function NotificationSettingsForm({
     announcements: initialPrefs.announcements ?? true,
   })
   const [saving, setSaving] = useState(false)
+  const [testing, setTesting] = useState(false)
+  const [testResult, setTestResult] = useState<"idle" | "sent" | "error">("idle")
 
   const update = (key: keyof Prefs, value: boolean) =>
     setPrefs((p) => ({ ...p, [key]: value }))
@@ -54,6 +56,27 @@ export function NotificationSettingsForm({
       })
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function onTest() {
+    setTesting(true)
+    setTestResult("idle")
+    try {
+      // Make sure the browser has granted permission
+      if (Notification.permission === "default") {
+        await Notification.requestPermission()
+      }
+      const res = await fetch("/api/notifications/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      })
+      setTestResult(res.ok ? "sent" : "error")
+    } catch {
+      setTestResult("error")
+    } finally {
+      setTesting(false)
     }
   }
 
@@ -87,9 +110,28 @@ export function NotificationSettingsForm({
         </div>
       ))}
 
-      <Button onClick={onSave} size="sm" disabled={saving}>
-        {saving ? "Saving..." : "Save changes"}
-      </Button>
+      <div className="h-px bg-border" />
+
+      <div className="flex flex-wrap items-center gap-3">
+        <Button onClick={onSave} size="sm" disabled={saving}>
+          {saving ? "Saving..." : "Save changes"}
+        </Button>
+
+        <Button onClick={onTest} size="sm" variant="outline" disabled={testing}>
+          {testing ? "Sending..." : "Send test notification"}
+        </Button>
+
+        {testResult === "sent" && (
+          <p className="text-xs text-emerald-600 font-medium">
+            ✓ Test sent — check your notifications (you may need to allow permissions first)
+          </p>
+        )}
+        {testResult === "error" && (
+          <p className="text-xs text-destructive font-medium">
+            ✗ Failed to send. Make sure push is enabled and you have an FCM token registered.
+          </p>
+        )}
+      </div>
     </div>
   )
 }

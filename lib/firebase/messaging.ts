@@ -28,13 +28,11 @@ async function getServiceWorkerRegistration() {
   if ("serviceWorker" in navigator) {
     try {
       const registration = await navigator.serviceWorker.register(
-        "/firebase-messaging-sw.js",
-        { scope: "/firebase-cloud-messaging-push-scope" }
+        "/firebase-messaging-sw.js"
       );
       return registration;
     } catch (error) {
       console.error("Service Worker registration failed: ", error);
-      // Fallback: Try to get existing registration without scope
       return navigator.serviceWorker.ready;
     }
   }
@@ -54,7 +52,7 @@ export async function requestNotificationToken(): Promise<string | null> {
     }
 
     const serviceWorkerRegistration = await getServiceWorkerRegistration();
-    
+
     console.log("Using VAPID key:", VAPID_KEY);
     const currentToken = await getToken(messaging, {
       vapidKey: VAPID_KEY,
@@ -73,8 +71,33 @@ export async function requestNotificationToken(): Promise<string | null> {
   }
 }
 
-export function subscribeForegroundMessages(cb: (payload: any) => void) {
+export function subscribeForegroundMessages(cb?: (payload: any) => void) {
   const app = initializeClientApp();
   const messaging = getMessaging(app);
-  return onMessage(messaging, cb);
+
+  return onMessage(messaging, (payload) => {
+    // Show a native OS notification when the app is in the foreground
+    const title = payload.notification?.title ?? "s3cNS"
+    const body = payload.notification?.body ?? ""
+    const url = payload.data?.url as string | undefined
+
+    if (Notification.permission === "granted") {
+      const n = new Notification(title, {
+        body,
+        icon: "/logo/s3cnsLogo.svg",
+        badge: "/logo/s3cnsLogo.svg",
+        tag: "s3cns-push",
+        renotify: true,
+      } as NotificationOptions & { renotify?: boolean })
+      if (url) {
+        n.onclick = () => {
+          window.focus()
+          window.location.href = url
+        }
+      }
+    }
+
+    // Call the optional extra handler (e.g. refresh bell count)
+    cb?.(payload)
+  })
 }
