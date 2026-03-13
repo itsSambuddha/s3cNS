@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth'
 import { firebaseAuth, googleProvider } from '@/lib/auth/firebase'
 import { Login04 } from '@/components/ui/login-04'
+import gsap from 'gsap'
 
 function LoginPageContent() {
   const router = useRouter()
@@ -12,13 +13,13 @@ function LoginPageContent() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [checkingAuth, setCheckingAuth] = useState(true)
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const redirectTo = searchParams.get('from') || '/dashboard'
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
-        // User is already logged in, redirect to dashboard
         router.push(redirectTo)
       } else {
         setCheckingAuth(false)
@@ -27,6 +28,38 @@ function LoginPageContent() {
 
     return () => unsubscribe()
   }, [router, redirectTo])
+
+  // GSAP Entrance Animation
+  useEffect(() => {
+    if (checkingAuth || !cardRef.current) return;
+
+    const card = cardRef.current;
+    
+    // Staggered Entrance Animation
+    const ctx = gsap.context(() => {
+      // Setup initial state for stagger items
+      gsap.set(".form-item", { y: 20, opacity: 0, rotateX: -10 });
+      
+      const tl = gsap.timeline({ defaults: { ease: "expo.out", duration: 1.2 } });
+      
+      tl.fromTo(card, 
+        { opacity: 0, scale: 0.9, y: 40, rotateX: 15 },
+        { opacity: 1, scale: 1, y: 0, rotateX: 0, duration: 1.5, ease: "power4.out" }
+      )
+      .to(".form-item", {
+        y: 0,
+        opacity: 1,
+        rotateX: 0,
+        stagger: 0.08,
+        duration: 0.8,
+        ease: "power3.out"
+      }, "-=1.0"); // Overlap with main card entrance
+    }, card);
+
+    return () => {
+      ctx.revert();
+    };
+  }, [checkingAuth])
 
   const setAuthCookieAndRedirect = async () => {
     const user = firebaseAuth.currentUser
@@ -76,25 +109,25 @@ function LoginPageContent() {
 
   if (checkingAuth) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
-        <div className="w-full max-w-md text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-sm text-muted-foreground">Checking authentication...</p>
+      <div className="flex flex-col items-center justify-center p-8 z-20">
+        <div className="relative h-20 w-20">
+          <div className="absolute inset-0 rounded-full border border-white/10" />
+          <div className="absolute inset-0 rounded-full border-2 border-blue-500 border-t-transparent animate-spin shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
+          <div className="absolute inset-3 rounded-full border border-blue-400/30 border-b-transparent animate-[spin_2s_linear_infinite_reverse]" />
         </div>
+        <p className="mt-8 text-xs font-bold uppercase tracking-[0.2em] text-slate-400 animate-pulse">Initializing Interface...</p>
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md">
-        <Login04
-          onEmailSubmit={handleEmailSubmit}
-          onGoogleSubmit={handleGoogleSubmit}
-          loading={loading}
-          error={error ?? undefined}
-        />
-      </div>
+    <div ref={cardRef} className="w-full max-w-lg relative z-20 will-change-transform" style={{ opacity: 0 }}>
+      <Login04
+        onEmailSubmitAction={handleEmailSubmit}
+        onGoogleSubmitAction={handleGoogleSubmit}
+        loading={loading}
+        error={error ?? undefined}
+      />
     </div>
   )
 }
@@ -102,11 +135,12 @@ function LoginPageContent() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
-        <div className="w-full max-w-md text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-sm text-muted-foreground">Loading...</p>
+      <div className="flex flex-col items-center justify-center p-8">
+        <div className="relative h-16 w-16">
+          <div className="absolute inset-0 rounded-full border-4 border-slate-100" />
+          <div className="absolute inset-0 rounded-full border-4 border-blue-500 border-t-transparent animate-spin" />
         </div>
+        <p className="mt-6 text-sm font-medium text-slate-500 tracking-wide">Loading workspace...</p>
       </div>
     }>
       <LoginPageContent />

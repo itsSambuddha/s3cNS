@@ -42,6 +42,7 @@
     "firebase": "^12.6.0",
     "firebase-admin": "^12.1.1",
     "framer-motion": "^12.23.25",
+    "gsap": "^3.14.2",
     "ioredis": "^5.9.3",
     "isomorphic-dompurify": "^3.0.0-rc.2",
     "jose": "^5.4.1",

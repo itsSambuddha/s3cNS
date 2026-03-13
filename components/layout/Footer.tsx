@@ -100,7 +100,7 @@ export function Footer({ className }: { className?: string }) {
               <p className="text-sm font-semibold text-slate-200">© {year} s3cNS Inc.</p>
               <p className="text-sm text-slate-400 leading-relaxed">
                 The operating digital system for <br />
-                St. Edmund&apos;s Secretariat.
+                St. Edmund&apos;s College Model United Nations Secretariat.
               </p>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] pt-4">
                 Designed & Engineered by Sam

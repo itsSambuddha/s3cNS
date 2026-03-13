@@ -2,7 +2,7 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { Scale, ShieldAlert, FileCheck, Info, RefreshCw, Gavel } from "lucide-react"
+import { Scale, ShieldAlert, FileCheck, Info, RefreshCw, Gavel, UserX, Copyright, AlertTriangle, Database } from "lucide-react"
 
 export default function TermsPage() {
   return (
@@ -53,29 +53,39 @@ export default function TermsPage() {
           <div className="space-y-12">
             {[
               {
-                icon: <Scale className="w-4 h-4" />,
-                title: "1. Use of the platform",
-                content: "The platform is intended for internal use by the SECMUN Secretariat and related college bodies. You agree not to misuse the system, attempt to break security, or use it for unlawful activities."
+                icon: <FileCheck className="w-4 h-4" />,
+                title: "1. Acceptance of Terms",
+                content: "By accessing or using the SECMUN Control Room platform, you agree to be bound by these comprehensive Terms & Conditions. If you do not agree with any part of these terms, you may not use our services."
               },
               {
                 icon: <ShieldAlert className="w-4 h-4" />,
-                title: "2. Accounts and access",
-                content: "Secretariat members are responsible for keeping their accounts secure and for actions taken under their logins. Access can be revoked by the Secretariat or college administration at any time."
+                title: "2. Accounts and Access",
+                content: "Secretariat members are responsible for maintaining the confidentiality of their accounts and for all activities under their login. Access privileges can be modified or revoked by the Secretariat or college administration at any time without prior notice."
               },
               {
-                icon: <FileCheck className="w-4 h-4" />,
-                title: "3. Data ownership",
-                content: "Conference and financial data entered into the platform remain the property of St. Edmund's College and the SECMUN Secretariat. The developer may use anonymised, aggregated data to improve the system."
+                icon: <UserX className="w-4 h-4" />,
+                title: "3. User Conduct",
+                content: "You agree not to misuse the system, attempt unauthorized access, disrupt service operations, or use the platform for any unlawful, fraudulent, or malicious activities that compromise the integrity of the SECMUN operations."
               },
               {
-                icon: <Info className="w-4 h-4" />,
-                title: "4. Limitation of liability",
-                content: "The platform is provided on a best-effort basis. There is no guarantee of uninterrupted availability, and the developer is not liable for indirect or consequential losses arising from its use."
+                icon: <Database className="w-4 h-4" />,
+                title: "4. Data Ownership & Privacy",
+                content: "All conference, user, and financial data entered into the platform remain the intellectual property of St. Edmund's College and the SECMUN Secretariat. Your use of the platform is also governed by our Privacy Policy."
+              },
+              {
+                icon: <Copyright className="w-4 h-4" />,
+                title: "5. Intellectual Property",
+                content: "The platform's proprietary design, underlying code, architecture, and original content are the exclusive intellectual property of the developer and St. Edmund's College, protected by applicable copyright laws."
+              },
+              {
+                icon: <AlertTriangle className="w-4 h-4" />,
+                title: "6. Limitation of Liability",
+                content: "The platform is provided on an 'as is' and 'as available' basis. There is no absolute guarantee of uninterrupted service, and neither the developer nor the institution shall be liable for indirect, incidental, or consequential damages arising from its use."
               },
               {
                 icon: <RefreshCw className="w-4 h-4" />,
-                title: "5. Changes to these terms",
-                content: "These terms may be updated when the platform changes or college requirements evolve. Continued use of the platform after updates means you accept the new terms."
+                title: "7. Modifications to Service & Terms",
+                content: "We reserve the right to modify, suspend, or discontinue any part of the platform, as well as update these terms at any time to reflect evolving college requirements. Continued use strongly implies acceptance of the revised terms."
               }
             ].map((section, idx) => (
               <section key={idx} className="space-y-4">

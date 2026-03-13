@@ -2,7 +2,7 @@
 'use client'
 
 import { motion } from "framer-motion"
-import { ShieldCheck, Lock, Eye, FileText } from "lucide-react"
+import { ShieldCheck, Lock, Eye, FileText, Database, Server, Cookie, Mail } from "lucide-react"
 
 export default function PrivacyPage() {
   return (
@@ -53,24 +53,39 @@ export default function PrivacyPage() {
           <div className="space-y-12">
             {[
               {
-                icon: <Lock className="w-4 h-4" />,
-                title: "1. Information collected",
-                content: "SECMUN Control Room stores only the data needed to run conferences and internal Secretariat work, such as user accounts, role assignments, event details, and financial records that you enter into the system."
+                icon: <Database className="w-4 h-4" />,
+                title: "1. Information We Collect",
+                content: "We collect information you explicitly provide, such as your name, email address, assigned roles, and operational data (e.g., event logs, financial entries) entered into the SECMUN Control Room."
               },
               {
                 icon: <Eye className="w-4 h-4" />,
-                title: "2. How information is used",
-                content: "Data is used solely to provide features like dashboards, notifications, archives, and analytics for your Secretariat. It is not sold or shared with third-party advertisers."
+                title: "2. How We Use Your Information",
+                content: "Your data is used exclusively to facilitate Secretariat operations, provide platform features like dashboards and notifications, authenticate your access, and maintain security logs. We never sell or share your data with third-party advertisers."
+              },
+              {
+                icon: <Lock className="w-4 h-4" />,
+                title: "3. Data Security & Storage",
+                content: "We implement industry-standard security protocols to protect your information against unauthorized access, alteration, or destruction. Access to data is strictly governed by role-based permissions."
+              },
+              {
+                icon: <Server className="w-4 h-4" />,
+                title: "4. Data Retention",
+                content: "Records are retained to maintain institutional memory for the SECMUN Secretariat. Data may be kept indefinitely unless a formal removal request is submitted by the Secretariat or college administration."
+              },
+              {
+                icon: <Cookie className="w-4 h-4" />,
+                title: "5. Cookies & Tracking",
+                content: "The platform uses essential cookies solely to maintain your active session, preferences, and security state. We do not employ tracking cookies for marketing or surveillance purposes."
               },
               {
                 icon: <ShieldCheck className="w-4 h-4" />,
-                title: "3. Data access and retention",
-                content: "Access to the workspace is limited to Secretariat members and other roles you explicitly grant. Records are retained for institutional memory unless the Secretariat or college administration requests removal."
+                title: "6. Third-Party Services",
+                content: "We utilize trusted third-party infrastructure (such as secure databases and authentication providers) essential for the platform's operation. These providers are constrained by strict data protection standards."
               },
               {
-                icon: <FileText className="w-4 h-4" />,
-                title: "4. Contact",
-                content: "For any questions about this policy or data requests, contact the Secretariat at secretariat@secmun.in"
+                icon: <Mail className="w-4 h-4" />,
+                title: "7. Contact Us",
+                content: "For any questions regarding this Privacy Policy, data access requests, or other privacy-related concerns, please contact the Developer or email us at secmun2024@gmail.com."
               }
             ].map((section, idx) => (
               <section key={idx} className="space-y-4">

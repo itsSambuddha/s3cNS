@@ -13,10 +13,12 @@ export default function CallbackPage() {
   }, [router])
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md text-center">
-        <p className="mt-4 text-sm text-muted-foreground">Please wait...</p>
+    <div className="flex flex-col items-center justify-center p-8">
+      <div className="relative h-16 w-16">
+        <div className="absolute inset-0 rounded-full border-4 border-slate-100" />
+        <div className="absolute inset-0 rounded-full border-4 border-blue-500 border-t-transparent animate-spin" />
       </div>
+      <p className="mt-6 text-sm font-medium text-slate-500 tracking-wide">Finalizing secure session...</p>
     </div>
   )
 }
