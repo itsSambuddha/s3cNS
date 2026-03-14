@@ -9,12 +9,11 @@ export async function GET() {
 
     // fetch only secretariat users that are USG or deputies
     const users = await User.find({
-      secretariatRole: "USG",
-      // optionally also filter by ACTIVE:
+      secretariatRole: { $in: ["USG", "DEPUTY_USG"] },
       memberStatus: "ACTIVE",
       office: { $ne: null },
     })
-      .select("displayName academicDepartment year office photoURL")
+      .select("displayName academicDepartment year office photoURL secretariatRole")
       .lean()
 
     // normalize to what SecretariatMembersShowcase expects
@@ -25,6 +24,7 @@ export async function GET() {
       year: u.year,
       office: u.office,      // must match keys in `secretariatMembers`
       photoURL: u.photoURL,
+      secretariatRole: u.secretariatRole,
     }))
 
     return NextResponse.json({ users: usgUsers }, { status: 200 })

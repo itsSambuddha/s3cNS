@@ -13,19 +13,20 @@ export type SecretariatRole =
   | 'SECRETARY_GENERAL'
   | 'DIRECTOR_GENERAL'
   | 'USG'
+  | 'DEPUTY_USG'
   | 'TEACHER'
   | 'MEMBER'
 
 export type SecretariatOffice =
-  | 'DELEGATION_AFFAIRS'
-  | 'SPONSORSHIP'
-  | 'MARKETING'
   | 'FINANCE'
+  | 'LOGISTICS'
+  | 'DELEGATIONS'
+  | 'ACADEMICS'
+  | 'PUBLIC_RELATIONS'
+  | 'MARKETING'
   | 'IT_DESIGN'
   | 'IT_SOCIAL_MEDIA'
-  | 'PUBLIC_RELATIONS'
   | 'CONFERENCE_MANAGEMENT'
-  | 'LOGISTICS'
   | null
 
 export type MemberStatus = 'ACTIVE' | 'ALUMNI' | 'APPLICANT' | 'REJECTED'
@@ -102,6 +103,7 @@ const UserSchema = new Schema<IUser>(
         'SECRETARY_GENERAL',
         'DIRECTOR_GENERAL',
         'USG',
+        'DEPUTY_USG',
         'TEACHER',
         'MEMBER',
       ],
@@ -110,15 +112,15 @@ const UserSchema = new Schema<IUser>(
     office: {
       type: String,
       enum: [
-        'DELEGATION_AFFAIRS',
-        'SPONSORSHIP',
-        'MARKETING',
         'FINANCE',
+        'LOGISTICS',
+        'DELEGATIONS',
+        'ACADEMICS',
+        'PUBLIC_RELATIONS',
+        'MARKETING',
         'IT_DESIGN',
         'IT_SOCIAL_MEDIA',
-        'PUBLIC_RELATIONS',
         'CONFERENCE_MANAGEMENT',
-        'LOGISTICS',
         null,
       ],
       default: null,

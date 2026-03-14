@@ -7,15 +7,15 @@ export type LeadershipRole =
   | 'TEACHER'
 
 export type OfficeKey =
-  | 'DELEGATION_AFFAIRS'
-  | 'SPONSORSHIP'
-  | 'MARKETING'
   | 'FINANCE'
+  | 'LOGISTICS'
+  | 'DELEGATIONS'
+  | 'ACADEMICS'
+  | 'PUBLIC_RELATIONS'
+  | 'MARKETING'
   | 'IT_DESIGN'
   | 'IT_SOCIAL_MEDIA'
-  | 'PUBLIC_RELATIONS'
   | 'CONFERENCE_MANAGEMENT'
-  | 'LOGISTICS'
 
 export type LeadershipMember = {
   id: string
@@ -114,25 +114,9 @@ export const secretariatMembers: SecretariatMember[] = [
     id: 'usg-delegation',
     name: 'To be announced',
     roleTitle: 'Under Secretary‑General',
-    office: 'DELEGATION_AFFAIRS',
+    office: 'DELEGATIONS',
     photoUrl: '/placeholders/delegation.jpg',
     email: 'delegation@example.com',
-  },
-  {
-    id: 'usg-sponsorship',
-    name: 'To be announced',
-    roleTitle: 'Under Secretary‑General',
-    office: 'SPONSORSHIP',
-    photoUrl: '/placeholders/sponsorship.jpg',
-    email: 'sponsorship@example.com',
-  },
-  {
-    id: 'usg-marketing',
-    name: 'To be announced',
-    roleTitle: 'Under Secretary‑General',
-    office: 'MARKETING',
-    photoUrl: '/placeholders/marketing.jpg',
-    email: 'marketing@example.com',
   },
   {
     id: 'usg-finance',
@@ -141,6 +125,14 @@ export const secretariatMembers: SecretariatMember[] = [
     office: 'FINANCE',
     photoUrl: '/placeholders/finance.jpg',
     email: 'finance@example.com',
+  },
+  {
+    id: 'usg-marketing',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'MARKETING',
+    photoUrl: '/placeholders/marketing.jpg',
+    email: 'marketing@example.com',
   },
   {
     id: 'usg-it-design',
@@ -182,16 +174,24 @@ export const secretariatMembers: SecretariatMember[] = [
     photoUrl: '/placeholders/logistics.jpg',
     email: 'logistics@example.com',
   },
+  {
+    id: 'usg-academics',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'ACADEMICS',
+    photoUrl: '/placeholders/academics.jpg',
+    email: 'academics@example.com',
+  }
 ]
 
 export const officeLabels: Record<OfficeKey, string> = {
-  DELEGATION_AFFAIRS: 'Delegation Affairs',
-  SPONSORSHIP: 'Sponsorship',
-  MARKETING: 'Marketing',
   FINANCE: 'Finance',
+  LOGISTICS: 'Logistics',
+  DELEGATIONS: 'Delegation Affairs',
+  ACADEMICS: 'Academics',
+  PUBLIC_RELATIONS: 'Public Relations',
+  MARKETING: 'Marketing',
   IT_DESIGN: 'IT · Design',
   IT_SOCIAL_MEDIA: 'IT · Social Media',
-  PUBLIC_RELATIONS: 'Public Relations',
   CONFERENCE_MANAGEMENT: 'Conference Management',
-  LOGISTICS: 'Logistics',
 }

@@ -19,37 +19,20 @@ type USGUser = {
   academicDepartment?: string
   year?: string
   office: string | null
+  secretariatRole: string
   photoURL?: string
-}
-
-function mergeMember(
-  staticMember: SecretariatMember,
-  dbUsers: USGUser[],
-): SecretariatMember {
-  const match = dbUsers.find(
-    (u) => u.office === staticMember.office, // static office key
-  )
-
-  if (!match) return staticMember
-
-  return {
-    ...staticMember,
-    name: match.displayName || staticMember.name,
-    academicDepartment:
-      match.academicDepartment || staticMember.academicDepartment,
-    year: match.year || staticMember.year,
-    photoUrl: match.photoURL || staticMember.photoUrl,
-    office: (match.office as SecretariatMember['office']) ?? staticMember.office,
-  }
 }
 
 function toTestimonial(member: SecretariatMember): Testimonial {
   const officeLabel =
     officeLabels[member.office] ?? member.office.replace(/_/g, ' ')
 
+  // Use the actual role from the database if available, else default to USG
+  const roleName = member.roleTitle || 'Under Secretary‑General'
+
   return {
     name: member.name,
-    designation: `${member.roleTitle} · ${officeLabel}`,
+    designation: `${roleName} · ${officeLabel}`,
     quote:
       `${member.academicDepartment || 'Department'}` +
       (member.year ? ` · ${member.year}` : ''),
@@ -74,18 +57,18 @@ export function SecretariatMembersShowcase() {
   }, [])
 
   // Create a combined list:
-  // For each OfficeKey, check if we have ACTIVE USGs in the database.
+  // For each OfficeKey, check if we have ACTIVE USGs/Deputies in the database.
   // If yes, show all of them. If no, show the static placeholder for that office.
   const officeKeys: OfficeKey[] = [
-    "DELEGATION_AFFAIRS",
-    "SPONSORSHIP",
-    "MARKETING",
-    "FINANCE",
-    "IT_DESIGN",
-    "IT_SOCIAL_MEDIA",
-    "PUBLIC_RELATIONS",
-    "CONFERENCE_MANAGEMENT",
-    "LOGISTICS",
+    'FINANCE',
+    'LOGISTICS',
+    'DELEGATIONS',
+    'ACADEMICS',
+    'PUBLIC_RELATIONS',
+    'MARKETING',
+    'IT_DESIGN',
+    'IT_SOCIAL_MEDIA',
+    'CONFERENCE_MANAGEMENT',
   ]
 
   const mergedMembers: SecretariatMember[] = []
@@ -94,13 +77,18 @@ export function SecretariatMembersShowcase() {
     const activeInOffice = dbUsers.filter((u) => u.office === key)
     if (activeInOffice.length > 0) {
       activeInOffice.forEach((user) => {
+        const roleLabel =
+          user.secretariatRole === 'DEPUTY_USG'
+            ? 'Deputy Under Secretary‑General'
+            : 'Under Secretary‑General'
+
         mergedMembers.push({
           id: user._id,
-          name: user.displayName || "To be announced",
-          roleTitle: "Under Secretary‑General",
+          name: user.displayName || 'To be announced',
+          roleTitle: roleLabel,
           office: user.office as OfficeKey,
-          photoUrl: user.photoURL || "/placeholders/member.jpg",
-          email: "", // email not fetched for USGs in this view
+          photoUrl: user.photoURL || '/placeholders/member.jpg',
+          email: '',
           academicDepartment: user.academicDepartment,
           year: user.year,
         })
