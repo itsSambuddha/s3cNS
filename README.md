@@ -8,14 +8,16 @@
   <img src="https://img.shields.io/badge/MongoDB-7.0-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
   <img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
 </p>
-![s3cNS](https://socialify.git.ci/itsSambuddha/s3cNS/image?font=Jost&language=1&name=1&owner=1&pattern=Circuit+Board&stargazers=1&theme=Auto)
+
+
+
 <p align="center">
   <strong>An enterprise-grade, full-stack secretariat management platform built for St. Edmund's College Model United Nations.</strong><br/>
   Designed to replace fragmented manual workflows with a unified, high-performance digital command system.
 </p>
 
 ---
-
+![s3cNS](https://socialify.git.ci/itsSambuddha/s3cNS/image?font=Jost&language=1&name=1&owner=1&pattern=Circuit+Board&stargazers=1&theme=Auto)
 ## Overview
 
 s3cNS (**S**ECMUN **S**ecretariat **N**ext-gen **S**ystem) is a mission-critical operational platform engineered for the modern SECMUN Secretariat. It consolidates delegation management, financial operations, logistics, governance, and institutional publishing into a single, cohesive system — purpose-built to the operational complexity of a student-run Model United Nations.
