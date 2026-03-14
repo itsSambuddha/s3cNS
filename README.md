@@ -1,334 +1,273 @@
-# s3cNS - SECMUN Secretariat Next-gen System
+# s3cNS — SECMUN Secretariat Next-gen System
 
-[![Version](https://img.shields.io/badge/version-1.1-blue.svg)](https://github.com/your-org/s3cns)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-s3cns.vercel.app-blue)](https://s3cns.vercel.app/)
-[![Next.js](https://img.shields.io/badge/Next.js-14+-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-7.0-green)](https://www.mongodb.com/)
+<p align="center">
+  <a href="https://s3cns.vercel.app/"><img src="https://img.shields.io/badge/Live-s3cns.vercel.app-1A2B4A?style=for-the-badge&logo=vercel&logoColor=white" /></a>
+  <img src="https://img.shields.io/badge/Version-1.2-2E6DA4?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-7.0-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
+</p>
 
-A comprehensive full-stack web application for managing St Edmund's College Model United Nations (SECMUN) secretariat operations, built with modern web technologies and designed as a Progressive Web App (PWA).
+<p align="center">
+  <strong>An enterprise-grade, full-stack secretariat management platform built for St. Edmund's College Model United Nations.</strong><br/>
+  Designed to replace fragmented manual workflows with a unified, high-performance digital command system.
+</p>
 
-## What is s3cNS?
+---
 
-s3cNS *(SECMUN Secretariat Next-gen System)* is a unified platform that modernizes and streamlines SECMUN secretariat operations by replacing disparate manual processes, spreadsheets, and disconnected systems with a single, mobile-ready web application. The system provides real-time insights, automated workflows, and comprehensive audit trails for all SECMUN conference activities.
+## Overview
 
-![s3cNS](https://socialify.git.ci/itsSambuddha/s3cNS/image?font=Jost&language=1&name=1&owner=1&pattern=Circuit+Board&stargazers=1&theme=Auto)
+s3cNS (**S**ECMUN **S**ecretariat **N**ext-gen **S**ystem) is a mission-critical operational platform engineered for the modern SECMUN Secretariat. It consolidates delegation management, financial operations, logistics, governance, and institutional publishing into a single, cohesive system — purpose-built to the operational complexity of a student-run Model United Nations.
 
-### Key Features
+The platform is not a prototype or internal tool. It is a production-grade application with a full RBAC model, an immutable audit trail, real-time collaboration features, and PWA capabilities — designed to scale across secretariat generations with institutional continuity as a core requirement.
 
-- **🔐 Authentication & RBAC**: Firebase-based authentication with role-based access control for 5 user roles
-- **📊 Real-time Dashboard**: Comprehensive analytics with KPIs, pending approvals, and personalized views
-- **💰 Finance Management**: Budget creation, expense tracking, payment processing, and financial reporting
-- **👥 Delegation Affairs**: Multi-step delegate registration, document management, and country allocation
-- **📅 Event Management**: Conference setup, committee management, and interactive scheduling
-- **🔔 Multi-channel Communication**: Push notifications, email, and WhatsApp messaging
-- **📱 PWA Support**: Installable web app with offline functionality
-- **📄 Document Management**: Position papers, resolutions, and gazette publishing
-- **🎯 Real-time Collaboration**: Live committee sessions, attendance tracking, and resolution voting
+---
 
-## Why s3cNS?
+## Architecture & Tech Stack
 
-**Before s3cNS:**
-- Scattered spreadsheets for budgets, events, and member data
-- Manual processes with error-prone approvals
-- No centralized audit trails or ownership tracking
-- Limited real-time insights and collaboration
+### Frontend
 
-**After s3cNS:**
-- Unified platform for all SECMUN operations
-- Automated workflows with comprehensive audit trails
-- Real-time insights and mobile-ready access
-- Secure, role-based access with granular permissions
+| Technology | Purpose |
+| :--- | :--- |
+| **Next.js 16** (App Router) | Core framework — SSR, Edge API routes, Server Actions |
+| **React 19** | UI rendering layer |
+| **TypeScript 5** | End-to-end static typing |
+| **Tailwind CSS + Shadcn UI** | Design system and component library |
+| **Framer Motion** | Cinematic transitions, parallax, and micro-interactions |
+| **React Hook Form + Zod** | Form state management and runtime schema validation |
 
-## Tech Stack
+### Backend & Infrastructure
 
-- **Frontend**: Next.js 14+, React 18+, TypeScript 5+
-- **Backend**: Node.js 18+, Next.js API Routes, Express.js
-- **Styling**: Tailwind CSS, Shadcn UI, Framer Motion
-- **Authentication**: Firebase Auth with RBAC
-- **Database**: MongoDB 7.0+ with Mongoose ODM
-- **Notifications**: Firebase Cloud Messaging, Resend, WhatsApp Business API
-- **File Storage**: UploadThing
-- **Payments**: Razorpay/Stripe integration
-- **Deployment**: Vercel serverless platform
+| Technology | Purpose |
+| :--- | :--- |
+| **Node.js 20+** | Server runtime |
+| **MongoDB Atlas + Mongoose** | Primary database with 17+ mission-critical models |
+| **Firebase Auth** | Authentication, session management, and RBAC enforcement |
+| **Firebase Cloud Messaging** | Push notification delivery |
+| **UploadThing** | Secure file and media storage |
+| **Resend** | Transactional email delivery |
+| **WhatsApp Business API** | Direct communication with delegates and members |
+| **Vercel** | Serverless deployment with Edge-optimized routing |
 
-## User Classes
+---
 
-s3cNS supports five distinct user classes with role-based access control:
+## Core Modules
 
-### 1. Secretariat Members (Admins)
-- **Role**: System administrators with full access
-- **Characteristics**: Technical proficiency, responsible for system configuration and oversight
-- **Experience**: Familiar with MUN operations and digital tools
+### Authentication & Access Control
 
-### 2. Delegation Affairs Team
-- **Role**: Manage delegate lifecycle from registration to participation
-- **Characteristics**: Detail-oriented, handle large volumes of delegate data
-- **Experience**: Customer service and administrative experience
+s3cNS implements a multi-tiered Role-Based Access Control (RBAC) system with five distinct user classes and nine departmental partitions:
 
-### 3. Finance Team
-- **Role**: Oversee budget management and financial operations
-- **Characteristics**: Financial acumen, attention to detail
-- **Experience**: Accounting or financial management experience
+**User Roles:** Admin · Leadership · Teacher · Office Bearer · Member
 
-### 4. Committee Chairs
-- **Role**: Lead committee sessions and evaluate delegate performance
-- **Characteristics**: Subject matter expertise in committee topics
-- **Experience**: MUN chairing experience
+**USG Offices:**
 
-### 5. Delegates/Participants
-- **Role**: Conference participants submitting position papers and participating in debates
-- **Characteristics**: Students aged 16-22, varying technical proficiency
-- **Experience**: Basic computer literacy, some MUN experience
+| Office | Core Scope |
+| :--- | :--- |
+| Finance | Budget creation, expense approvals, financial reporting |
+| Logistics | Asset management, venue coordination, inventory |
+| Delegation Affairs | Delegate registration, country allocation, double-delegation sync |
+| Public Relations | Outreach, institutional liaison |
+| Marketing | Social coordination, branding governance |
+| IT · Design | Platform maintenance, UI/UX, technical operations |
+| IT · Social Media | Digital engagement, live conference updates |
+| Conference Management | Timetable oversight, event execution, attendance |
+| Academics | Academic programming, guides, and institutional knowledge |
 
-## Operating Environment
+Fine-grained access is enforced via permission bitmasks (`canManageMembers`, `canApproveUSG`, `canManageFinance`, `canManageEvents`), with privacy controls for notification preferences and automated masking of sensitive data in audit logs.
 
-### Hardware Requirements
-- **Client**: Modern web browsers (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
-- **Server**: Vercel serverless functions or Node.js compatible hosting
-- **Database**: MongoDB Atlas or compatible MongoDB instance
+---
 
-### Software Requirements
-- **Frontend**: Next.js 14+, React 18+, TypeScript 5+
-- **Backend**: Node.js 18+, Express.js
-- **Database**: MongoDB 7.0+
-- **Authentication**: Firebase Auth
-- **Notifications**: Firebase Cloud Messaging, Nodemailer, WhatsApp Business API
+### Delegation Affairs (DA)
 
-### Network Requirements
-- HTTPS encryption for all communications
-- Reliable internet connectivity for real-time features
-- Support for WebSocket connections for live updates
+- Multi-event engine supporting Intra-SECMUN, Inter-SECMUN, Workshops, and specialized publications (e.g. Edblazon Times)
+- Role-specific registration tracks for Delegates, Campus Ambassadors, Journalists, and Video Journalists
+- Real-time status tracking for automated Email and WhatsApp dispatches
+- End-to-end country and portfolio allocation with committee interest management
 
-## Getting Started
+### Outbound Conference Management
 
-### Prerequisites
+- Centralized tracking for all external conference delegations, venues, and dates
+- Industry-grade **Double Delegation Smart Sync** — synchronises awards, interests, and portfolios for linked delegate pairs
+- High-fidelity achievement logging (`BEST_DELEGATE`, `HIGH_COMMENDATION`, `VERBAL_MENTION`, etc.)
+- Multi-day attendance tracking with automated percentage calculation
+- Integrated fee payment verification and financial compliance tracking
 
-- Node.js 18+
-- MongoDB database (Atlas recommended)
-- Firebase project with authentication enabled
-- Firebase service account key
-- Payment gateway accounts (Razorpay/Stripe)
-- Email service provider (Resend) API keys
-- WhatsApp Business API access
-- File storage service (UploadThing) credentials
+### Finance Operations (FinOps)
 
-### Installation
+- Categorised ledger tracking for Budgets, Expenses, Reimbursements, and Dues
+- Departmental budgeting with automated linking to USG offices and specific events
+- Multi-tier approval pipeline with automated review flows for leadership and faculty
+- Immutable audit trail recording every transaction with creator and payer timestamps
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-org/s3cns.git
-   cd s3cns
-   ```
+### Logistics & Inventory
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+- Real-time asset tracking with condition metadata (`GOOD`, `FAIR`, `DAMAGED`, `LOST`)
+- Dynamic checkout and return management for secretariat members
+- Authorised hardware registry for conference operations
+- Interactive timetable engine with class-wise session management
 
-3. **Set up environment variables**
+### Institutional Framework
 
-   Copy `.env.example` to `.env.local` and fill in your configuration:
+- Digital hosting for the SECMUN Constitution, Mandate, and Governing Laws
+- Searchable, filterable institutional census of all members
+- Self-service Academy with operational guides, FAQs, and manuals
+- Service account vault for institutional credential management and rotation
 
-   ```bash
-   cp .env.example .env.local
-   ```
+### Publishing & Engagement
 
-   Required environment variables:
-   - `MONGODB_URI`: Your MongoDB connection string
-   - `NEXTAUTH_SECRET`: Random secret for NextAuth
-   - `FIREBASE_API_KEY`: Firebase project API key
-   - `FIREBASE_AUTH_DOMAIN`: Firebase auth domain
-   - `FIREBASE_PROJECT_ID`: Firebase project ID
-   - `FIREBASE_PRIVATE_KEY`: Firebase service account private key
-   - `FIREBASE_CLIENT_EMAIL`: Firebase service account email
-   - `UPLOADTHING_SECRET`: UploadThing API secret
-   - `UPLOADTHING_APP_ID`: UploadThing app ID
-   - `RESEND_API_KEY`: Resend email API key
-   - `RAZORPAY_KEY_ID`: Razorpay/Stripe API keys
-   - `WHATSAPP_API_KEY`: WhatsApp Business API credentials
+- Full-featured **Gazette** publishing engine with policy, official, and community categories
+- Cinematic multimedia galleries with historical records of awards and secretariat milestones
+- Gamified recognition system with badges and contribution milestones
 
-4. **Run the development server**
-   ```bash
-   npm run dev
-   ```
+---
 
-5. **Open your browser**
+## API Reference
 
-   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+The platform exposes **30+ specialised API modules**. All endpoints enforce authentication and RBAC middleware validation.
 
-### Database Setup
+| Module | Endpoint | Description |
+| :--- | :--- | :--- |
+| Delegation Affairs | `/api/da` | Registration processing and country allocations |
+| Outbound Conferences | `/api/outbound-conference` | External delegation and award management |
+| Finance | `/api/finance` | Budgeting, proposals, and automated ledger recording |
+| Attendance | `/api/attendance` | Multi-tiered tracking (`/mark`, `/report`, `/summary`) |
+| Gazette | `/api/gazette` | Conference news content management |
+| Achievements | `/api/achievements` | Gamification and recognition engine |
+| Notifications | `/api/notifications` | FCM token management and push delivery |
 
-The application uses MongoDB with Mongoose ODM. The system automatically creates collections and indexes on first run. Key collections include:
+---
 
-- **Users**: User profiles, roles, and permissions
-- **Events**: Conference and committee management
-- **DelegateRegistrations**: Registration and allocation data
-- **FinanceRecords**: Budgets, expenses, and payments
-- **Notifications**: Communication logs and preferences
+## Database Schema
 
-## Usage
+Managed via Mongoose ODM with **17+ mission-critical models**:
 
-### For Secretariat Members
+| Model | Description |
+| :--- | :--- |
+| `User` | Profiles with UID, Role, Office, and permission flags |
+| `DelegateRegistration` | Nested data structure for individual and double-delegations |
+| `OutboundConference` | Venues, dates, delegates, and `DelegateAward` records |
+| `FinanceRecord` | High-precision records for every financial transaction |
+| `Asset` / `AssetCheckout` | Real-time state management for logistics inventory |
+| `Event` / `Committee` | Core conference structural data |
 
-1. **Sign In**: Use your SECMUN account credentials
-2. **Complete Onboarding**: Set up your profile and role
-3. **Access Dashboard**: View your personalized overview
-4. **Navigate Modules**: Access finance, events, directory, etc.
-
-### Key Workflows
-
-- **Budget Management**: Create budgets, track expenses, submit proposals
-- **Event Coordination**: Manage SEC-NEXUS events and delegate information
-- **Member Directory**: View and update secretariat member profiles
-- **Notifications**: Receive updates and send announcements
+---
 
 ## Project Structure
 
 ```
 s3cns/
-├── app/                    # Next.js app directory
-│   ├── (auth)/            # Authentication pages
-│   ├── (protected)/       # Protected routes
-│   ├── (root)/            # Landing page
-│   └── api/               # API routes
-├── components/            # React components
-│   ├── ui/               # Reusable UI components
-│   ├── layout/           # Layout components
-│   └── modules/          # Feature-specific components
-├── lib/                   # Utility libraries
-│   ├── auth/             # Authentication logic
-│   ├── db/               # Database models and connections
-│   ├── firebase/         # Firebase configuration
-│   └── services/         # Business logic services
-├── hooks/                 # Custom React hooks
-├── public/                # Static assets
-└── types/                 # TypeScript type definitions
+├── app/
+│   ├── (auth)/             # Authentication flows — Login, Signup, Onboarding
+│   ├── (protected)/        # Core platform modules — Dashboard, Finance, DA
+│   ├── (public)/           # Public portals — Gallery, News, Gazette
+│   ├── (root)/             # Cinematic landing page
+│   ├── api/                # 30+ RESTful API modules
+│   ├── attendance/         # Real-time attendance tracking
+│   ├── constitution/       # Institutional framework documents
+│   └── gazette/            # Conference publishing engine
+├── components/
+│   ├── ui/                 # Atomic UI components (Shadcn)
+│   ├── layout/             # Navbars, Sidebars, Footers
+│   └── modules/            # Feature-rich modular components (Finance, DA)
+├── lib/
+│   ├── db/                 # MongoDB models
+│   ├── auth/               # Firebase integration and RBAC logic
+│   ├── secretariat/        # Business logic for USG offices
+│   └── firebase/           # FCM and Firebase Admin SDK
+├── hooks/                  # Custom React hooks
+├── public/                 # Static assets and PWA manifests
+└── types/                  # Centralised TypeScript definitions
 ```
-
-## API Reference
-
-The application provides comprehensive RESTful APIs for all major operations:
-
-### Authentication Endpoints
-- `POST /api/auth/login` - User authentication
-- `POST /api/auth/logout` - User logout
-- `GET /api/auth/session` - Session validation
-
-### User Management Endpoints
-- `GET /api/users` - List users with filtering
-- `POST /api/users` - Create new user
-- `PUT /api/users/:id` - Update user profile
-- `DELETE /api/users/:id` - Deactivate user
-
-### Finance Endpoints
-- `GET /api/finance/budgets` - List budgets
-- `POST /api/finance/budgets` - Create budget
-- `GET /api/finance/expenses` - List expenses
-- `POST /api/finance/expenses` - Submit expense
-- `PUT /api/finance/expenses/:id/approve` - Approve expense
-
-### Delegation Affairs Endpoints
-- `GET /api/da/registrations` - List delegate registrations
-- `POST /api/da/registrations` - Submit registration
-- `PUT /api/da/registrations/:id/approve` - Approve registration
-- `POST /api/da/allocations` - Allocate countries/committees
-
-### Event Management Endpoints
-- `GET /api/events` - List events
-- `POST /api/events` - Create event
-- `PUT /api/events/:id` - Update event
-- `GET /api/events/:id/committees` - Get event committees
-
-### Notification Endpoints
-- `GET /api/notifications` - Get user notifications
-- `POST /api/notifications` - Send notification
-- `PUT /api/notifications/:id/read` - Mark as read
-
-## Performance Requirements
-
-- **Response Time**: API calls < 500ms, page loads < 2s
-- **Throughput**: Handle 1000+ concurrent users during conferences
-- **Availability**: 99.5% uptime SLA
-- **Scalability**: Horizontal scaling support via Vercel platform
-
-## Security Requirements
-
-- **Authentication**: Firebase Auth with multi-factor authentication support
-- **Authorization**: Granular permissions based on user roles and offices
-- **Data Protection**: Encryption of sensitive data (financial info, personal details)
-- **Compliance**: GDPR compliance for EU user data
-- **Audit Trail**: Comprehensive logging of all system activities
-
-## Deployment Architecture
-
-### Development Environment
-- Local development with Next.js dev server
-- MongoDB local instance or MongoDB Atlas
-- Firebase emulator for authentication and functions
-
-### Production Environment
-- **Frontend/Backend**: Vercel serverless deployment
-- **Database**: MongoDB Atlas
-- **Authentication**: Firebase Auth production project
-- **File Storage**: UploadThing production environment
-- **Email**: Resend production account
-- **Notifications**: Firebase Cloud Messaging production
-- **Payments**: Razorpay/Stripe production accounts
-
-### CI/CD Pipeline
-- GitHub Actions for automated testing and deployment
-- ESLint and TypeScript checking
-- Automated deployment to Vercel on main branch pushes
-
-## Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-### Code Quality
-
-The project uses:
-- **ESLint** for code linting
-- **Prettier** for code formatting
-- **TypeScript** for type safety
-- **Jest** for testing (framework configured)
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
-
-- Setting up your development environment
-- Code style and standards
-- Submitting pull requests
-- Reporting issues
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- **Documentation**: Check the `/docs` directory for detailed guides
-- **Issues**: Report bugs and request features on GitHub
-- **Discussions**: Join community discussions for questions
-
-## Acknowledgments
-
-- Built for St Edmund's College Model United Nations
-- Powered by Next.js and the amazing open-source community
-- Special thanks to all SECMUN secretariat members for their feedback
 
 ---
 
-**Ready to streamline SECMUN operations?** Sign in to s3cNS and experience the future of secretariat management.
+## Security & Performance
 
-## Demo
+**Security**
+- Full RBAC middleware on all API routes preventing unauthorised access
+- CSRF protection and Secure Cookie management
+- Zod-powered schema validation on all API inputs to prevent NoSQL injection
+- IP logging and User-Agent auditing for session integrity
+- Environment secrets managed exclusively via Vercel — never committed to source
 
-https://s3cns.vercel.app/ 
-##### ***Click on the Link Above to get a Demo of the platform*** 
+**Performance**
+- API response times targeted at < 300ms
+- Dynamic imports for heavy modules (Gallery, Gazette) to optimise bundle size
+- Image optimisation via `next/image` and UploadThing CDN
+- Next.js 16 App Router with Edge-optimised API routes
 
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18.17.0 or higher
+- MongoDB Atlas cluster
+- Firebase project (Auth + Cloud Messaging)
+- UploadThing account
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/itsSambuddha/s3cNS.git
+cd s3cns
+
+# Install dependencies
+npm install
+
+# Configure environment variables
+cp .env.example .env.local
+# Edit .env.local with your credentials — never commit this file
+```
+
+### Environment Variables
+
+```env
+# Database
+MONGODB_URI=your_mongodb_connection_string
+
+# Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+FIREBASE_PROJECT_ID=...
+FIREBASE_PRIVATE_KEY=...
+
+# Storage & Services
+UPLOADTHING_SECRET=...
+UPLOADTHING_APP_ID=...
+RESEND_API_KEY=...
+```
+
+```bash
+# Start development server
+npm run dev
+```
+
+---
+
+## Contributing
+
+Contributions are welcome and held to a high standard of quality and consistency.
+
+1. Review existing design tokens in `styles/globals.css` before introducing new styles
+2. All new components must be fully typed with TypeScript
+3. Follow the established modular structure for feature development
+4. Submit a Pull Request with a clear, detailed summary of changes and rationale
+
+---
+
+## License
+
+Licensed under the [MIT License](./LICENSE).
+
+Built for **St. Edmund's College Model United Nations** — Shillong, India.  
+Designed and engineered by **Sambuddha Das**.
+
+---
+
+<p align="center">
+  <a href="https://s3cns.vercel.app/">s3cns.vercel.app</a> · <a href="https://s3cns.vercel.app/help">Support Desk</a> · <a href="https://s3cns.vercel.app/developer">Developer</a>
+</p>
