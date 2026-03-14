@@ -5,3 +5,4 @@ export { Event, type EventDoc, type EventType, type EventStatus } from './models
 export { Committee, type CommitteeDoc } from './models/Committee'
 export { Portfolio, type PortfolioDoc, type PortfolioType } from './models/Portfolio'
 export { DelegateRegistration, type DelegateRegistrationDoc, type DelegateStatus, type InterestType } from './models/DelegateRegistration'
+export { OutboundConference, type OutboundConferenceDoc, type OutboundDelegate, type DelegateAward, type DelegateStatus as OutboundDelegateStatus } from './models/OutboundConference'

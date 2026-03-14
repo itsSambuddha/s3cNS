@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
@@ -9,6 +10,7 @@ import { useAppUser } from "@/hooks/useAppUser"
 import { usePushRegistration } from "@/hooks/usePushRegistration"
 import { FinanceCard } from "./FinanceCard"
 import { canUseDaModule } from "@/lib/da/access"
+import { canManageDelegationTeam } from "@/lib/delegation-team/access"
 
 const pageStagger = {
   hidden: {},
@@ -32,6 +34,28 @@ export default function DashboardPage() {
   const { user: fbUser, loading: authLoading } = useAuth()
   const { user: appUser, loading: appLoading } = useAppUser()
   usePushRegistration()
+
+  const [summary, setSummary] = useState<{
+    eventsCount: number
+    pendingApprovals: number
+  } | null>(null)
+
+  useEffect(() => {
+    const loadSummary = async () => {
+      try {
+        const res = await fetch("/api/dashboard/summary")
+        if (res.ok) {
+          const data = await res.json()
+          setSummary(data)
+        }
+      } catch (err) {
+        console.error("Failed to load dashboard summary:", err)
+      }
+    }
+    if (fbUser && appUser) {
+      loadSummary()
+    }
+  }, [fbUser, appUser])
 
   if (authLoading || appLoading) {
     return (
@@ -69,6 +93,9 @@ export default function DashboardPage() {
   // SHOW DA CARD ONLY FOR: role === ADMIN AND secretariatOffice === DELEGATION_AFFAIRS
   const showDaCard = canUseDaModule(appUser)
 
+  // SHOW DELEGATION TEAM CARD FOR: President, SG, DG, Teachers, Admins
+  const showDelegationTeamCard = canManageDelegationTeam(appUser)
+
 
   return (
     <motion.div
@@ -93,8 +120,8 @@ export default function DashboardPage() {
                 Welcome back, {displayName}.
               </h1>
               <p className="max-w-xl text-sm font-medium text-slate-500 dark:text-zinc-400">
-                This overview will soon reflect your real events, finances, and
-                approvals based on your role.
+                This overview now reflects real events, finances, and
+                approvals based on the live database.
               </p>
             </div>
           </div>
@@ -132,7 +159,9 @@ export default function DashboardPage() {
               <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
             </div>
             <div>
-              <p className="text-4xl font-black text-slate-900 dark:text-white">3</p>
+              <p className="text-4xl font-black text-slate-900 dark:text-white">
+                {summary?.eventsCount ?? 0}
+              </p>
               <p className="mt-1 text-xs font-bold text-slate-500 dark:text-zinc-500">
                 Active SEC‑NEXUS events
               </p>
@@ -164,7 +193,9 @@ export default function DashboardPage() {
               <div className="h-2 w-2 rounded-full bg-emerald-500" />
             </div>
             <div>
-              <p className="text-4xl font-black text-slate-900 dark:text-white">5</p>
+              <p className="text-4xl font-black text-slate-900 dark:text-white">
+                {summary?.pendingApprovals ?? 0}
+              </p>
               <p className="mt-1 text-xs font-bold text-slate-500 dark:text-zinc-500">
                 Pending across all modules
               </p>
@@ -258,6 +289,47 @@ export default function DashboardPage() {
             <div className="mt-4">
               <span className="inline-flex rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
                 Open DA module
+              </span>
+            </div>
+          </Link>
+        </motion.div>
+      )}
+
+      {/* Delegation Team Management card – only for Senior Secretariat */}
+      {showDelegationTeamCard && (
+        <motion.div
+          variants={fadeInUp}
+          whileHover={{ y: -4, boxShadow: "0 18px 40px rgba(109, 40, 217, 0.08)" }}
+          transition={{ type: "spring", stiffness: 260, damping: 22 }}
+          className="group relative overflow-hidden rounded-[2rem] border border-violet-200/60 bg-white p-6 shadow-xl shadow-violet-500/5 dark:border-white/5 dark:bg-white/5 cursor-pointer"
+        >
+          <div className="absolute top-0 right-0 w-[40%] h-full bg-violet-400/5 blur-[60px] pointer-events-none group-hover:bg-violet-400/10 transition-colors" />
+          <Link href="/delegation-team" className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-violet-200/60 bg-violet-50/70 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-violet-700 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300">
+                  <span>🌏</span> Senior Secretariat
+                </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
+                  Delegation Team Management
+                </h2>
+                <p className="mt-1 text-sm font-medium text-slate-500 dark:text-zinc-400">
+                  Enroll members, track attendance, record awards, and manage galleries for outbound conferences.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {['Members', 'Attendance', 'Awards', 'Gallery'].map(f => (
+                  <span key={f} className="rounded-full bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-violet-600 dark:text-violet-300">
+                    {f}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="shrink-0">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-5 py-2.5 text-[11px] font-black uppercase tracking-wider text-white shadow-lg shadow-violet-500/20 group-hover:bg-violet-700 transition-colors">
+                Open Module →
               </span>
             </div>
           </Link>

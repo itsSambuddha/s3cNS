@@ -19,7 +19,7 @@ export function canUseDaModule(user: UserWithDaPermissions): boolean {
   ) {
     return true
   }
-  if (user.secretariatRole === 'USG' && user.office === 'DELEGATION_AFFAIRS') {
+  if (user.secretariatRole === 'USG' && user.office === 'DELEGATIONS') {
     return true
   }
   return false
