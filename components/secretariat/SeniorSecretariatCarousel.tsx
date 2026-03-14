@@ -136,9 +136,35 @@ export function SeniorSecretariatCarousel() {
     load()
   }, [])
 
-  const mergedMembers: LeadershipMember[] = leadershipMembers.map((m) =>
-    mergeMember(m, dbUsers),
-  )
+  // Determine which cards to show.
+  // For each essential leadership role, find the ACTIVE db users. 
+  // If no ACTIVE db users for that role, fallback to the placeholder from static data.
+  const roles: LeadershipMember["role"][] = ["PRESIDENT", "SECRETARY_GENERAL", "DIRECTOR_GENERAL", "TEACHER"]
+  
+  const mergedMembers: LeadershipMember[] = []
+  
+  roles.forEach(role => {
+    const activeForRole = dbUsers.filter(u => u.secretariatRole === role)
+    if (activeForRole.length > 0) {
+      activeForRole.forEach(user => {
+        mergedMembers.push({
+          id: user._id,
+          role: user.secretariatRole as any,
+          name: user.displayName || "Unknown Member",
+          photoUrl: user.photoURL || DEFAULT_AVATAR,
+          email: user.email,
+          phone: user.phone,
+          academicDepartment: user.academicDepartment,
+          year: user.year,
+          tagline: leadershipMembers.find(m => m.role === role)?.tagline
+        })
+      })
+    } else {
+      // Fallback to placeholders for this role
+      const placeholders = leadershipMembers.filter(m => m.role === role)
+      mergedMembers.push(...placeholders)
+    }
+  })
 
   const cards = mergedMembers.map(toAppleCard)
   const currentDate = new Date()

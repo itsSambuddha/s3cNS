@@ -56,8 +56,9 @@ export default function DashboardPage() {
     )
   }
 
-  // Simple onboarding redirect
-  if (appUser.secretariatRole === "MEMBER") {
+  // Simple onboarding redirect: if they haven't picked a role (or filled academic details), send to onboarding
+  const hasOnboarded = appUser.secretariatRole !== "MEMBER" || !!appUser.year
+  if (!hasOnboarded) {
     router.replace("/onboarding")
     return null
   }

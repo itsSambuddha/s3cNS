@@ -7,27 +7,53 @@ import { getCurrentUser } from '@/lib/auth/getCurrentUser'
 export async function GET() {
   await connectToDatabase()
   const current = await getCurrentUser()
-  if (!current || !current.canApproveUSG) {
+  if (!current || (current.role !== 'ADMIN' && !current.canApproveUSG)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  // DIAGNOSTIC LOGGING
+  const totalUsers = await User.countDocuments({});
+  const allApplicantsDirect = await User.find({ memberStatus: 'APPLICANT' }).lean();
+  const allUsersSample = await User.find({}).limit(10).select('displayName email memberStatus secretariatRole year').lean();
+  
+  console.log(`[ApplicantsDebug] Total Users in DB: ${totalUsers}`);
+  console.log(`[ApplicantsDebug] Direct 'APPLICANT' count: ${allApplicantsDirect.length}`);
+  console.log(`[ApplicantsDebug] Sample Users:`, JSON.stringify(allUsersSample, null, 2));
+
+  // Simplified query for now to minimize logic errors
   const applicants = await User.find({
-    secretariatRole: 'USG',
-    memberStatus: 'APPLICANT',
+    $or: [
+      { memberStatus: 'APPLICANT' },
+      { memberStatus: { $exists: false } },
+      { memberStatus: null },
+      { memberStatus: '' }
+    ]
   })
     .select(
-      'displayName email academicDepartment year office rollNo memberStatus'
+      'displayName email academicDepartment year office rollNo memberStatus secretariatRole'
     )
     .lean()
     .exec()
 
-  return NextResponse.json({ applicants })
+  // Filter out those who are clearly NOT onboarding (e.g. just a base user record)
+  const filteredApplicants = applicants.filter(a => {
+    const isMember = a.secretariatRole === 'MEMBER';
+    const hasYear = !!a.year;
+    // If they are a MEMBER, they MUST have a year to be considered an "applicant"
+    // (since default role is MEMBER)
+    if (isMember) return hasYear;
+    return true;
+  });
+
+  console.log(`[ApplicantsDebug] Found ${applicants.length} raw applicants candidate. Final filtered: ${filteredApplicants.length}`);
+
+  return NextResponse.json({ applicants: filteredApplicants })
 }
 
 export async function POST(req: Request) {
   await connectToDatabase()
   const current = await getCurrentUser()
-  if (!current || !current.canApproveUSG) {
+  if (!current || (current.role !== 'ADMIN' && !current.canApproveUSG)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

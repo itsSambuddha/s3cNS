@@ -12,6 +12,7 @@ type Applicant = {
   year?: string
   office?: string
   rollNo?: string
+  secretariatRole?: string
 }
 
 export default function USGApprovalsPage() {
@@ -34,6 +35,7 @@ export default function USGApprovalsPage() {
           year: a.year,
           office: a.office,
           rollNo: a.rollNo,
+          secretariatRole: a.secretariatRole,
         }))
       )
     } catch (e) {
@@ -69,10 +71,10 @@ export default function USGApprovalsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold sm:text-3xl">
-          USG approvals
+          Secretariat approvals
         </h1>
         <p className="text-sm text-muted-foreground">
-          Review and approve Under Secretary‑General applicants.
+          Review and approve pending applicants for any secretariat role.
         </p>
       </div>
 
@@ -82,7 +84,7 @@ export default function USGApprovalsPage() {
 
       {!loading && apps.length === 0 && (
         <p className="text-sm text-muted-foreground">
-          No pending USG applications.
+          No pending applications at the moment.
         </p>
       )}
 
@@ -90,7 +92,14 @@ export default function USGApprovalsPage() {
         {apps.map((a) => (
           <Card key={a._id} className="flex flex-col justify-between gap-3 p-4 sm:flex-row sm:items-center">
             <div className="space-y-1">
-              <p className="text-sm font-semibold">{a.displayName}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold">{a.displayName}</p>
+                {a.secretariatRole && (
+                  <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700">
+                    {a.secretariatRole}
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-muted-foreground">{a.email}</p>
               <p className="text-xs text-muted-foreground">
                 {a.academicDepartment || 'Department'} · {a.year || '--'} ·{' '}

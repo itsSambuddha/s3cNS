@@ -13,7 +13,12 @@ export async function GET(req: Request) {
   const dept = searchParams.get("dept") || ""
   const year = searchParams.get("year") || ""
 
-  const filter: any = { memberStatus: "ACTIVE" }
+  const view = searchParams.get("view") || ""
+  const filter: any = {}
+
+  if (view === "active") filter.memberStatus = "ACTIVE"
+  else if (view === "inactive") filter.memberStatus = { $ne: "ACTIVE" }
+  else if (view === "applicants") filter.memberStatus = "APPLICANT"
 
   if (role) filter.secretariatRole = role
   if (office) filter.office = office

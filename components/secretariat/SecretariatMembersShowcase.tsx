@@ -10,6 +10,7 @@ import {
   secretariatMembers,
   officeLabels,
   type SecretariatMember,
+  type OfficeKey,
 } from '@/lib/secretariat/data'
 
 type USGUser = {
@@ -72,9 +73,44 @@ export function SecretariatMembersShowcase() {
     load()
   }, [])
 
-  const mergedMembers: SecretariatMember[] = secretariatMembers.map((m) =>
-    mergeMember(m, dbUsers),
-  )
+  // Create a combined list:
+  // For each OfficeKey, check if we have ACTIVE USGs in the database.
+  // If yes, show all of them. If no, show the static placeholder for that office.
+  const officeKeys: OfficeKey[] = [
+    "DELEGATION_AFFAIRS",
+    "SPONSORSHIP",
+    "MARKETING",
+    "FINANCE",
+    "IT_DESIGN",
+    "IT_SOCIAL_MEDIA",
+    "PUBLIC_RELATIONS",
+    "CONFERENCE_MANAGEMENT",
+    "LOGISTICS",
+  ]
+
+  const mergedMembers: SecretariatMember[] = []
+
+  officeKeys.forEach((key) => {
+    const activeInOffice = dbUsers.filter((u) => u.office === key)
+    if (activeInOffice.length > 0) {
+      activeInOffice.forEach((user) => {
+        mergedMembers.push({
+          id: user._id,
+          name: user.displayName || "To be announced",
+          roleTitle: "Under Secretary‑General",
+          office: user.office as OfficeKey,
+          photoUrl: user.photoURL || "/placeholders/member.jpg",
+          email: "", // email not fetched for USGs in this view
+          academicDepartment: user.academicDepartment,
+          year: user.year,
+        })
+      })
+    } else {
+      // Fallback to static placeholder for this office
+      const placeholder = secretariatMembers.find((m) => m.office === key)
+      if (placeholder) mergedMembers.push(placeholder)
+    }
+  })
 
   const testimonials: Testimonial[] = mergedMembers.map(toTestimonial)
   if (!testimonials.length) return null

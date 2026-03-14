@@ -56,7 +56,8 @@ export default function SignupPage() {
     try {
       const user = await signUpWithEmail(values.name, values.email, values.password)
       await syncUser(user)
-      await setSession(user.uid)
+      const idToken = await user.getIdToken()
+      await setSession(idToken)
       router.push('/dashboard')
     } catch (e: any) {
       setError(e?.message || 'Unable to sign up')

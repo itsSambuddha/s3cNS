@@ -3,8 +3,14 @@ import { NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/connect"
 import { User } from "@/lib/db/models/User"
 import nodemailer from "nodemailer"
+import { getCurrentUser } from "@/lib/auth/getCurrentUser"
 
 export async function GET() {
+  const current = await getCurrentUser()
+  if (!current || current.role !== "ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
   const dbStatus = {
     ok: false,
     message: "Unknown",

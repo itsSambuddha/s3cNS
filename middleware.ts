@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob: https://lh3.googleusercontent.com",
-    "connect-src 'self' https://api.stripe.com https://api.openai.com https://generativelanguage.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebasestorage.googleapis.com https://uploadthing.com https://api.uploadthing.com",
+    "connect-src 'self' https://api.stripe.com https://api.openai.com https://generativelanguage.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebasestorage.googleapis.com https://uploadthing.com https://*.uploadthing.com https://api.uploadthing.com",
     "frame-src 'self' https://*.firebaseapp.com https://*.google.com",
     "frame-ancestors 'none'",
     // "base-uri 'self'", // Can break some next.js features if not careful, omitted for now

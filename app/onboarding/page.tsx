@@ -26,8 +26,9 @@ export default function OnboardingPage() {
     if (authLoading || appLoading) return
     if (!appUser) return
 
-    // If user already has a real secretariat role, send to dashboard
-    if (appUser.secretariatRole !== 'MEMBER') {
+    // If user already has a real secretariat role (or filled details), send to dashboard
+    const hasOnboarded = appUser.secretariatRole !== 'MEMBER' || !!appUser.year
+    if (hasOnboarded) {
       router.replace('/dashboard')
     }
   }, [authLoading, appLoading, appUser, router])

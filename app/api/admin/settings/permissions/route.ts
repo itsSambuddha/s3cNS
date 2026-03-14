@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/connect"
 import { User } from "@/lib/db/models/User"
+import { getCurrentUser } from "@/lib/auth/getCurrentUser"
 
 type PermissionUpdateBody = {
   userId?: string
@@ -14,6 +15,10 @@ type PermissionUpdateBody = {
 // GET: list users with permissions
 export async function GET() {
   try {
+    const current = await getCurrentUser()
+    if (!current || current.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
     await connectToDatabase()
 
     const users = await User.find({})
@@ -35,6 +40,10 @@ export async function GET() {
 // PATCH: update permission flags for a single user
 export async function PATCH(req: Request) {
   try {
+    const current = await getCurrentUser()
+    if (!current || current.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
     await connectToDatabase()
 
     const body = (await req.json()) as PermissionUpdateBody

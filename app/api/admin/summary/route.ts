@@ -8,6 +8,7 @@ import { getCurrentUser } from "@/lib/auth/getCurrentUser"
 type SecretariatSummary = {
   total: number
   active: number
+  pending: number
   byRole: Record<string, number>
   byOffice: Record<string, number>
 }
@@ -35,6 +36,7 @@ const DEFAULT_SUMMARY: AdminSummary = {
   secretariat: {
     total: 0,
     active: 0,
+    pending: 0,
     byRole: {},
     byOffice: {},
   },
@@ -55,24 +57,19 @@ export async function GET() {
   try {
     const user = await getCurrentUser()
 
-    // 0) Security Check
-    if (!user) {
-      console.log('[AuthDebug] /api/admin/summary: 401 Unauthorized - No user found')
+    if (!user || user.role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
-
-    // Check if user is admin (adjust role check as needed, assuming 'ADMIN' or specific roles)
-    // Inspecting User model logic, if there is an isAdmin field or role
-    // For now strict check: if not logged in -> 401. 
-    // TODO: Add strict Role check if 'role' field exists on User.
 
     await connectToDatabase()
 
     // 1) Secretariat summary
-    const [total, active] = await Promise.all([
-      User.countDocuments({}).exec(),
+    const [active, pending] = await Promise.all([
       User.countDocuments({ memberStatus: "ACTIVE" }).exec(),
+      User.countDocuments({ memberStatus: "APPLICANT" }).exec(),
     ])
+
+    const total = active + pending
 
     const [byRoleAgg, byOfficeAgg] = await Promise.all([
       User.aggregate([
@@ -108,6 +105,7 @@ export async function GET() {
     const secretariat: SecretariatSummary = {
       total,
       active,
+      pending,
       byRole,
       byOffice,
     }

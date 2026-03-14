@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from 'firebase/auth'
 import { firebaseAuth, googleProvider } from '@/lib/auth/firebase'
 import { Login04 } from '@/components/ui/login-04'
+import { setSession } from '@/lib/auth/utils'
 import gsap from 'gsap'
 
 function LoginPageContent() {
@@ -66,17 +67,7 @@ function LoginPageContent() {
     if (!user) return
 
     const idToken = await user.getIdToken(true)
-
-    const res = await fetch('/api/auth/set-cookie', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idToken }),
-    })
-
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
-      throw new Error(data.error || 'Failed to establish session')
-    }
+    await setSession(idToken)
 
     router.push(redirectTo)
   }

@@ -180,20 +180,28 @@ export default function RoleOnboarding({
       setSaving(true)
       setError(null)
 
-      let avatarUrl: string | null = avatarPreview ?? null
+      let avatarUrl: string | null = null
+      // Use initial URL if no new file is selected, or if the current preview isn't a blob
+      if (!avatarFile && avatarPreview && !avatarPreview.startsWith("blob:")) {
+        avatarUrl = avatarPreview
+      }
 
       if (avatarFile) {
         try {
           const result = await uploadThing.startUpload([avatarFile])
           if (result && result[0]) {
             avatarUrl = result[0].url
+          } else {
+            throw new Error("Upload failed - no URL returned")
           }
         } catch (uploadErr: any) {
           console.error("avatar upload error", uploadErr)
           setError(
             uploadErr?.message ||
-            "Could not upload avatar. You can try again or continue without it.",
+            "Could not upload avatar. Please try again.",
           )
+          setSaving(false)
+          return // STOP here
         }
       }
 

@@ -9,7 +9,7 @@ export async function GET() {
     await connectToDatabase()
 
     const current = await getCurrentUser()
-    if (!current || !current.canManageEvents) {
+    if (!current || (current.role !== "ADMIN" && !current.canManageMembers)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -43,7 +43,7 @@ export async function PATCH(req: Request) {
     await connectToDatabase()
 
     const current = await getCurrentUser()
-    if (!current || !current.canManageEvents) {
+    if (!current || (current.role !== "ADMIN" && !current.canManageMembers)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 

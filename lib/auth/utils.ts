@@ -11,10 +11,10 @@ export async function syncUser(user: any) {
   })
 }
 
-export async function setSession(uid: string) {
+export async function setSession(idToken: string) {
   await fetch('/api/auth/session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ uid }),
+    body: JSON.stringify({ idToken }),
   })
 }

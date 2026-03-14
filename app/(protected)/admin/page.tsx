@@ -13,6 +13,7 @@ import {
   Users,
   ShieldCheck,
   UserCog,
+  UserCheck,
   UserMinus2,
   ArrowRight,
   ArrowUpDown,
@@ -33,6 +34,7 @@ import { TimetableMockModule } from "./_components/TimetableMockModule"
 type SecretariatSummary = {
   total: number
   active: number
+  pending: number
   byRole: Record<string, number>
   byOffice: Record<string, number>
 }
@@ -60,6 +62,7 @@ const DEFAULT_SUMMARY: AdminSummary = {
   secretariat: {
     total: 0,
     active: 0,
+    pending: 0,
     byRole: {},
     byOffice: {},
   },
@@ -239,6 +242,14 @@ export default function AdminDashboardPage() {
               description="Safely deactivate former secretariat members or remove test accounts."
               href="/admin/secretariat/members?view=inactive"
               danger
+            />
+            {/* Approvals */}
+            <AdminLinkCard
+              icon={UserCheck}
+              title="Pending approvals"
+              description="View and approve new applicants who have finished their onboarding."
+              href="/secretariat/usg-approvals"
+              primary
             />
           </div>
         </Card>

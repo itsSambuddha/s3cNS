@@ -108,29 +108,80 @@ export const leadershipMembers: LeadershipMember[] = [
   },
 ]
 
-// Secretariat offices with placeholders
+// Secretariat offices with placeholders (one per office)
 export const secretariatMembers: SecretariatMember[] = [
   {
     id: 'usg-delegation',
-    name: 'USG Delegation Affairs',
+    name: 'To be announced',
     roleTitle: 'Under Secretary‑General',
     office: 'DELEGATION_AFFAIRS',
     photoUrl: '/placeholders/delegation.jpg',
     email: 'delegation@example.com',
-    academicDepartment: 'Sociology',
-    year: 'TY',
   },
   {
     id: 'usg-sponsorship',
-    name: 'USG Sponsorship',
+    name: 'To be announced',
     roleTitle: 'Under Secretary‑General',
     office: 'SPONSORSHIP',
     photoUrl: '/placeholders/sponsorship.jpg',
     email: 'sponsorship@example.com',
-    academicDepartment: 'Computer Science',
-    year: 'SY',
   },
-  // add more placeholders per office as needed
+  {
+    id: 'usg-marketing',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'MARKETING',
+    photoUrl: '/placeholders/marketing.jpg',
+    email: 'marketing@example.com',
+  },
+  {
+    id: 'usg-finance',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'FINANCE',
+    photoUrl: '/placeholders/finance.jpg',
+    email: 'finance@example.com',
+  },
+  {
+    id: 'usg-it-design',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'IT_DESIGN',
+    photoUrl: '/placeholders/it.jpg',
+    email: 'it@example.com',
+  },
+  {
+    id: 'usg-it-social',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'IT_SOCIAL_MEDIA',
+    photoUrl: '/placeholders/social.jpg',
+    email: 'social@example.com',
+  },
+  {
+    id: 'usg-pr',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'PUBLIC_RELATIONS',
+    photoUrl: '/placeholders/pr.jpg',
+    email: 'pr@example.com',
+  },
+  {
+    id: 'usg-conference',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'CONFERENCE_MANAGEMENT',
+    photoUrl: '/placeholders/conference.jpg',
+    email: 'conference@example.com',
+  },
+  {
+    id: 'usg-logistics',
+    name: 'To be announced',
+    roleTitle: 'Under Secretary‑General',
+    office: 'LOGISTICS',
+    photoUrl: '/placeholders/logistics.jpg',
+    email: 'logistics@example.com',
+  },
 ]
 
 export const officeLabels: Record<OfficeKey, string> = {

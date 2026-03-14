@@ -39,7 +39,7 @@ const secretariatLinks = [
 // Admin-only links; shown only when role === "ADMIN"
 const adminLinks = [
   { href: "/admin", label: "Admin Controls", icon: IconShield },
-  // { href: "/secretariat/usg-approvals", label: "USG Approvals" },
+  { href: "/secretariat/usg-approvals", label: "Secretariat Approvals", icon: IconShield },
 ]
 
 type AnyLink = {

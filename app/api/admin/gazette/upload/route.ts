@@ -2,11 +2,17 @@
 import { NextResponse } from "next/server"
 import fs from "node:fs"
 import path from "node:path"
+import { getCurrentUser } from "@/lib/auth/getCurrentUser"
 
 export const runtime = "nodejs"
 
 export async function POST(req: Request) {
   try {
+    const current = await getCurrentUser()
+    if (!current || current.role !== "ADMIN") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const formData = await req.formData()
     const file = formData.get("file")
 
