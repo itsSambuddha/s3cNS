@@ -109,7 +109,7 @@ export default function RoleOnboarding({
     (steps.findIndex((s) => s.id === currentStep) / (steps.length - 1)) * 100
 
   const canContinueFromStep = (step: StepId) => {
-    if (step === 1) return !!fullName.trim()
+    if (step === 1) return !!fullName.trim() && !!avatarPreview
     if (step === 2) return !!year && !!department
     if (step === 3) {
       if (!secretariatRole) return false
@@ -630,16 +630,6 @@ export default function RoleOnboarding({
               Back
             </Button>
             <div className="flex items-center gap-3">
-              {currentStep === 4 && (
-                <button
-                  type="button"
-                  className="text-xs text-muted-foreground underline-offset-2 hover:underline"
-                  onClick={() => router.push("/dashboard")}
-                  disabled={saving}
-                >
-                  Skip for now
-                </button>
-              )}
               {currentStep < 4 && (
                 <Button
                   type="button"
