@@ -65,6 +65,7 @@ export default function RoleOnboarding({
   initialDepartment,
   initialSecretariatRole,
   initialOffice,
+  initialAvatarUrl,
 }: {
   initialName?: string | null
   initialEmail?: string | null
@@ -74,6 +75,7 @@ export default function RoleOnboarding({
   initialDepartment?: string | null
   initialSecretariatRole?: string | null
   initialOffice?: string | null
+  initialAvatarUrl?: string | null
 }) {
   const router = useRouter()
   const { user: fbUser } = useAuth()
@@ -100,7 +102,7 @@ export default function RoleOnboarding({
   const [officeRank, setOfficeRank] = useState<"HEAD" | "DEPUTY" | "">("")
   const [tagline, setTagline] = useState("")
 
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(initialAvatarUrl ?? null)
   const [avatarFile, setAvatarFile] = useState<File | null>(null)
 
   const progress =
@@ -250,8 +252,12 @@ export default function RoleOnboarding({
               }
             }}
           >
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-background text-[11px] font-medium">
-              {step.chip}
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-background text-[11px] font-medium overflow-hidden">
+              {isActive && avatarPreview ? (
+                <img src={avatarPreview} alt="" className="h-full w-full object-cover" />
+              ) : (
+                step.chip
+              )}
             </span>
             <span>{step.label}</span>
           </button>

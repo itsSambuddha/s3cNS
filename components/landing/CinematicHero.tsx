@@ -141,25 +141,22 @@ export function CinematicHero() {
         { opacity: 0.45, scale: 1.1, filter: "grayscale(0)", duration: 0.3 }
       )
 
-      // Phase 2: Logo shrinks and flies to bottom-right corner
+      // Phase 2: Logo shrinks and flies to bottom-right corner using transforms
+      // We start from center (0,0 with standard translation) and move to viewport bottom right
       logoTl.to(logoRef.current, {
-        top: "auto",
-        bottom: widgetBottom,
-        right: widgetRight,
-        left: "auto",
-        width: widgetSize,
-        height: widgetSize,
+        x: () => window.innerWidth / 2 - (isMobile ? 28 : 50) - (isMobile ? 16 : 32),
+        y: () => window.innerHeight / 2 - (isMobile ? 28 : 50) - (isMobile ? 16 : 32),
+        scale: isMobile ? 0.2 : 0.2, // Match the target size (e.g. 56px / 280px = 0.2)
         opacity: 0.85,
-        scale: 1,
         filter: "grayscale(0) drop-shadow(0 4px 24px rgba(59,130,246,0.35))",
-        duration: 0.4,
-        ease: "power2.inOut",
+        duration: 0.6,
+        ease: "power3.inOut",
       })
 
       // Phase 3: Hold as widget
       logoTl.to(logoRef.current, {
         opacity: 0.85,
-        duration: 0.3,
+        duration: 0.5,
       })
 
       // Marquee

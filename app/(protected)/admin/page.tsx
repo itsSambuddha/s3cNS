@@ -82,6 +82,9 @@ export default function AdminDashboardPage() {
   const router = useRouter()
   const { user, loading: userLoading } = useAppUser()
 
+  // Gate: show nothing until we know who the user is
+  const isAdmin = !userLoading && user?.role === "ADMIN"
+
   useEffect(() => {
     if (userLoading) return;
 
@@ -120,6 +123,23 @@ export default function AdminDashboardPage() {
 
   const currentYear = new Date().getFullYear()
   const { secretariat, gazette, system } = summary
+
+  // Prevent any content flash for non-admin users
+  if (userLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-32 animate-pulse rounded-2xl bg-muted" />
+        <div className="grid gap-4 lg:grid-cols-2">
+          <div className="h-48 animate-pulse rounded-xl bg-muted" />
+          <div className="h-48 animate-pulse rounded-xl bg-muted" />
+        </div>
+      </div>
+    )
+  }
+
+  if (!isAdmin) {
+    return null
+  }
 
   return (
     <div className="space-y-6">

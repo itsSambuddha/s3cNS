@@ -47,6 +47,12 @@ export async function POST(req: Request) {
       appRole = 'OFFICE_BEARER'
     }
 
+    // Senior secretariat + teachers are auto-approved; everyone else stays APPLICANT
+    const autoApproveRoles = ['PRESIDENT', 'SECRETARY_GENERAL', 'DIRECTOR_GENERAL', 'TEACHER']
+    const derivedMemberStatus = autoApproveRoles.includes(secretariatRole)
+      ? 'ACTIVE'
+      : 'APPLICANT'
+
     const user = await User.findOneAndUpdate(
       { uid },
       {
@@ -60,7 +66,7 @@ export async function POST(req: Request) {
           secretariatRole,
           office: secretariatRole === 'USG' ? office : null,
           role: appRole,
-          memberStatus: 'ACTIVE',
+          memberStatus: derivedMemberStatus,
           photoURL: avatarUrl || undefined,
           // simple permissions – you can refine later
           canManageMembers:

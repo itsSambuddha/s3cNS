@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import { useAppUser } from '@/hooks/useAppUser'
 import RoleOnboarding from '@/components/secretariat/role-onboarding'
+import { ProfileView } from '@/components/secretariat/ProfileView'
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -30,19 +31,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="flex min-h-[520px] items-center justify-center bg-muted/40 px-3 py-6 sm:px-4 sm:py-10">
+    <div className="flex min-h-[520px] items-center justify-center px-3 py-6 sm:px-4 sm:py-10">
       <div className="w-full max-w-6xl">
-        <RoleOnboarding
-          initialName={appUser.displayName ?? appUser.email}
-          initialEmail={appUser.email}
-          initialPhone={appUser.phone}
-          initialRollNo={appUser.rollNo}
-          initialYear={appUser.year}
-          initialDepartment={appUser.academicDepartment}
-          initialSecretariatRole={appUser.secretariatRole}
-          initialOffice={appUser.office ?? undefined}
-        // if you later add tagline to schema, pass it here too
-        />
+        <ProfileView user={appUser} />
       </div>
     </div>
   )
