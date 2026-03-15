@@ -30,12 +30,22 @@ async function getServiceWorkerRegistration() {
   }
 
   try {
+    const params = new URLSearchParams({
+      apiKey: firebaseConfig.apiKey || "",
+      authDomain: firebaseConfig.authDomain || "",
+      projectId: firebaseConfig.projectId || "",
+      storageBucket: firebaseConfig.storageBucket || "",
+      messagingSenderId: firebaseConfig.messagingSenderId || "",
+      appId: firebaseConfig.appId || "",
+    });
+    const swUrl = `/firebase-messaging-sw.js?${params.toString()}`;
+
     // Check if it's already registered
-    let registration = await navigator.serviceWorker.getRegistration("/firebase-messaging-sw.js");
+    let registration = await navigator.serviceWorker.getRegistration(swUrl);
     
     if (!registration) {
       console.log("[FCM] Registering new service worker...");
-      registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js", {
+      registration = await navigator.serviceWorker.register(swUrl, {
         scope: "/"
       });
     }

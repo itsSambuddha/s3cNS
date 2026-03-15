@@ -4,13 +4,14 @@
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
+const urlParams = new URL(self.location.href).searchParams;
 const firebaseConfig = {
-  apiKey: "AIzaSyCfRvaP2GbkYmiIvN_NwblWgZOoT-IaZOo",
-  authDomain: "s3cns-dd426.firebaseapp.com",
-  projectId: "s3cns-dd426",
-  storageBucket: "s3cns-dd426.firebasestorage.app",
-  messagingSenderId: "612070263412",
-  appId: "1:612070263412:web:a3cb19af4bc0c9f05f1f21",
+  apiKey: urlParams.get('apiKey'),
+  authDomain: urlParams.get('authDomain'),
+  projectId: urlParams.get('projectId'),
+  storageBucket: urlParams.get('storageBucket'),
+  messagingSenderId: urlParams.get('messagingSenderId'),
+  appId: urlParams.get('appId'),
 };
 
 // Initialize Firebase app in the service worker
