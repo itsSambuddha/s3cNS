@@ -5,12 +5,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js
 importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-compat.js');
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC2FVThtugQFaXunbbt1X6ht4wkKAD1Tr4",
-  authDomain: "s3cns-f159a.firebaseapp.com",
-  projectId: "s3cns-f159a",
-  storageBucket: "s3cns-f159a.appspot.com",
-  messagingSenderId: "438835392978",
-  appId: "1:438835392978:web:cc1d801ebaeac8e180b",
+  apiKey: "AIzaSyCfRvaP2GbkYmiIvN_NwblWgZOoT-IaZOo",
+  authDomain: "s3cns-dd426.firebaseapp.com",
+  projectId: "s3cns-dd426",
+  storageBucket: "s3cns-dd426.firebasestorage.app",
+  messagingSenderId: "612070263412",
+  appId: "1:612070263412:web:a3cb19af4bc0c9f05f1f21",
 };
 
 // Initialize Firebase app in the service worker

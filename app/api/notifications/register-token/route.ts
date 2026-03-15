@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/db/mongodb";
+import { connectToDatabase } from "@/lib/db/connect";
 import { Device as DeviceModel } from "@/lib/db/models/Device";
+import { User as UserModel } from "@/lib/db/models/User";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,11 +16,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Hardening: Resolve Mongo _id if userId is a Firebase UID
+    let targetUserId = userId;
+    const userByUid = await UserModel.findOne({ uid: userId }).select('_id').lean();
+    if (userByUid) {
+      targetUserId = userByUid._id;
+    }
+
     await DeviceModel.updateOne(
       { token },
       {
         $set: {
-          userId,
+          userId: targetUserId,
           platform: platform || "web",
           lastSeenAt: new Date(),
           isActive: true,

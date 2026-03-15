@@ -230,23 +230,14 @@ export default function AdminDashboardPage() {
             /> */}
             {/* Permissions */}
             <AdminLinkCard
-              icon={KeyRound}
-              title="Permissions & capabilities"
-              description="Toggle admin flags such as finance or events management for each member."
-              href="/admin/settings/permissions"
+              icon={UserCog}
+              title="Manage directory"
+              description="Full list of members. Edit profiles, update roles, or deactivate."
+              href="/admin/secretariat/directory"
             />
-            {/* Deactivate / delete */}
-            <AdminLinkCard
-              icon={UserMinus2}
-              title="Deactivate or delete members"
-              description="Safely deactivate former secretariat members or remove test accounts."
-              href="/admin/secretariat/members?view=inactive"
-              danger
-            />
-            {/* Approvals */}
             <AdminLinkCard
               icon={UserCheck}
-              title="Pending approvals"
+              title="Approve applicants"
               description="View and approve new applicants who have finished their onboarding."
               href="/secretariat/usg-approvals"
               primary
@@ -255,7 +246,7 @@ export default function AdminDashboardPage() {
         </Card>
 
         {/* Secretariat composition + audit preview */}
-        <div className="space-y-4">
+        <div className="space-y-4 lg:col-span-2">
           {/* Composition summary */}
           <Card className="border-slate-200/70 bg-slate-50/90 p-4 shadow-sm">
             <div className="mb-2 flex items-center justify-between gap-2">
@@ -351,7 +342,7 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* 2. Gazette & events/finance shortcuts */}
-      <section className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)]">
+      <section className="grid gap-5 lg:grid-cols-2">
         {/* Gazette */}
         <Card className="border-slate-200/70 bg-white/90 p-4 shadow-sm">
           <div className="mb-3 flex items-center justify-between gap-2">
@@ -387,7 +378,6 @@ export default function AdminDashboardPage() {
               description="Edit titles, themes, read time, and visibility of existing issues."
               href="/admin/gazette/manage"
             />
-
           </div>
         </Card>
 
@@ -431,42 +421,7 @@ export default function AdminDashboardPage() {
       </section>
 
       {/* 3. Access control & system health */}
-      <section className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.1fr)]">
-        {/* Access control */}
-        {/* <Card className="border-slate-200/70 bg-white/90 p-4 shadow-sm">
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <KeyRound className="h-4 w-4 text-slate-800" />
-              <div>
-                <h2 className="text-sm font-semibold">Access control</h2>
-                <p className="text-[11px] text-muted-foreground">
-                  Configure who can see and change what across the admin
-                  console.
-                </p>
-              </div>
-            </div>
-            <Badge variant="outline" className="text-[10px]">
-              Roles & permissions
-            </Badge>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <AdminLinkCard
-              icon={Users}
-              title="Admin & module access"
-              description="Assign who can access Secretariat, Gazette, Events, and Finance modules."
-              href="/admin/settings/permissions"
-              primary
-            />
-            <AdminLinkCard
-              icon={ShieldAlert}
-              title="Security & audit"
-              description="Review permission changes and important security‑related events."
-              href="/admin/audit/security"
-            />
-          </div>
-        </Card> */}
-
+      <section className="grid gap-5 lg:grid-cols-1">
         {/* System health */}
         <Card className="border-slate-200/70 bg-slate-50/90 p-4 shadow-sm">
           <div className="mb-3 flex items-center justify-between gap-2">
@@ -497,16 +452,6 @@ export default function AdminDashboardPage() {
               ok={system.emailOk}
               message={system.emailMessage ?? "OK"}
             />
-            {/* <HealthItem
-              icon={HardDrive}
-              label="Storage"
-              ok={system.storageOk}
-              message={
-                typeof system.storageUsedMb === "number"
-                  ? `${system.storageUsedMb.toFixed(1)} MB used`
-                  : "OK"
-              }
-            /> */}
           </div>
         </Card>
 

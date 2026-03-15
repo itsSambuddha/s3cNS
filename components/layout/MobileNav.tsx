@@ -12,6 +12,7 @@ import { signOut } from 'firebase/auth'
 import { firebaseAuth } from '@/lib/auth/firebase'
 import * as Dialog from '@radix-ui/react-dialog'
 import type { IUser } from '@/lib/db/models/User'
+import { NotificationBell } from '@/components/notifications/NotificationBell'
 
 // Top navbar items
 const topLinks = [
@@ -112,6 +113,7 @@ export default function MobileNav() {
                 </span>
               </div>
             </div>
+            {!loading && user && <NotificationBell />}
           </div>
 
           {/* Top nav */}

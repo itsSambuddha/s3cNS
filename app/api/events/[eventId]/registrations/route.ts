@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { connectToDatabase } from "@/lib/db/mongodb"
+import { connectToDatabase } from "@/lib/db/connect"
 import { DelegateRegistration } from "@/lib/db/models/DelegateRegistration"
 
 export async function GET(

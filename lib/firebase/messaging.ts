@@ -5,15 +5,15 @@ import { getApp, getApps, initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC2FVThtugQFaXunbbt1X6ht4wkKAD1Tr4",
-  authDomain: "s3cns-f159a.firebaseapp.com",
-  projectId: "s3cns-f159a",
-  storageBucket: "s3cns-f159a.appspot.com",
-  messagingSenderId: "438835392978",
-  appId: "1:438835392978:web:cc1d801ebaeac8e180b",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const VAPID_KEY = "BBcE0jlezPZk2sq2bqYli1KuNAWK7jCSvF2PdWXSrJ5Jk3qWj2usTlohsWosdJZKr1Qde3HNdiJTIGGWuBd1gY8";
+const VAPID_KEY = "BDZMx_Khov_BpbvOTWiCJVSacPbXkClIZFq5wT7rI9vAq3Is1LwP9y0G2IT3t18Vh3jOVN6asZw_S5wZrVTyTpQ";
 
 // Initialize Firebase app on the client
 function initializeClientApp() {
@@ -25,18 +25,43 @@ function initializeClientApp() {
 }
 
 async function getServiceWorkerRegistration() {
-  if ("serviceWorker" in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register(
-        "/firebase-messaging-sw.js"
-      );
-      return registration;
-    } catch (error) {
-      console.error("Service Worker registration failed: ", error);
-      return navigator.serviceWorker.ready;
-    }
+  if (!("serviceWorker" in navigator)) {
+     throw new Error("Service workers are not supported in this browser.");
   }
-  throw new Error("Service workers are not supported in this browser.");
+
+  try {
+    // Check if it's already registered
+    let registration = await navigator.serviceWorker.getRegistration("/firebase-messaging-sw.js");
+    
+    if (!registration) {
+      console.log("[FCM] Registering new service worker...");
+      registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js", {
+        scope: "/"
+      });
+    }
+
+    // Ensure it's active before returning
+    if (registration.installing) {
+      console.log("[FCM] SW Installing...");
+      await new Promise<void>((resolve) => {
+        registration!.installing?.addEventListener("statechange", (e: any) => {
+          if (e.target.state === "activated") resolve();
+        });
+      });
+    } else if (registration.waiting) {
+      console.log("[FCM] SW Waiting...");
+      // For waiting, skipWaiting might be needed, but usually just waiting for activation is enough
+      // For simplicity in debug, we'll try to get it active
+    }
+
+    // Wait for ready
+    const readyRegistration = await navigator.serviceWorker.ready;
+    console.log("[FCM] Service Worker Ready.");
+    return readyRegistration;
+  } catch (error) {
+    console.error("[FCM] Service Worker registration failed: ", error);
+    throw error;
+  }
 }
 
 
@@ -58,6 +83,7 @@ export async function requestNotificationToken(): Promise<string | null> {
       vapidKey: VAPID_KEY,
       serviceWorkerRegistration,
     });
+    console.log("[FCM] Token retrieved successfully.");
 
     if (currentToken) {
       return currentToken;
@@ -65,8 +91,11 @@ export async function requestNotificationToken(): Promise<string | null> {
       console.log("No registration token available. Request permission to generate one.");
       return null;
     }
-  } catch (err) {
-    console.error("An error occurred while retrieving token. ", err);
+  } catch (err: any) {
+    console.error("An error occurred while retrieving token: ", err);
+    if (err.name === 'AbortError') {
+      console.warn("Push Service Error: This usually means the browser push service is unreachable or blocked. Check if you are in Incognito mode or if a firewall is blocking FCM.");
+    }
     return null;
   }
 }

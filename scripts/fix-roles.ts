@@ -1,11 +1,16 @@
 
 import mongoose from 'mongoose';
 
-const MONGODB_URI = "mongodb+srv://secmun2024_db_user:0b8uwFntO1R5id7Q@s3cnscluster0.2d2tyly.mongodb.net/?appName=s3cnsCluster0";
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  console.error("MONGODB_URI not found");
+  process.exit(1);
+}
 
 async function run() {
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI as string);
     console.log("Connected to MongoDB");
 
     const usersCol = mongoose.connection.collection('users');

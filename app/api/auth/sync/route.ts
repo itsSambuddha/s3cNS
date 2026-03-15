@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         uid,
         email,
         displayName,
-        photoURL,
+        photoURL: (photoURL && !photoURL.startsWith('blob:')) ? photoURL : undefined,
       })
     } else {
       // If user exists:
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       // - Update profile details if provided
       user.uid = uid
       user.displayName = displayName ?? user.displayName
-      user.photoURL = photoURL ?? user.photoURL
+      user.photoURL = (photoURL && !photoURL.startsWith('blob:')) ? photoURL : user.photoURL
       await user.save()
     }
 

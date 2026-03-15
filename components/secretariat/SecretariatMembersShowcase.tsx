@@ -60,14 +60,14 @@ export function SecretariatMembersShowcase() {
   // For each OfficeKey, check if we have ACTIVE USGs/Deputies in the database.
   // If yes, show all of them. If no, show the static placeholder for that office.
   const officeKeys: OfficeKey[] = [
-    'FINANCE',
-    'LOGISTICS',
-    'DELEGATIONS',
-    'ACADEMICS',
-    'PUBLIC_RELATIONS',
-    'MARKETING',
+    'DELEGATION_AFFAIRS',
     'IT_DESIGN',
     'IT_SOCIAL_MEDIA',
+    'PUBLIC_RELATIONS',
+    'MARKETING',
+    'FINANCE',
+    'SPONSORSHIP',
+    'LOGISTICS',
     'CONFERENCE_MANAGEMENT',
   ]
 

@@ -2,7 +2,7 @@
 
 // Force reload
 import { NextRequest, NextResponse } from "next/server"
-import { connectToDatabase } from "@/lib/db/mongodb"
+import { connectToDatabase } from "@/lib/db/connect"
 import { Event } from "@/lib/db/models/Event"
 
 interface UpdateBody {

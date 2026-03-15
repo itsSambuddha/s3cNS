@@ -1,7 +1,7 @@
 // app/api/events/route.ts
 
 import { NextRequest, NextResponse } from "next/server"
-import { connectToDatabase } from "@/lib/db/mongodb"
+import { connectToDatabase } from "@/lib/db/connect"
 import { Event } from "@/lib/db/models/Event"
 import type { EventType, EventStatus } from "@/lib/db/models/Event"
 

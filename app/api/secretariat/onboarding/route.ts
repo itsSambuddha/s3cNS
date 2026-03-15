@@ -67,7 +67,7 @@ export async function POST(req: Request) {
           office: secretariatRole === 'USG' ? office : null,
           role: appRole,
           memberStatus: derivedMemberStatus,
-          photoURL: avatarUrl || undefined,
+          photoURL: (avatarUrl && !avatarUrl.startsWith('blob:')) ? avatarUrl : undefined,
           // simple permissions – you can refine later
           canManageMembers:
             secretariatRole === 'PRESIDENT' ||

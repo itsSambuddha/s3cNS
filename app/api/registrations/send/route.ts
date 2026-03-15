@@ -1,7 +1,7 @@
 // app/api/registrations/send/route.ts
 
 import { NextRequest, NextResponse } from "next/server"
-import { connectToDatabase } from "@/lib/db/mongodb"
+import { connectToDatabase } from "@/lib/db/connect"
 import { DelegateRegistration } from "@/lib/db/models/DelegateRegistration"
 import { Event } from "@/lib/db/models/Event"
 import { sendDAInterestEmail } from "@/lib/email/sendDAInterestEmail"

@@ -182,7 +182,10 @@ export default function Navbar() {
             <img src="/logo/s3cnsLogo.svg" alt="s3cNS Logo" className="h-8 w-8 rounded-lg shadow-sm" />
             <span className="text-sm font-black tracking-tight text-slate-900 dark:text-white">s3cNS</span>
           </div>
-          <MobileNav />
+          <div className="flex items-center gap-2">
+            {!loading && user && <NotificationBell />}
+            <MobileNav />
+          </div>
         </div>
       </div>
     </header>

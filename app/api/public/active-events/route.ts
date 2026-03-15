@@ -1,7 +1,7 @@
 // app/api/public/active-events/route.ts
 
 import { NextRequest, NextResponse } from "next/server"
-import { connectToDatabase } from "@/lib/db/mongodb"
+import { connectToDatabase } from "@/lib/db/connect"
 import { Event } from "@/lib/db/models/Event"
 
 const TYPES = ["INTRA_SECMUN", "INTER_SECMUN", "WORKSHOP", "EDBLAZON_TIMES"] as const

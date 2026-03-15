@@ -1,6 +1,6 @@
 // app/api/da/events/[eventId]/overview/route.ts
 import { NextResponse } from "next/server"
-import { connectToDatabase } from "@/lib/db/mongodb"
+import { connectToDatabase } from "@/lib/db/connect"
 import { Event } from "@/lib/db/models/Event"
 import { DelegateRegistration } from "@/lib/db/models/DelegateRegistration"
 

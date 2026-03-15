@@ -24,7 +24,7 @@ export async function POST(req: Request) {
           uid,
           email,
           displayName: displayName || email,
-          photoURL: photoURL || undefined,
+          photoURL: (photoURL && !photoURL.startsWith('blob:')) ? photoURL : undefined,
         },
       },
       { new: true, upsert: true },

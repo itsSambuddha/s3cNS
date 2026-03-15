@@ -5,9 +5,11 @@ import NotificationModel, {
 } from "@/lib/db/models/Notification"
 import { User as UserModel } from "@/lib/db/models/User"
 
-const PROJECT_ID = process.env.FIREBASE_PROJECT_ID!
-const CLIENT_EMAIL = process.env.FIREBASE_CLIENT_EMAIL!
-const PRIVATE_KEY = process.env.FIREBASE_PRIVATE_KEY!
+const trimEnv = (val?: string) => val?.trim().replace(/^["'](.+)["']$/, '$1') || ''
+
+const PROJECT_ID = trimEnv(process.env.FIREBASE_PROJECT_ID)
+const CLIENT_EMAIL = trimEnv(process.env.FIREBASE_CLIENT_EMAIL)
+const PRIVATE_KEY = trimEnv(process.env.FIREBASE_PRIVATE_KEY)
 
 export type NotificationPayload = {
   category: NotificationCategory

@@ -1,4 +1,4 @@
-import { connectToDatabase } from "../lib/db/mongodb";
+import { connectToDatabase } from "../lib/db/connect";
 import { Event } from "../lib/db/models/Event";
 import mongoose from "mongoose";
 

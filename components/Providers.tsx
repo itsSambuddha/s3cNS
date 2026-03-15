@@ -1,8 +1,11 @@
 "use client"
 
 import React, { useEffect } from "react"
+import { useFCM } from "@/hooks/useFCM"
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  useFCM();
+
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker

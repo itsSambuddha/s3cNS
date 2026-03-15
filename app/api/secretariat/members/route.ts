@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/connect"
 import { User } from "@/lib/db/models/User"
+import { Device } from "@/lib/db/models/Device"
 
 export async function GET(req: Request) {
   await connectToDatabase()
@@ -34,11 +35,25 @@ export async function GET(req: Request) {
 
   const members = await User.find(filter)
     .select(
-      "displayName email phone secretariatRole office academicDepartment year rollNo memberStatus canManageFinance canManageEvents photoURL",
+      "_id displayName email phone secretariatRole office academicDepartment year rollNo memberStatus canManageFinance canManageEvents photoURL",
     )
     .sort({ secretariatRole: 1, office: 1, displayName: 1 })
     .lean()
     .exec()
 
-  return NextResponse.json({ members })
+  // Find all active devices for these users
+  const activeDevices = await Device.find({
+    userId: { $in: members.map(m => m._id) },
+    isActive: true
+  }).select('userId').lean()
+
+  const pushEnabledUserIds = new Set(activeDevices.map(d => String(d.userId)))
+
+  // Map to include a boolean hasPushEnabled
+  const membersWithPush = members.map(m => ({
+    ...m,
+    hasPushEnabled: pushEnabledUserIds.has(String(m._id))
+  }))
+
+  return NextResponse.json({ members: membersWithPush })
 }

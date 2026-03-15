@@ -7,10 +7,23 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/hooks/useAuth"
 import { useAppUser } from "@/hooks/useAppUser"
-import { usePushRegistration } from "@/hooks/usePushRegistration"
 import { FinanceCard } from "./FinanceCard"
+import { 
+  BarChart3, 
+  Calendar, 
+  CheckCircle2, 
+  Flag, 
+  Globe, 
+  LayoutDashboard, 
+  ShieldCheck, 
+  Users, 
+  Wallet, 
+  Zap,
+  ArrowRight
+} from "lucide-react"
 import { canUseDaModule } from "@/lib/da/access"
 import { canManageDelegationTeam } from "@/lib/delegation-team/access"
+// import { AnnouncementCard } from "@/components/admin/AnnouncementCard"
 
 const pageStagger = {
   hidden: {},
@@ -33,7 +46,6 @@ export default function DashboardPage() {
   const router = useRouter()
   const { user: fbUser, loading: authLoading } = useAuth()
   const { user: appUser, loading: appLoading } = useAppUser()
-  usePushRegistration()
 
   const [summary, setSummary] = useState<{
     eventsCount: number
@@ -96,242 +108,248 @@ export default function DashboardPage() {
   // SHOW DELEGATION TEAM CARD FOR: President, SG, DG, Teachers, Admins
   const showDelegationTeamCard = canManageDelegationTeam(appUser)
 
+  // Admin Card Access
+  const showAdminCard = appUser.role === 'ADMIN'
+
 
   return (
     <motion.div
-      className="space-y-6"
+      className="grid grid-cols-1 md:grid-cols-12 gap-5 auto-rows-min"
       initial="hidden"
       animate="visible"
       variants={pageStagger}
     >
-      {/* Header strip */}
+      {/* Row 1: Welcome Card (Full Width Header) */}
       <motion.div
         variants={scaleIn}
-        className="group relative overflow-hidden rounded-[2rem] border border-blue-200/60 bg-white p-8 shadow-xl shadow-blue-500/5 dark:border-white/5 dark:bg-[#030712]/80"
+        className="md:col-span-12 group relative overflow-hidden rounded-[2.5rem] border border-slate-200/60 bg-white p-10 shadow-2xl shadow-slate-200/50 dark:border-white/5 dark:bg-[#030712]/80 dark:shadow-none min-h-[400px]"
       >
-        <div className="absolute top-0 right-0 w-[40%] h-full bg-blue-400/5 blur-[80px] pointer-events-none group-hover:bg-blue-400/10 transition-colors" />
-        <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 bg-blue-50/50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-700">
-              Authorized Workspace
+        <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-400/10 blur-[100px] rounded-full pointer-events-none group-hover:bg-blue-400/15 transition-all duration-1000" />
+        
+        <div className="relative z-10 h-full flex flex-col justify-between gap-12">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50/50 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-blue-700 dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+              </span>
+              System Active
             </div>
-            <div className="space-y-1">
-              <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white sm:text-4xl leading-tight">
-                Welcome back, {displayName}.
+            <div className="space-y-4">
+              <h1 className="text-5xl font-black tracking-tighter text-slate-900 dark:text-white lg:text-8xl leading-[0.85]">
+                Welcome Back,<br />
+                <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400 italic">
+                  {displayName}.
+                </span>
               </h1>
-              <p className="max-w-xl text-sm font-medium text-slate-500 dark:text-zinc-400">
-                This overview now reflects real events, finances, and
-                approvals based on the live database.
+              <p className="max-w-2xl text-lg font-medium text-slate-500 dark:text-zinc-400 leading-relaxed">
+                Your unified command center for institutional operations, global conference coordination, and secure financial management.
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-3">
+          
+          <div className="flex flex-wrap gap-4 items-center pt-4">
             <Link href="/profile">
-              <Button size="lg" variant="outline" className="rounded-full px-6 font-bold shadow-sm transition-all hover:bg-slate-50">
-                View my profile
+              <Button size="lg" variant="outline" className="rounded-2xl px-8 h-12 font-bold shadow-sm transition-all hover:bg-slate-50 hover:scale-[1.02] border-slate-200 dark:border-white/10 dark:hover:bg-white/5">
+                Account Settings
               </Button>
             </Link>
-            <Button size="lg" className="rounded-full px-6 font-bold bg-primary text-primary-foreground shadow-lg shadow-primary/10 transition-all hover:scale-[1.03]">
-              Create quick note
+            <Button size="lg" className="rounded-2xl px-8 h-12 font-bold bg-slate-900 text-white shadow-xl shadow-slate-900/10 transition-all hover:scale-[1.05] hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100">
+              Launch Task Center
             </Button>
           </div>
         </div>
       </motion.div>
 
-      {/* KPI cards */}
+      {/* Row 2: Primaries (Bento Starts Here) */}
       <motion.div
-        className="grid gap-4 md:grid-cols-2 xl:grid-cols-4"
-        variants={pageStagger}
+        variants={fadeInUp}
+        whileHover={{ scale: 1.01 }}
+        className="md:col-span-8 group relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-sm transition-all hover:shadow-xl dark:border-white/5 dark:bg-white/5"
       >
-        <motion.div
-          variants={fadeInUp}
-          whileHover={{
-            y: -4,
-            transition: { duration: 0.3 }
-          }}
-          className="group relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/5 dark:bg-white/5"
-        >
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                Events
-              </p>
-              <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 h-full">
+          <div className="space-y-6 max-w-md">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                <Calendar size={24} />
+              </div>
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Events Hub</p>
             </div>
-            <div>
-              <p className="text-4xl font-black text-slate-900 dark:text-white">
-                {summary?.eventsCount ?? 0}
+            <div className="space-y-4">
+              <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white leading-none">SECMUN Repository</h2>
+              <p className="text-sm font-medium text-slate-500 dark:text-zinc-400 leading-relaxed">
+                Aggregated repository for conferences, participation trails, and analytics.
               </p>
-              <p className="mt-1 text-xs font-bold text-slate-500 dark:text-zinc-500">
-                Active SEC‑NEXUS events
-              </p>
+              <div className="flex gap-4 items-center">
+                <div className="flex flex-col">
+                  <span className="text-3xl font-black text-slate-900 dark:text-white">{summary?.eventsCount ?? 0}</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Active Events</span>
+                </div>
+                <div className="h-8 w-px bg-slate-100 dark:bg-white/10" />
+                <div className="flex gap-2">
+                  {['Live Data', 'Stats'].map(tag => (
+                    <span key={tag} className="px-3 py-1 rounded-full border border-slate-100 bg-slate-50 text-[9px] font-bold text-slate-400 dark:bg-white/5 dark:border-white/10">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-            <Link
-              href="/events"
-              className="inline-flex h-9 items-center justify-center rounded-full bg-slate-50 px-4 text-[11px] font-black uppercase tracking-wider text-slate-900 transition-colors hover:bg-slate-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-            >
-              Open events →
-            </Link>
           </div>
-        </motion.div>
-
-        <FinanceCard />
-
-        <motion.div
-          variants={fadeInUp}
-          whileHover={{
-            y: -4,
-            transition: { duration: 0.3 }
-          }}
-          className="group relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-emerald-500/5 dark:border-white/5 dark:bg-white/5"
-        >
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                Approvals
-              </p>
-              <div className="h-2 w-2 rounded-full bg-emerald-500" />
-            </div>
-            <div>
-              <p className="text-4xl font-black text-slate-900 dark:text-white">
-                {summary?.pendingApprovals ?? 0}
-              </p>
-              <p className="mt-1 text-xs font-bold text-slate-500 dark:text-zinc-500">
-                Pending across all modules
-              </p>
-            </div>
-            <Link
-              href="/admin"
-              className="inline-flex h-9 items-center justify-center rounded-full bg-slate-50 px-4 text-[11px] font-black uppercase tracking-wider text-slate-900 transition-colors hover:bg-slate-100 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-            >
-              Open approvals →
-            </Link>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Module groups quick access */}
-      <motion.div
-        className="grid gap-4 lg:grid-cols-2"
-        variants={pageStagger}
-      >
-        {[
-          {
-            title: "Operations",
-            desc: "Tasks, meetings, and feedback workflows.",
-            href: "#",
-          },
-          {
-            title: "Events",
-            desc: "SEC‑NEXUS events, delegates, and surveys.",
-            href: "/events",
-          },
-          {
-            title: "Finance",
-            desc: "Budgets, expenses, and inventory.",
-            href: "/finance",
-          },
-          {
-            title: "Secretariat & Content",
-            desc: "Members, directory, training, news, and achievements.",
-            href: "/directory",
-          },
-        ].map((group) => (
-          <motion.div
-            key={group.title}
-            variants={fadeInUp}
-            whileHover={{ y: -5, scale: 1.01 }}
-            transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="group flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl hover:shadow-blue-500/5 dark:border-white/5 dark:bg-white/5"
+          <Link
+            href="/events"
+            className="shrink-0 inline-flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-blue-600 text-white shadow-lg shadow-blue-500/20 transition-all hover:scale-110 active:scale-95"
           >
-            <div className="space-y-3">
-              <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-                {group.title}
-              </h2>
-              <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">
-                {group.desc}
-              </p>
-            </div>
-            <div className="mt-6 flex items-center justify-between">
-              <Link
-                href={group.href}
-                className="inline-flex h-10 items-center justify-center rounded-full bg-primary/10 px-4 text-[11px] font-black uppercase tracking-wider text-primary transition-colors hover:bg-primary/20"
-              >
-                View modules →
-              </Link>
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-slate-500 dark:bg-white/5 dark:text-zinc-500">
-                Protected
-              </span>
-            </div>
-          </motion.div>
-        ))}
+            <ArrowRight size={28} />
+          </Link>
+        </div>
       </motion.div>
 
-      {/* Delegate Affairs card – only for ADMIN + DELEGATION_AFFAIRS */}
+      <div className="md:col-span-4">
+        <FinanceCard />
+      </div>
+
+      {/* Row 3: Secondaries */}
+      <motion.div
+        variants={fadeInUp}
+        whileHover={{ y: -5 }}
+        className="md:col-span-3 group relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm transition-all hover:shadow-xl dark:border-white/5 dark:bg-white/5"
+      >
+        <div className="relative z-10 flex flex-col justify-between h-full space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 size={24} />
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Approvals</p>
+          </div>
+          <div>
+            <p className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">
+              {summary?.pendingApprovals ?? 0}
+            </p>
+            <p className="text-xs font-bold text-slate-400 dark:text-zinc-500">Awaiting Auth</p>
+          </div>
+          <Link
+            href="/secretariat/usg-approvals"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 px-4 text-[11px] font-black uppercase tracking-wider text-white transition-all hover:scale-105"
+          >
+            Access List →
+          </Link>
+        </div>
+      </motion.div>
+
+      {showAdminCard && (
+        <motion.div
+  variants={fadeInUp}
+  whileHover={{ scale: 1.02 }}
+  className="md:col-span-4 group relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm transition-all hover:shadow-xl dark:border-white/5 dark:bg-white/5"
+>
+  <div className="space-y-6">
+    <div className="h-12 w-12 rounded-2xl bg-slate-100 flex items-center justify-center dark:bg-white/10 text-slate-900 dark:text-white">
+      <Zap size={24} />
+    </div>
+    <div className="space-y-2">
+      <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Admin</h2>
+      <p className="text-sm font-medium text-slate-500 dark:text-zinc-400 leading-relaxed">
+        Admin tools and protocols.
+      </p>
+    </div>
+    <Link
+      href="/admin"
+      className="inline-flex h-11 items-center justify-center rounded-xl bg-slate-50 dark:bg-white/10 px-6 text-[11px] font-black uppercase tracking-wider text-slate-900 dark:text-white transition-all hover:bg-slate-100"
+    >
+      Protocols →
+    </Link>
+  </div>
+</motion.div>
+      )}
+
+      <motion.div
+        variants={fadeInUp}
+        className="md:col-span-5 group relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm transition-all hover:shadow-xl dark:border-white/5 dark:bg-white/5"
+      >
+        <div className="flex flex-col h-full justify-between gap-8">
+          <div className="space-y-4">
+            <div className="h-12 w-12 rounded-2xl bg-slate-100 dark:bg-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300">
+              <Users size={24} />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Directorate</h2>
+              <p className="text-sm font-medium text-slate-500 dark:text-zinc-400 leading-relaxed">
+                Member registry and verified achievements.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/directory"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-slate-900 dark:bg-white dark:text-slate-900 px-6 text-[11px] font-black uppercase tracking-wider text-white transition-all hover:bg-slate-800"
+          >
+            Access Records →
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* Row 4+: Conditional Admin Modules */}
+      {showDelegationTeamCard && (
+        <motion.div variants={fadeInUp} className="md:col-span-12">
+          {/* <AnnouncementCard /> */}
+        </motion.div>
+      )}
+
       {showDaCard && (
         <motion.div
           variants={fadeInUp}
-          whileHover={{
-            y: -4,
-            boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
-          }}
-          transition={{ type: "spring", stiffness: 260, damping: 22 }}
-          className="cursor-pointer rounded-xl border bg-card p-4 shadow-sm"
+          className="md:col-span-12 group relative overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white p-10 dark:border-white/5 dark:bg-[#030712]/80 shadow-sm"
         >
-          <Link href="/da" className="flex flex-col justify-between">
-            <div className="space-y-1">
-              <h2 className="text-base font-semibold">Delegate Affairs</h2>
-              <p className="text-xs text-muted-foreground">
-                Manage registrations, allotments, and portfolios for SECMUN
-                events.
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-slate-900/5 to-transparent pointer-events-none dark:from-white/5" />
+          <Link href="/da" className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-slate-900 text-white px-3 py-1 text-[9px] font-black uppercase tracking-widest dark:bg-white dark:text-slate-900">
+                <ShieldCheck size={10} className="mr-1" />
+                Secure Module
+              </div>
+              <h2 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">Delegate Affairs Directorate</h2>
+              <p className="max-w-xl text-base font-medium text-slate-500 dark:text-zinc-400 text-lg">
+                Execute administrative control over registrations and committee allocations.
               </p>
             </div>
-            <div className="mt-4">
-              <span className="inline-flex rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
-                Open DA module
-              </span>
-            </div>
+            <Button size="lg" className="rounded-2xl h-14 px-8 font-black uppercase text-[12px] bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xl">
+              Open Directory →
+            </Button>
           </Link>
         </motion.div>
       )}
 
-      {/* Delegation Team Management card – only for Senior Secretariat */}
       {showDelegationTeamCard && (
         <motion.div
           variants={fadeInUp}
-          whileHover={{ y: -4, boxShadow: "0 18px 40px rgba(109, 40, 217, 0.08)" }}
-          transition={{ type: "spring", stiffness: 260, damping: 22 }}
-          className="group relative overflow-hidden rounded-[2rem] border border-violet-200/60 bg-white p-6 shadow-xl shadow-violet-500/5 dark:border-white/5 dark:bg-white/5 cursor-pointer"
+          className="md:col-span-12 group relative overflow-hidden rounded-[2.5rem] border border-violet-200/60 bg-white p-10 dark:border-white/5 dark:bg-[#030712]/80 shadow-xl shadow-violet-500/5"
         >
-          <div className="absolute top-0 right-0 w-[40%] h-full bg-violet-400/5 blur-[60px] pointer-events-none group-hover:bg-violet-400/10 transition-colors" />
-          <Link href="/delegation-team" className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-violet-200/60 bg-violet-50/70 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-violet-700 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300">
-                  <span>🌏</span> Senior Secretariat
-                </div>
+          <div className="absolute top-0 right-0 w-1/2 h-full bg-violet-400/5 blur-[100px] pointer-events-none group-hover:bg-violet-400/10 transition-all duration-700" />
+          <Link href="/delegation-team" className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-full border border-violet-200/60 bg-violet-50/70 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.25em] text-violet-700 dark:bg-violet-500/10 dark:text-violet-300">
+                <Flag size={10} className="mr-1" />
+                Executive Command
               </div>
-              <div>
-                <h2 className="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-                  Delegation Team Management
-                </h2>
-                <p className="mt-1 text-sm font-medium text-slate-500 dark:text-zinc-400">
-                  Enroll members, track attendance, record awards, and manage galleries for outbound conferences.
+              <div className="space-y-3">
+                <h2 className="text-4xl font-black tracking-tighter text-slate-900 dark:text-white">Delegation Team Command</h2>
+                <p className="max-w-2xl text-lg font-medium text-slate-500 dark:text-zinc-400 leading-relaxed">
+                  Unified platform for outbound conference logistics, attendance tracking, and achievement verification.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
-                {['Members', 'Attendance', 'Awards', 'Gallery'].map(f => (
-                  <span key={f} className="rounded-full bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-violet-600 dark:text-violet-300">
+              <div className="flex flex-wrap gap-3">
+                {['Ops Control', 'Data Vault', 'Media Library'].map(f => (
+                  <span key={f} className="rounded-xl bg-violet-50 dark:bg-violet-500/10 border border-violet-100 dark:border-violet-500/20 px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-violet-600 dark:text-violet-300">
                     {f}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="shrink-0">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-5 py-2.5 text-[11px] font-black uppercase tracking-wider text-white shadow-lg shadow-violet-500/20 group-hover:bg-violet-700 transition-colors">
-                Open Module →
-              </span>
-            </div>
+            <span className="inline-flex items-center justify-center rounded-2xl bg-violet-600 h-16 px-10 text-[13px] font-black uppercase tracking-widest text-white shadow-2xl shadow-violet-500/40 hover:bg-violet-700 transition-all hover:scale-105 active:scale-95">
+              Initialize System →
+            </span>
           </Link>
         </motion.div>
       )}
