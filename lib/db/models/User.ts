@@ -20,13 +20,13 @@ export type SecretariatRole =
 export type SecretariatOffice =
   | 'FINANCE'
   | 'LOGISTICS'
-  | 'DELEGATIONS'
-  | 'ACADEMICS'
+  | 'DELEGATION_AFFAIRS'
   | 'PUBLIC_RELATIONS'
   | 'MARKETING'
   | 'IT_DESIGN'
   | 'IT_SOCIAL_MEDIA'
   | 'CONFERENCE_MANAGEMENT'
+  | 'SPONSORSHIP'
   | null
 
 export type MemberStatus = 'ACTIVE' | 'ALUMNI' | 'APPLICANT' | 'REJECTED'
@@ -79,7 +79,7 @@ export interface IUser extends Document {
 const UserSchema = new Schema<IUser>(
   {
     uid: { type: String, required: true, unique: true },
-    email: { type: String, required: true, index: true },
+    email: { type: String, required: true, unique: true, index: true },
     displayName: { type: String },
     photoURL: { type: String },
     fcmToken: { type: String },
@@ -114,13 +114,13 @@ const UserSchema = new Schema<IUser>(
       enum: [
         'FINANCE',
         'LOGISTICS',
-        'DELEGATIONS',
-        'ACADEMICS',
+        'DELEGATION_AFFAIRS',
         'PUBLIC_RELATIONS',
         'MARKETING',
         'IT_DESIGN',
         'IT_SOCIAL_MEDIA',
         'CONFERENCE_MANAGEMENT',
+        'SPONSORSHIP',
         null,
       ],
       default: null,
@@ -129,6 +129,7 @@ const UserSchema = new Schema<IUser>(
       type: String,
       enum: ['ACTIVE', 'ALUMNI', 'APPLICANT', 'REJECTED'],
       default: 'APPLICANT',
+      index: true,
     },
 
     canManageMembers: { type: Boolean, default: false },

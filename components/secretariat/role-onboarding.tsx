@@ -42,10 +42,10 @@ type SecretariatRole =
   | typeof memberRole
 
 const officeOptions: OfficeKey[] = [
-  "DELEGATIONS",
-  "ACADEMICS",
+  "DELEGATION_AFFAIRS",
   "MARKETING",
   "FINANCE",
+  "SPONSORSHIP",
   "IT_DESIGN",
   "IT_SOCIAL_MEDIA",
   "PUBLIC_RELATIONS",

@@ -1,6 +1,6 @@
 // app/api/auth/sync/route.ts
 import { NextResponse } from 'next/server'
-import { connectToDatabase } from '@/lib/db/mongodb'
+import { connectToDatabase } from '@/lib/db/connect'
 import { User } from '@/lib/db/models/User'
 
 export async function POST(req: Request) {
@@ -19,9 +19,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing uid or email' }, { status: 400 })
     }
 
-    const existing = await User.findOne({ uid })
+    // 1. Try to find user by email (most reliable for account linking)
+    // 2. Fallback to finding by uid
+    let user = await User.findOne({ 
+      $or: [
+        { email },
+        { uid }
+      ] 
+    })
 
-    if (!existing) {
+    if (!user) {
+      // Create new user if none exists with this email or uid
       await User.create({
         uid,
         email,
@@ -29,9 +37,13 @@ export async function POST(req: Request) {
         photoURL,
       })
     } else {
-      existing.displayName = displayName ?? existing.displayName
-      existing.photoURL = photoURL ?? existing.photoURL
-      await existing.save()
+      // If user exists:
+      // - Ensure uid matches (updates uid if user switched login methods)
+      // - Update profile details if provided
+      user.uid = uid
+      user.displayName = displayName ?? user.displayName
+      user.photoURL = photoURL ?? user.photoURL
+      await user.save()
     }
 
     return NextResponse.json({ ok: true })
