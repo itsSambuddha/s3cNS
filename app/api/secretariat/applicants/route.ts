@@ -3,11 +3,13 @@ import { NextResponse } from 'next/server'
 import { connectToDatabase } from '@/lib/db/connect'
 import { User } from '@/lib/db/models/User'
 import { getCurrentUser } from '@/lib/auth/getCurrentUser'
+import { isAuthorizedAdmin } from '@/lib/auth/permissions'
+
 
 export async function GET() {
   await connectToDatabase()
   const current = await getCurrentUser()
-  if (!current || (current.role !== 'ADMIN' && !current.canApproveUSG)) {
+  if (!isAuthorizedAdmin(current)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -53,7 +55,7 @@ export async function GET() {
 export async function POST(req: Request) {
   await connectToDatabase()
   const current = await getCurrentUser()
-  if (!current || (current.role !== 'ADMIN' && !current.canApproveUSG)) {
+  if (!isAuthorizedAdmin(current)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

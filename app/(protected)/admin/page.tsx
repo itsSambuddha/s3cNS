@@ -86,12 +86,16 @@ export default function AdminDashboardPage() {
   const { user, loading: userLoading } = useAppUser()
 
   // Gate: show nothing until we know who the user is
-  const isAdmin = !userLoading && user?.role === "ADMIN"
+  const isAdmin = !userLoading && user && (
+    user.role === "ADMIN" || 
+    user.role === "TEACHER" ||
+    ["PRESIDENT", "SECRETARY_GENERAL", "DIRECTOR_GENERAL", "TEACHER"].includes(user.secretariatRole)
+  )
 
   useEffect(() => {
     if (userLoading) return;
 
-    if (!user || user.role !== "ADMIN") {
+    if (!isAdmin) {
       router.replace("/dashboard");
       return;
     }

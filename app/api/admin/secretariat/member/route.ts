@@ -3,13 +3,15 @@ import { NextResponse } from "next/server"
 import { connectToDatabase } from "@/lib/db/connect"
 import { User } from "@/lib/db/models/User"
 import { getCurrentUser } from "@/lib/auth/getCurrentUser"
+import { isAuthorizedAdmin } from "@/lib/auth/permissions"
+
 
 export async function PATCH(req: Request) {
   try {
     await connectToDatabase()
 
     const current = await getCurrentUser()
-    if (!current || (current.role !== "ADMIN" && !current.canManageMembers)) {
+    if (!isAuthorizedAdmin(current)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -89,7 +91,7 @@ export async function DELETE(req: Request) {
     await connectToDatabase()
 
     const current = await getCurrentUser()
-    if (!current || (current.role !== "ADMIN" && !current.canManageMembers)) {
+    if (!isAuthorizedAdmin(current)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 

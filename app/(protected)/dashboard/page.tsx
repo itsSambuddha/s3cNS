@@ -109,7 +109,11 @@ export default function DashboardPage() {
   const showDelegationTeamCard = canManageDelegationTeam(appUser)
 
   // Admin Card Access
-  const showAdminCard = appUser.role === 'ADMIN'
+  const showAdminCard = appUser && (
+    appUser.role === 'ADMIN' || 
+    appUser.role === 'TEACHER' ||
+    ['PRESIDENT', 'SECRETARY_GENERAL', 'DIRECTOR_GENERAL', 'TEACHER'].includes(appUser.secretariatRole)
+  )
 
 
   return (

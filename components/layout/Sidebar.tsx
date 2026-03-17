@@ -62,7 +62,11 @@ export default function Sidebar() {
   const { user: appUser, loading } = useAppUser()
 
   const isLoggedIn = !!appUser
-  const isAdmin = appUser?.role === "ADMIN"
+  const isAdmin = appUser && (
+    appUser.role === "ADMIN" || 
+    appUser.role === "TEACHER" || 
+    ["PRESIDENT", "SECRETARY_GENERAL", "DIRECTOR_GENERAL", "TEACHER"].includes(appUser.secretariatRole)
+  )
   const isSecretariat = Boolean(appUser?.secretariatRole)
 
   const allLinks: AnyLink[] = [

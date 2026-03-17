@@ -21,8 +21,11 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ file, metadata }) => {
       // file.url is the public URL; metadata includes userId from middleware
-      console.log("Upload complete for userId:", metadata.userId);
-      return { url: file.url }
+      console.log(">>> [UploadThing] Upload complete for userId:", metadata.userId);
+      console.log(">>> [UploadThing] File URL:", file.url);
+      
+      // Return the URL explicitly to the client
+      return { url: file.url, name: file.name, size: file.size }
     }),
 } satisfies FileRouter
 

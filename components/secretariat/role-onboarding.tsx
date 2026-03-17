@@ -79,7 +79,12 @@ export default function RoleOnboarding({
 }) {
   const router = useRouter()
   const { user: fbUser } = useAuth()
-  const uploadThing = useUploadThing("avatarUploader")
+  const uploadThing = useUploadThing("avatarUploader", {
+    onUploadError: (error) => {
+      console.error("UploadThing onUploadError:", error);
+      setError(`Upload failed: ${error.message}`);
+    },
+  })
 
   const [currentStep, setCurrentStep] = useState<StepId>(1)
   const [saving, setSaving] = useState(false)
@@ -188,22 +193,38 @@ export default function RoleOnboarding({
 
       if (avatarFile) {
         try {
+          console.log("Starting upload for file:", avatarFile.name, avatarFile.size);
           const result = await uploadThing.startUpload([avatarFile])
-          if (result && result[0]) {
-            avatarUrl = result[0].url
-          } else {
-            throw new Error("Upload failed - no URL returned")
+          console.log("Upload result raw:", result);
+          
+          if (!result) {
+            throw new Error("Upload timed out or was interrupted. Please check your connection.")
+          }
+
+          if (result && result.length > 0) {
+            const uploadedFile = result[0];
+            // Use ufsUrl as per deprecation warning, fall back to others
+            // @ts-ignore
+            avatarUrl = uploadedFile.ufsUrl || uploadedFile.url || uploadedFile.appUrl || uploadedFile.fileUrl;
+            
+            console.log("Extracted avatarUrl:", avatarUrl);
+          }
+
+          if (!avatarUrl) {
+            const keys = result && result[0] ? Object.keys(result[0]).join(", ") : "none";
+            throw new Error(`Upload record created but no URL found in response. (Keys: ${keys})`)
           }
         } catch (uploadErr: any) {
           console.error("avatar upload error", uploadErr)
           setError(
             uploadErr?.message ||
-            "Could not upload avatar. Please try again.",
+            "Could not upload avatar. Please check your connection and try again.",
           )
           setSaving(false)
           return // STOP here
         }
       }
+
 
       const res = await fetch("/api/secretariat/onboarding", {
         method: "POST",
