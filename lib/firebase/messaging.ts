@@ -13,7 +13,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const VAPID_KEY = "BDZMx_Khov_BpbvOTWiCJVSacPbXkClIZFq5wT7rI9vAq3Is1LwP9y0G2IT3t18Vh3jOVN6asZw_S5wZrVTyTpQ";
+const VAPID_KEY = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY || "BDZMx_Khov_BpbvOTWiCJVSacPbXkClIZFq5wT7rI9vAq3Is1LwP9y0G2IT3t18Vh3jOVN6asZw_S5wZrVTyTpQ";
 
 // Initialize Firebase app on the client
 function initializeClientApp() {
@@ -121,13 +121,19 @@ export function subscribeForegroundMessages(cb?: (payload: any) => void) {
     const url = payload.data?.url as string | undefined
 
     if (Notification.permission === "granted") {
+      // Trigger vibration for "buzz" feel in foreground
+      if ("vibrate" in navigator) {
+        navigator.vibrate([200, 100, 200]);
+      }
+
       const n = new Notification(title, {
         body,
         icon: "/logo/s3cnsLogo.svg",
         badge: "/logo/s3cnsLogo.svg",
         tag: "s3cns-push",
         renotify: true,
-      } as NotificationOptions & { renotify?: boolean })
+        vibrate: [200, 100, 200],
+      } as any)
       if (url) {
         n.onclick = () => {
           window.focus()

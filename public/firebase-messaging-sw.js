@@ -31,7 +31,10 @@ messaging.onBackgroundMessage((payload) => {
     body: payload.notification.body,
     icon: "/logo/s3cnsLogo.svg",
     badge: "/logo/s3cnsLogo.svg",
+    vibrate: [200, 100, 200],
     data: payload.data,
+    tag: payload.data?.channelId || 'chat-msg',
+    renotify: true
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);

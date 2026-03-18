@@ -16,6 +16,7 @@ import {
   IconTrophy,
   IconUsersGroup,
   IconShield,
+  IconMessage,
 } from "@tabler/icons-react"
 
 const baseLinks = [
@@ -25,6 +26,7 @@ const baseLinks = [
 
   // { href: "/documents", label: "Documents", icon: IconFileText },
   { href: "/news", label: "News", icon: IconNews },
+  { href: "/chat", label: "Chat", icon: IconMessage },
   { href: "/achievements", label: "Achievements", icon: IconTrophy },
   // { href: "/directory", label: "Directory", icon: IconUsersGroup },
 ]
