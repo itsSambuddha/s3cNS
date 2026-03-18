@@ -18,22 +18,28 @@ export async function notifyChannelParticipants(
   console.log(`>>> [ChatNotify] Starting for channel: ${channel.name} (${channel._id})`);
   await connectToDatabase()
 
-  // 1. Find all users who are in the "allowedRoles" for this channel
-  // We exclude the sender
-  const query = {
-    // uid: { $ne: senderId }, // Temporarily disabled so you can test notifications on your own account
-    $or: [
+  // For DMs, we notify participants. For Groups, we notify based on roles.
+  const query: any = {
+    memberStatus: 'ACTIVE'
+  };
+
+  if (channel.type === 'DM') {
+    query.uid = { $in: channel.participants };
+    console.log(`>>> [ChatNotify] DM Path: targeting participants:`, channel.participants);
+  } else {
+    query.$or = [
       { secretariatRole: { $in: channel.allowedRoles } },
       { role: { $in: channel.allowedRoles } }
-    ],
-    memberStatus: { $in: ['ACTIVE', 'APPLICANT'] } 
-  };
+    ];
+    console.log(`>>> [ChatNotify] Group Path: targeting roles:`, channel.allowedRoles);
+  }
   
-  console.log(`>>> [ChatNotify] Query:`, JSON.stringify(query, null, 2));
+  // NOTE: We used to exclude senderId, but currently enabled for self-testing 
+  // query.uid = { ...query.uid, $ne: senderId }; 
   
   const eligibleUsers = await User.find(query);
 
-  console.log(`>>> [ChatNotify] Found ${eligibleUsers.length} eligible users (excluding sender)`);
+  console.log(`>>> [ChatNotify] Found ${eligibleUsers.length} users to notify`);
 
   const notificationTitle = `${message.senderName} in ${channel.name}`
   const notificationBody = message.content.length > 100 

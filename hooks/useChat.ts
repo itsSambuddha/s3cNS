@@ -56,7 +56,12 @@ export function useChat(channelId: string | null) {
           })
         }
       } else if (data.messages && data.messages.length > 0) {
-        setMessages((prev) => [...prev, ...data.messages])
+        setMessages((prev) => {
+          const existingIds = new Set(prev.map(m => m._id.toString()))
+          const newUniqueMsgs = data.messages.filter((m: any) => !existingIds.has(m._id.toString()))
+          if (newUniqueMsgs.length === 0) return prev
+          return [...prev, ...newUniqueMsgs]
+        })
         lastFetchRef.current = data.messages[data.messages.length - 1].createdAt
       }
       
@@ -104,23 +109,42 @@ export function useChat(channelId: string | null) {
     }
   }, [channelId, isPolling, fetchMessages])
 
-  const sendMessage = async (content: string, attachments: any[] = []) => {
+  const sendMessage = async (content: string, attachments: any[] = [], replyTo?: string) => {
     if (!channelId || !content.trim()) return
 
     try {
+      // Optimistic Update
+      const tempId = `temp-${Date.now()}`
+      const tempMsg: any = {
+        _id: tempId,
+        channelId,
+        senderId: 'me', // Will be replaced by real user info in UI usually, or use user.uid if available
+        senderName: 'You',
+        content,
+        attachments: attachments || [],
+        replyTo: replyTo || undefined,
+        readBy: [],
+        createdAt: new Date().toISOString(),
+        isOptimistic: true // Marker for UI
+      }
+      
+      setMessages(prev => [...prev, tempMsg])
+
       const response = await fetch('/api/chat/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ channelId, content, attachments }),
+        body: JSON.stringify({ channelId, content, attachments, replyTo }),
       })
       const data = await response.json()
 
-      if (!response.ok) throw new Error(data.error || 'Failed to send message')
+      if (!response.ok) {
+        // Rollback optimistic update on error
+        setMessages(prev => prev.filter(m => m._id.toString() !== tempId))
+        throw new Error(data.error || 'Failed to send message')
+      }
 
-      // Optimistic update would go here, but since polling is fast (3s), 
-      // we'll wait for the next poll or manually push it.
-      // For a better UX, we'll manually add it:
-      setMessages((prev) => [...prev, data.message])
+      // Replace optimistic message with real message
+      setMessages(prev => prev.map(m => m._id.toString() === tempId ? data.message : m))
       lastFetchRef.current = data.message.createdAt
       
       return data.message
@@ -140,7 +164,7 @@ export function useChat(channelId: string | null) {
       const data = await response.json()
       if (!response.ok) throw new Error(data.error || 'Failed to edit message')
 
-      setMessages((prev) => prev.map((m) => (m._id.toString() === messageId ? data.message : m)))
+      setMessages((prev) => prev.map((m) => ((m._id as any)?.toString() === messageId ? data.message : m)))
       return data.message
     } catch (err: any) {
       setError(err.message)
@@ -157,9 +181,7 @@ export function useChat(channelId: string | null) {
       if (!response.ok) throw new Error(data.error || 'Failed to delete message')
 
       setMessages((prev) =>
-        prev.map((m) =>
-          m._id.toString() === messageId ? ({ ...m, deleted: true, content: 'This message was deleted' } as any) : m
-        ) as IMessage[]
+        prev.filter((m) => (m._id as any)?.toString() !== messageId) as IMessage[]
       )
     } catch (err: any) {
       setError(err.message)
@@ -167,5 +189,23 @@ export function useChat(channelId: string | null) {
     }
   }
 
-  return { messages, loading, error, isPolling, sendMessage, editMessage, deleteMessage }
+  const reactToMessage = async (messageId: string, emoji: string) => {
+    try {
+      const response = await fetch(`/api/chat/messages/${messageId}/react`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emoji }),
+      })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Failed to react')
+
+      setMessages((prev) => prev.map((m) => ((m._id as any)?.toString() === messageId ? data.message : m)))
+      return data.message
+    } catch (err: any) {
+      setError(err.message)
+      throw err
+    }
+  }
+
+  return { messages, loading, error, isPolling, sendMessage, editMessage, deleteMessage, reactToMessage }
 }

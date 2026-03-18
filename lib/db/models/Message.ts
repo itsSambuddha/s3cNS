@@ -15,6 +15,11 @@ export interface IMessage extends Document {
   senderAvatar?: string
   content: string
   attachments?: IAttachment[]
+  replyTo?: mongoose.Types.ObjectId // Reference to the message being replied to
+  reactions?: {
+    emoji: string
+    userId: string
+  }[]
   edited?: boolean
   deleted?: boolean
   readBy: {
@@ -38,6 +43,13 @@ const MessageSchema = new Schema<IMessage>(
         name: { type: String, required: true },
         type: { type: String, required: true },
         size: { type: Number },
+      },
+    ],
+    replyTo: { type: Schema.Types.ObjectId, ref: 'Message' },
+    reactions: [
+      {
+        emoji: { type: String, required: true },
+        userId: { type: String, required: true },
       },
     ],
     edited: { type: Boolean, default: false },

@@ -4,8 +4,8 @@
 import React, { useState, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import type { IChannel } from '@/lib/db/models/Channel'
-import { IconHash, IconLock, IconMessagePlus, IconUsers, IconSearch, IconX, IconLoader2 } from '@tabler/icons-react'
-import { motion } from 'framer-motion'
+import { IconHash, IconMessagePlus, IconUsers, IconSearch, IconX, IconLoader2 } from '@tabler/icons-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface ChatSidebarProps {
   channels: IChannel[]
@@ -14,6 +14,7 @@ interface ChatSidebarProps {
   userUid: string
   userName: string
   loading?: boolean
+  onChannelCreated?: (channel: IChannel) => void
 }
 
 export default function ChatSidebar({ 
@@ -22,7 +23,8 @@ export default function ChatSidebar({
   onSelectChannel, 
   userUid,
   userName,
-  loading 
+  loading,
+  onChannelCreated
 }: ChatSidebarProps) {
   const [isDmModalOpen, setIsDmModalOpen] = useState(false)
   const [contacts, setContacts] = useState<any[]>([])
@@ -54,6 +56,7 @@ export default function ChatSidebar({
         body: JSON.stringify({ targetUid })
       })
       const newChannel = await res.json()
+      if (onChannelCreated) onChannelCreated(newChannel)
       onSelectChannel(newChannel._id.toString())
       setIsDmModalOpen(false)
     } catch (err) {
@@ -70,128 +73,200 @@ export default function ChatSidebar({
   const dms = channels.filter(c => c.type === 'DM')
 
   return (
-    <div className="flex w-64 flex-col border-r bg-slate-50 dark:bg-[#030712] dark:border-white/5">
-      <div className="flex h-16 items-center justify-between px-4 border-b dark:border-white/5">
-        <h2 className="text-lg font-bold">Channels</h2>
+    <div className="flex flex-col h-full bg-[#f2f3f5] dark:bg-[#2b2d31] transition-colors overflow-hidden">
+      {/* Sidebar Header */}
+      <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b border-black/5 dark:border-white/5 bg-white/50 dark:bg-black/10 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 dark:text-[#949ba4]">
+            Comm Center
+          </h2>
+          <span className="rounded-full bg-amber-400 dark:bg-amber-500 px-2 py-0.5 text-[10px] font-black text-amber-950 shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-pulse">
+            BETA
+          </span>
+        </div>
         <button 
           onClick={() => setIsDmModalOpen(true)}
-          className="p-1 hover:bg-slate-200 dark:hover:bg-white/5 rounded-lg transition-colors"
-          title="New Direct Message"
+          className="p-1.5 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg transition-all text-sky-600 dark:text-sky-400 active:scale-90"
         >
           <IconMessagePlus className="h-5 w-5" />
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 space-y-6">
+      <div className="flex-1 overflow-y-auto p-3 space-y-6 custom-scrollbar pb-10">
         {/* Groups Section */}
-        <div>
-          <div className="flex items-center gap-2 px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            <IconUsers className="h-3 w-3" />
-            <span>Groups</span>
+        <div className="space-y-1">
+          <div className="flex items-center justify-between px-2 mb-2">
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-[#949ba4]">
+              <IconUsers className="h-3 w-3" />
+              <span>Channels</span>
+            </div>
           </div>
           <div className="space-y-0.5">
-            {groups.map((channel) => (
-              <button
-                key={channel._id.toString()}
-                onClick={() => onSelectChannel(channel._id.toString())}
-                className={cn(
-                  'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
-                  selectedChannelId === channel._id.toString()
-                    ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
-                    : 'text-slate-600 hover:bg-slate-200 dark:text-zinc-400 dark:hover:bg-white/5'
-                )}
-              >
-                <IconHash className="h-4 w-4 shrink-0" />
-                <span className="truncate">{channel.name}</span>
-              </button>
-            ))}
+            {groups.map((channel) => {
+              const isActive = selectedChannelId === channel._id.toString()
+              return (
+                <button
+                  key={channel._id.toString()}
+                  onClick={() => onSelectChannel(channel._id.toString())}
+                  className={cn(
+                    'group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-all duration-200',
+                    isActive
+                      ? 'bg-sky-500 text-white shadow-[0_4px_12px_rgba(14,165,233,0.3)]'
+                      : 'text-slate-600 dark:text-[#949ba4] hover:bg-slate-200 dark:hover:bg-[#35373c] hover:text-slate-900 dark:hover:text-white'
+                  )}
+                >
+                  <div className={cn(
+                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all",
+                    isActive ? "bg-white/20" : "bg-black/5 dark:bg-black/20"
+                  )}>
+                    <IconHash className="h-4 w-4" />
+                  </div>
+                  <span className="truncate flex-1 text-left">{channel.name}</span>
+                </button>
+              )
+            })}
           </div>
         </div>
 
         {/* DMs Section */}
-        <div>
-          <div className="flex items-center gap-2 px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            <IconMessagePlus className="h-3 w-3" />
-            <span>Direct Messages</span>
+        <div className="space-y-1">
+          <div className="flex items-center justify-between px-2 mb-2">
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-[#949ba4]">
+              <IconMessagePlus className="h-3 w-3" />
+              <span>Direct Messages</span>
+            </div>
           </div>
           <div className="space-y-0.5">
             {dms.map((channel) => {
               const parts = channel.name.split(' & ')
               const otherName = parts.find(p => !p.toLowerCase().includes(userName.toLowerCase())) || channel.name
               const initial = otherName.match(/[a-zA-Z]/)?.[0] || '?'
+              const isActive = selectedChannelId === channel._id.toString()
+              
               return (
                 <button
                   key={channel._id.toString()}
                   onClick={() => onSelectChannel(channel._id.toString())}
                   className={cn(
-                    'flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
-                    selectedChannelId === channel._id.toString()
-                      ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
-                      : 'text-slate-600 hover:bg-slate-200 dark:text-zinc-400 dark:hover:bg-white/5'
+                    'group relative flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-sm transition-all duration-200',
+                    isActive
+                      ? 'bg-white dark:bg-[#404249] shadow-md border border-black/5 dark:border-white/5'
+                      : 'text-slate-600 dark:text-[#949ba4] hover:bg-slate-200 dark:hover:bg-[#35373c] hover:text-slate-900 dark:hover:text-white'
                   )}
                 >
-                  <div className="h-5 w-5 rounded-full bg-slate-300 dark:bg-zinc-700 flex items-center justify-center text-[8px] font-bold text-white uppercase shrink-0">
+                  {/* Active Indicator Pill */}
+                  {isActive && (
+                    <motion.div 
+                      layoutId="activeIndicator"
+                      className="absolute -left-1 w-1 h-6 bg-sky-500 rounded-r-full" 
+                    />
+                  )}
+                  
+                  <div className={cn(
+                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-black uppercase transition-all shadow-sm",
+                    isActive 
+                      ? "bg-sky-500 text-white" 
+                      : "bg-white dark:bg-[#1e1f22] text-slate-500 dark:text-[#949ba4] border border-black/5 dark:border-white/5"
+                  )}>
                     {initial}
                   </div>
-                  <span className="truncate text-left">{otherName}</span>
+                  <div className="flex flex-1 flex-col items-start overflow-hidden">
+                    <span className={cn(
+                      "w-full truncate font-bold leading-tight",
+                      isActive ? "text-slate-900 dark:text-white" : "text-slate-600 dark:text-[#949ba4]"
+                    )}>
+                      {otherName.replace(/\(.*?\)\s/g, '')}
+                    </span>
+                    <span className={cn(
+                      "w-full truncate text-[10px] mt-0.5 font-medium",
+                      isActive ? "text-sky-500" : "text-slate-400 dark:text-zinc-500"
+                    )}>
+                      {channel.lastMessage?.content || 'Say hello...'}
+                    </span>
+                  </div>
                 </button>
               )
             })}
-            {dms.length === 0 && (
-              <p className="px-3 text-[10px] text-slate-400 italic">No recent DMs</p>
-            )}
           </div>
         </div>
       </div>
 
       {/* DM Modal */}
-      {isDmModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-zinc-900"
-          >
-            <div className="flex items-center justify-between border-b p-4 dark:border-white/5">
-              <h3 className="font-bold">New Direct Message</h3>
-              <button onClick={() => setIsDmModalOpen(false)}><IconX className="h-5 w-5" /></button>
-            </div>
-            
-            <div className="p-4">
-              <div className="relative mb-4">
-                <IconSearch className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-                <input 
-                  type="text" 
-                  placeholder="Search members..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm focus:border-sky-500 focus:outline-none dark:border-white/10 dark:bg-zinc-800"
-                />
+      <AnimatePresence>
+        {isDmModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsDmModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-[#313338] border border-black/5 dark:border-white/10"
+            >
+              <div className="flex items-center justify-between p-6 pb-2">
+                <h3 className="text-xl font-black tracking-tight">Select Member</h3>
+                <button onClick={() => setIsDmModalOpen(false)} className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+                  <IconX className="h-5 w-5" />
+                </button>
               </div>
+              
+              <div className="p-6 pt-2">
+                <div className="relative mb-6">
+                  <IconSearch className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input 
+                    type="text" 
+                    placeholder="Search by name or role..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full rounded-2xl border-none bg-slate-100 py-3 pl-12 pr-4 text-sm focus:ring-2 focus:ring-sky-500/50 outline-none dark:bg-[#1e1f22]"
+                  />
+                </div>
 
-              <div className="max-h-60 overflow-y-auto space-y-1">
-                {loadingContacts ? (
-                  <div className="flex h-20 items-center justify-center"><IconLoader2 className="h-5 w-5 animate-spin" /></div>
-                ) : filteredContacts.map(contact => (
-                  <button
-                    key={contact.uid}
-                    onClick={() => startDm(contact.uid)}
-                    className="flex w-full items-center gap-3 rounded-xl p-3 text-left hover:bg-slate-100 dark:hover:bg-white/5 transition-colors"
-                  >
-                    <div className="h-10 w-10 overflow-hidden rounded-full bg-slate-200 dark:bg-zinc-800">
-                      {contact.photoURL ? <img src={contact.photoURL} className="h-full w-full object-cover" /> : <div className="flex h-full w-full items-center justify-center font-bold text-slate-400">{contact.displayName?.[0] || contact.email[0]}</div>}
+                <div className="max-h-[400px] overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+                  {loadingContacts ? (
+                    <div className="flex h-32 items-center justify-center flex-col gap-2">
+                      <IconLoader2 className="h-6 w-6 animate-spin text-sky-500" />
+                      <p className="text-xs text-slate-400">Fetching users...</p>
                     </div>
-                    <div>
-                      <p className="text-sm font-bold">{contact.displayName || contact.email.split('@')[0]}</p>
-                      <p className="text-[10px] text-slate-500 uppercase">{contact.secretariatRole || contact.role}</p>
-                    </div>
-                  </button>
-                ))}
+                  ) : filteredContacts.length === 0 ? (
+                    <div className="py-10 text-center text-slate-400 text-sm">No members found matching "{search}"</div>
+                  ) : filteredContacts.map(contact => (
+                    <button
+                      key={contact.uid}
+                      onClick={() => startDm(contact.uid)}
+                      className="group flex w-full items-center gap-4 rounded-2xl p-3 text-left hover:bg-sky-500/5 dark:hover:bg-sky-500/10 transition-all border border-transparent hover:border-sky-500/20"
+                    >
+                      <div className="relative shrink-0">
+                        <div className="h-12 w-12 overflow-hidden rounded-full transition-transform group-hover:scale-105 shadow-md">
+                          {contact.photoURL ? (
+                            <img src={contact.photoURL} className="h-full w-full object-cover" />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-sky-500 text-white font-black text-lg">
+                              {(contact.displayName || contact.email)[0].toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-black truncate">{contact.displayName || contact.email.split('@')[0]}</p>
+                        <p className="text-[10px] font-bold text-sky-500 uppercase tracking-widest truncate">{contact.secretariatRole || contact.role}</p>
+                      </div>
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                        <IconMessagePlus className="h-5 w-5 text-sky-500" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
