@@ -50,7 +50,7 @@ export function AttendanceTab({ conference, canManage, onRefresh }: Props) {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-lg font-black text-slate-900 dark:text-white">Daily Attendance</h3>
           <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Marking attendance for {approved.length} approved delegate{approved.length !== 1 ? 's' : ''} across {dates.length} day{dates.length !== 1 ? 's' : ''}</p>

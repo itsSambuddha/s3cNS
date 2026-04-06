@@ -309,9 +309,9 @@ export default function DelegationTeamPage() {
                       {/* OVERVIEW TAB */}
                       {tab === 'overview' && (
                         <div className="space-y-6">
-                          <div className="flex items-center justify-between">
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <h3 className="text-lg font-black text-slate-900 dark:text-white">Conference Details</h3>
-                            <div className="flex gap-2">
+                            <div className="flex flex-wrap gap-2">
                               <button onClick={() => window.print()}
                                 className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-wider text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-white/5">
                                 <Printer className="w-3.5 h-3.5" /> Print
