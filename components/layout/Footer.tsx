@@ -22,7 +22,7 @@ export function Footer({ className }: { className?: string }) {
   return (
     <footer
       className={cn(
-        "w-full bg-[#020617] border-t border-slate-900 relative overflow-hidden text-slate-100",
+        "w-full bg-[#020617] border-t border-slate-900 relative overflow-hidden text-slate-100 print:hidden",
         className,
       )}
     >

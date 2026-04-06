@@ -75,7 +75,12 @@ export default function DelegationTeamPage() {
   const createConference = async () => {
     if (!newName.trim()) return
     setCreating(true)
-    const dates = newDates.sort((a, b) => a.getTime() - b.getTime()).map(d => d.toISOString().split('T')[0])
+    const dates = newDates.sort((a, b) => a.getTime() - b.getTime()).map(d => {
+      const year = d.getFullYear()
+      const month = String(d.getMonth() + 1).padStart(2, '0')
+      const day = String(d.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    })
     const res = await fetch('/api/outbound-conference', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -94,7 +99,12 @@ export default function DelegationTeamPage() {
   const saveOverview = async () => {
     if (!conference) return
     setSavingOverview(true)
-    const dates = ovDates.sort((a, b) => a.getTime() - b.getTime()).map(d => d.toISOString().split('T')[0])
+    const dates = ovDates.sort((a, b) => a.getTime() - b.getTime()).map(d => {
+      const year = d.getFullYear()
+      const month = String(d.getMonth() + 1).padStart(2, '0')
+      const day = String(d.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    })
     await fetch(`/api/outbound-conference/${conference._id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
