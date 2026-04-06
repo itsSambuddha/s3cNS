@@ -88,7 +88,7 @@ export default function Sidebar() {
   if (!allLinks.length) return null
 
   return (
-    <aside className="hidden h-screen shrink-0 sm:block">
+    <aside className="hidden h-screen shrink-0 sm:block print:hidden">
       <motion.div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}

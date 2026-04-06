@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { Printer } from 'lucide-react'
 import type { OutboundConference } from './types'
 
 interface Props {
@@ -49,9 +50,15 @@ export function AttendanceTab({ conference, canManage, onRefresh }: Props) {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h3 className="text-lg font-black text-slate-900 dark:text-white">Daily Attendance</h3>
-        <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Marking attendance for {approved.length} approved delegate{approved.length !== 1 ? 's' : ''} across {dates.length} day{dates.length !== 1 ? 's' : ''}</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-lg font-black text-slate-900 dark:text-white">Daily Attendance</h3>
+          <p className="text-xs text-slate-500 dark:text-zinc-400 mt-0.5">Marking attendance for {approved.length} approved delegate{approved.length !== 1 ? 's' : ''} across {dates.length} day{dates.length !== 1 ? 's' : ''}</p>
+        </div>
+        <button onClick={() => window.print()}
+          className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-wider text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-white/5">
+          <Printer className="w-3.5 h-3.5" /> Print
+        </button>
       </div>
 
       <div className="overflow-x-auto rounded-2xl border border-slate-200/60 dark:border-white/5">

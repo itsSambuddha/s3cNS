@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { PlusCircle, MapPin, Calendar, ChevronDown, Loader2, Users, ClipboardCheck, Trophy, Globe, Trash2 } from 'lucide-react'
+import { PlusCircle, MapPin, Calendar, ChevronDown, Loader2, Users, ClipboardCheck, Trophy, Globe, Trash2, Printer } from 'lucide-react'
 import { useAppUser } from '@/hooks/useAppUser'
 import { canManageDelegationTeam } from '@/lib/delegation-team/access'
 import { DelegatesTab } from '@/components/delegation-team/DelegatesTab'
@@ -10,6 +10,8 @@ import { AttendanceTab } from '@/components/delegation-team/AttendanceTab'
 import { AwardsGalleryTab } from '@/components/delegation-team/AwardsGalleryTab'
 import type { OutboundConference } from '@/components/delegation-team/types'
 import { ConferenceDatePicker } from '@/components/delegation-team/ConferenceDatePicker'
+import { PrintLayout } from '@/components/delegation-team/PrintLayout'
+import { PrintOverview, PrintAttendance } from '@/components/delegation-team/PrintViews'
 
 type Tab = 'overview' | 'delegates' | 'attendance' | 'awards'
 
@@ -122,9 +124,19 @@ export default function DelegationTeamPage() {
   )
 
   return (
-    <div className="relative w-full max-w-[100vw] overflow-x-hidden px-4 py-8">
+    <>
+      <div className="hidden print:block print:w-full print:bg-white print:z-50 print:text-black">
+        {conference && (
+          <PrintLayout title={tab === 'overview' ? 'Conference Overview' : tab === 'attendance' ? 'Attendance Report' : 'Report'} appUser={appUser} conference={conference}>
+            {tab === 'overview' && <PrintOverview conference={conference} />}
+            {tab === 'attendance' && <PrintAttendance conference={conference} />}
+          </PrintLayout>
+        )}
+      </div>
+
+    <div className="relative w-full max-w-[100vw] overflow-x-hidden px-4 py-8 print:hidden">
       {/* Atmosphere */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden print:hidden">
         <div className="absolute left-[-15%] top-[-10%] h-[500px] w-[500px] rounded-full bg-blue-100/40 blur-[120px]" />
         <div className="absolute right-[-10%] top-[35%] h-[600px] w-[600px] rounded-full bg-violet-100/30 blur-[140px]" />
       </div>
@@ -299,12 +311,18 @@ export default function DelegationTeamPage() {
                         <div className="space-y-6">
                           <div className="flex items-center justify-between">
                             <h3 className="text-lg font-black text-slate-900 dark:text-white">Conference Details</h3>
-                            {canManage && !editingOverview && (
-                              <button onClick={() => setEditingOverview(true)}
-                                className="rounded-full border border-slate-200 dark:border-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-wider text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-white/5">
-                                Edit Details
+                            <div className="flex gap-2">
+                              <button onClick={() => window.print()}
+                                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-wider text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-white/5">
+                                <Printer className="w-3.5 h-3.5" /> Print
                               </button>
-                            )}
+                              {canManage && !editingOverview && (
+                                <button onClick={() => setEditingOverview(true)}
+                                  className="rounded-full border border-slate-200 dark:border-white/10 px-4 py-1.5 text-[11px] font-black uppercase tracking-wider text-slate-600 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-white/5">
+                                  Edit Details
+                                </button>
+                              )}
+                            </div>
                           </div>
 
                           {editingOverview ? (
@@ -393,5 +411,6 @@ export default function DelegationTeamPage() {
         )}
       </div>
     </div>
+    </>
   )
 }
