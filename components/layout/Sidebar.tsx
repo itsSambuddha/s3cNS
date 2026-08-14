@@ -17,18 +17,19 @@ import {
   IconUsersGroup,
   IconShield,
   IconMessage,
+  IconFolder,
+  IconBellRinging,
 } from "@tabler/icons-react"
 
 const baseLinks = [
   { href: "/dashboard", label: "Overview", icon: IconLayoutDashboard },
+  { href: "/utilities", label: "Utilities", icon: IconFolder },
   { href: "/timetable", label: "Timetable", icon: IconCalendarTime },
   { href: "/finance/records?tab=budgets", label: "Budget", icon: IconCurrencyRupee },
 
-  // { href: "/documents", label: "Documents", icon: IconFileText },
   { href: "/news", label: "News", icon: IconNews },
   { href: "/chat", label: "Chat", icon: IconMessage },
   { href: "/achievements", label: "Achievements", icon: IconTrophy },
-  // { href: "/directory", label: "Directory", icon: IconUsersGroup },
 ]
 
 // Secretariat-only links; shown only when user has a secretariatRole
@@ -41,6 +42,7 @@ const secretariatLinks = [
 // Admin-only links; shown only when role === "ADMIN"
 const adminLinks = [
   { href: "/admin", label: "Admin Controls", icon: IconShield },
+  { href: "/admin/notifications", label: "Broadcast Reminders", icon: IconBellRinging },
   { href: "/secretariat/usg-approvals", label: "Secretariat Approvals", icon: IconShield },
 ]
 

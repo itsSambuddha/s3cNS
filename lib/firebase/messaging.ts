@@ -26,7 +26,8 @@ function initializeClientApp() {
 
 async function getServiceWorkerRegistration() {
   if (!("serviceWorker" in navigator)) {
-     throw new Error("Service workers are not supported in this browser.");
+    console.warn("[FCM] Service workers are not supported in this browser environment.");
+    return null;
   }
 
   try {
@@ -58,54 +59,57 @@ async function getServiceWorkerRegistration() {
           if (e.target.state === "activated") resolve();
         });
       });
-    } else if (registration.waiting) {
-      console.log("[FCM] SW Waiting...");
-      // For waiting, skipWaiting might be needed, but usually just waiting for activation is enough
-      // For simplicity in debug, we'll try to get it active
     }
 
-    // Wait for ready
     const readyRegistration = await navigator.serviceWorker.ready;
     console.log("[FCM] Service Worker Ready.");
     return readyRegistration;
-  } catch (error) {
-    console.error("[FCM] Service Worker registration failed: ", error);
-    throw error;
+  } catch (error: any) {
+    console.warn("[FCM] Service Worker registration skipped/failed:", error?.message || error);
+    return null;
   }
 }
 
 
 export async function requestNotificationToken(): Promise<string | null> {
-  const app = initializeClientApp();
-  const messaging = getMessaging(app);
-
   try {
+    const app = initializeClientApp();
+    const messaging = getMessaging(app);
+
+    if (typeof window === "undefined" || !("Notification" in window)) {
+      return null;
+    }
+
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      console.log("Notification permission not granted.");
+      console.log("[FCM] Notification permission not granted.");
       return null;
     }
 
     const serviceWorkerRegistration = await getServiceWorkerRegistration();
+    if (!serviceWorkerRegistration) {
+      console.warn("[FCM] Service Worker registration not available. Skipping FCM token creation.");
+      return null;
+    }
 
     console.log("Using VAPID key:", VAPID_KEY);
     const currentToken = await getToken(messaging, {
       vapidKey: VAPID_KEY,
       serviceWorkerRegistration,
+    }).catch((err) => {
+      console.warn("[FCM] Push Service Error or getToken failure:", err?.message || err);
+      return null;
     });
-    console.log("[FCM] Token retrieved successfully.");
 
     if (currentToken) {
+      console.log("[FCM] Token retrieved successfully.");
       return currentToken;
     } else {
-      console.log("No registration token available. Request permission to generate one.");
+      console.log("[FCM] No registration token returned by push service.");
       return null;
     }
   } catch (err: any) {
-    console.error("An error occurred while retrieving token: ", err);
-    if (err.name === 'AbortError') {
-      console.warn("Push Service Error: This usually means the browser push service is unreachable or blocked. Check if you are in Incognito mode or if a firewall is blocking FCM.");
-    }
+    console.warn("[FCM] Notification setup skipped due to browser restriction/error:", err?.message || err);
     return null;
   }
 }

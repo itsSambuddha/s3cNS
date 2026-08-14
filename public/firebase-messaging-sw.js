@@ -6,39 +6,43 @@ importScripts('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging-com
 
 const urlParams = new URL(self.location.href).searchParams;
 const firebaseConfig = {
-  apiKey: urlParams.get('apiKey'),
-  authDomain: urlParams.get('authDomain'),
-  projectId: urlParams.get('projectId'),
-  storageBucket: urlParams.get('storageBucket'),
-  messagingSenderId: urlParams.get('messagingSenderId'),
-  appId: urlParams.get('appId'),
+  apiKey: urlParams.get('apiKey') || '',
+  authDomain: urlParams.get('authDomain') || '',
+  projectId: urlParams.get('projectId') || '',
+  storageBucket: urlParams.get('storageBucket') || '',
+  messagingSenderId: urlParams.get('messagingSenderId') || '',
+  appId: urlParams.get('appId') || '',
 };
 
-// Initialize Firebase app in the service worker
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase app in the service worker safely
+if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+  try {
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
+    
+    messaging.onBackgroundMessage((payload) => {
+      console.log(
+        "[firebase-messaging-sw.js] Received background message ",
+        payload
+      );
 
-// Retrieve an instance of Firebase Messaging so that it can handle background messages
-const messaging = firebase.messaging();
+      const notificationTitle = payload.notification?.title || "s3cNS Alert";
+      const notificationOptions = {
+        body: payload.notification?.body || "",
+        icon: "/logo/s3cnsLogo.svg",
+        badge: "/logo/s3cnsLogo.svg",
+        vibrate: [200, 100, 200],
+        data: payload.data,
+        tag: payload.data?.channelId || 'chat-msg',
+        renotify: true
+      };
 
-messaging.onBackgroundMessage((payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/logo/s3cnsLogo.svg",
-    badge: "/logo/s3cnsLogo.svg",
-    vibrate: [200, 100, 200],
-    data: payload.data,
-    tag: payload.data?.channelId || 'chat-msg',
-    renotify: true
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
+      self.registration.showNotification(notificationTitle, notificationOptions);
+    });
+  } catch (err) {
+    console.warn("[firebase-messaging-sw.js] Initialization warning:", err);
+  }
+}
 
 self.addEventListener("notificationclick", (event) => {
   console.log("[firebase-messaging-sw.js] Notification click received.", event);

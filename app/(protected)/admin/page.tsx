@@ -27,6 +27,7 @@ import {
   Database,
   MailWarning,
   HardDrive,
+  BellRing,
 } from "lucide-react"
 
 import { TimetableMockModule } from "./_components/TimetableMockModule"
@@ -244,6 +245,13 @@ export default function AdminDashboardPage() {
               title="Approve applicants"
               description="View and approve new applicants who have finished their onboarding."
               href="/secretariat/usg-approvals"
+              primary
+            />
+            <AdminLinkCard
+              icon={BellRing}
+              title="Broadcast & Reminders"
+              description="Send profile update reminders, app release updates, and targeted notifications to members."
+              href="/admin/notifications"
               primary
             />
           </div>
