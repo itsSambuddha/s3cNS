@@ -5,7 +5,7 @@ import { isAppTerminatedEdge } from '@/lib/shutdown/shutdownEdge';
 
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || [];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // 0. App Termination Lockout
@@ -21,7 +21,6 @@ export async function middleware(request: NextRequest) {
 
   const response = NextResponse.next();
   const origin = request.headers.get('origin');
-
 
   // 1. CORS
   if (origin && (ALLOWED_ORIGINS.includes(origin) || process.env.NODE_ENV === 'development')) {
@@ -55,7 +54,6 @@ export async function middleware(request: NextRequest) {
   response.headers.delete('X-Powered-By');
 
   // 3. Rate Limiting
-  // Determine if user is authenticated (lightweight check, no DB)
   const token = request.cookies.get('s3cns_session')?.value;
   let userId: string | null = null;
 
@@ -63,38 +61,15 @@ export async function middleware(request: NextRequest) {
     const payload = await verifySessionToken(token);
     if (payload?.uid) {
       userId = payload.uid as string;
-      // Inject user ID into headers for rate limiter to use
       request.headers.set('x-user-id', userId);
     }
   }
 
   // Determine Tier
   let tier = 'PUBLIC';
-
   if (path.startsWith('/api/auth')) tier = 'AUTH';
   else if (path.startsWith('/api/payment')) tier = 'PAYMENT';
   else if (path.startsWith('/api/admin')) tier = 'ADMIN';
-
-  // TEMPORARILY DISABLED - Debugging charCodeAt error
-  // Apply Limit
-  // const limitResult = await rateLimiter.checkLimit(request, tier as any);
-
-  // if (!limitResult.allowed) {
-  //   return new NextResponse(
-  //     JSON.stringify({
-  //       error: 'Too Many Requests',
-  //       message: 'Please try again later',
-  //       retryAfter: limitResult.retryAfter
-  //     }),
-  //     {
-  //       status: 429,
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //           'Retry-After': String(limitResult.retryAfter || 60)
-  //       }
-  //     }
-  //   );
-  // }
 
   return response;
 }
