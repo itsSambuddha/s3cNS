@@ -4,12 +4,14 @@ import "./globals.css"
 import { Providers } from "@/components/Providers"
 import { Footer } from "@/components/layout/Footer"
 import { SplashScreen } from "@/components/ui/SplashScreen"
-
+import { SmoothScroll } from "@/components/ui/SmoothScroll"
+import { isAppTerminated } from "@/lib/shutdown/shutdownManager"
+import { TerminatedAppPage } from "@/components/ui/TerminatedAppPage"
 
 const cabin = Cabin({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "s3cNS- The SECMUN Platform",
+  title: "s3cNS - The SECMUN Platform",
   description: "Internal SECMUN platform",
 }
 
@@ -17,25 +19,32 @@ export const viewport: Viewport = {
   themeColor: "#002f7a",
 }
 
-import { SmoothScroll } from "@/components/ui/SmoothScroll"
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const terminated = isAppTerminated()
+
   return (
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className={cabin.className}>
-        <SplashScreen />
-        <SmoothScroll>
-          <Providers>{children}</Providers>
-          <Footer /> {/* Global Footer */}
-        </SmoothScroll>
+        {terminated ? (
+          <TerminatedAppPage />
+        ) : (
+          <>
+            <SplashScreen />
+            <SmoothScroll>
+              <Providers>{children}</Providers>
+              <Footer /> {/* Global Footer */}
+            </SmoothScroll>
+          </>
+        )}
       </body>
     </html>
   )
 }
+

@@ -1,14 +1,27 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { verifySessionToken } from '@/lib/auth/jwt';
-// TEMPORARILY DISABLED - Causing module evaluation error
-// import { rateLimiter } from '@/lib/rate-limiter';
+import { isAppTerminatedEdge } from '@/lib/shutdown/shutdownEdge';
 
 const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || [];
 
 export async function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+
+  // 0. App Termination Lockout
+  if (isAppTerminatedEdge() && path.startsWith('/api/') && path !== '/api/shutdown/status') {
+    return NextResponse.json(
+      {
+        error: 'APP_TERMINATED',
+        message: 'This application has been permanently terminated due to inactivity.',
+      },
+      { status: 503 }
+    );
+  }
+
   const response = NextResponse.next();
   const origin = request.headers.get('origin');
+
 
   // 1. CORS
   if (origin && (ALLOWED_ORIGINS.includes(origin) || process.env.NODE_ENV === 'development')) {
@@ -56,7 +69,6 @@ export async function middleware(request: NextRequest) {
   }
 
   // Determine Tier
-  const path = request.nextUrl.pathname;
   let tier = 'PUBLIC';
 
   if (path.startsWith('/api/auth')) tier = 'AUTH';
