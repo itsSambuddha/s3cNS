@@ -23,21 +23,24 @@ export async function POST(req: NextRequest) {
       parentFolderId = String(rawParentId)
     }
 
-    let parentDiskPath = path.join(process.cwd(), 'public', 'uploads', 'utilities')
+    let relativePath = `/uploads/utilities/${cleanTitle}`
 
-    if (parentFolderId) {
-      const parentFolderDoc = await UtilityResource.findById(parentFolderId).lean()
-      if (parentFolderDoc && parentFolderDoc.filePath) {
-        const cleanParentRel = parentFolderDoc.filePath.replace(/^\//, '').replace(/\//g, path.sep)
-        parentDiskPath = path.join(process.cwd(), 'public', cleanParentRel)
+    if (process.env.NODE_ENV === 'development') {
+      let parentDiskPath = path.join(process.cwd(), 'public', 'uploads', 'utilities')
+
+      if (parentFolderId) {
+        const parentFolderDoc = await UtilityResource.findById(parentFolderId).lean()
+        if (parentFolderDoc && parentFolderDoc.filePath) {
+          const cleanParentRel = parentFolderDoc.filePath.replace(/^\//, '').replace(/\//g, path.sep)
+          parentDiskPath = path.join(process.cwd(), 'public', cleanParentRel)
+        }
       }
+
+      // Create physical folder on local disk
+      const physicalFolderPath = path.join(parentDiskPath, cleanTitle)
+      await fs.mkdir(physicalFolderPath, { recursive: true })
+      relativePath = '/' + path.relative(path.join(process.cwd(), 'public'), physicalFolderPath).replace(/\\/g, '/')
     }
-
-    // Create physical folder on local disk
-    const physicalFolderPath = path.join(parentDiskPath, cleanTitle)
-    await fs.mkdir(physicalFolderPath, { recursive: true })
-
-    const relativePath = '/' + path.relative(path.join(process.cwd(), 'public'), physicalFolderPath).replace(/\\/g, '/')
 
     // Check if folder doc already exists in DB
     let folderDoc = await UtilityResource.findOne({

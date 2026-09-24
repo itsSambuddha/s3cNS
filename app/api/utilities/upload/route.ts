@@ -38,33 +38,35 @@ export async function POST(req: NextRequest) {
       parentFolderId = String(rawParentId)
     }
 
-    let uploadDir = path.join(process.cwd(), 'public', 'uploads', 'utilities')
-
-    if (parentFolderId) {
-      const parentFolderDoc = await UtilityResource.findById(parentFolderId).lean()
-      if (parentFolderDoc && parentFolderDoc.filePath) {
-        const cleanParentRel = parentFolderDoc.filePath.replace(/^\//, '').replace(/\//g, path.sep)
-        uploadDir = path.join(process.cwd(), 'public', cleanParentRel)
-      }
-    }
-
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-
-    // Ensure target uploads directory exists
-    await fs.mkdir(uploadDir, { recursive: true })
-
     // Clean up filename
     const originalName = file.name
     const ext = path.extname(originalName)
     const baseName = path.basename(originalName, ext).replace(/[^a-zA-Z0-9_-]/g, '_')
     const uniqueFileName = `${baseName}_${Date.now()}${ext}`
-    const filePathOnDisk = path.join(uploadDir, uniqueFileName)
+    let relativeFilePath = `/uploads/utilities/${uniqueFileName}`
 
-    // Write file to local disk
-    await fs.writeFile(filePathOnDisk, buffer)
+    if (process.env.NODE_ENV === 'development') {
+      let uploadDir = path.join(process.cwd(), 'public', 'uploads', 'utilities')
 
-    const relativeFilePath = '/' + path.relative(path.join(process.cwd(), 'public'), filePathOnDisk).replace(/\\/g, '/')
+      if (parentFolderId) {
+        const parentFolderDoc = await UtilityResource.findById(parentFolderId).lean()
+        if (parentFolderDoc && parentFolderDoc.filePath) {
+          const cleanParentRel = parentFolderDoc.filePath.replace(/^\//, '').replace(/\//g, path.sep)
+          uploadDir = path.join(process.cwd(), 'public', cleanParentRel)
+        }
+      }
+
+      const bytes = await file.arrayBuffer()
+      const buffer = Buffer.from(bytes)
+
+      // Ensure target uploads directory exists
+      await fs.mkdir(uploadDir, { recursive: true })
+      const filePathOnDisk = path.join(uploadDir, uniqueFileName)
+
+      // Write file to local disk
+      await fs.writeFile(filePathOnDisk, buffer)
+      relativeFilePath = '/' + path.relative(path.join(process.cwd(), 'public'), filePathOnDisk).replace(/\\/g, '/')
+    }
     const detectedType = getFileType(originalName)
     const tagsArr = tagsString
       ? tagsString.split(',').map((t) => t.trim()).filter(Boolean)

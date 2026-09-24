@@ -4,10 +4,14 @@ const nextConfig: NextConfig = {
   compress: true,
   outputFileTracingExcludes: {
     '*': [
-      './public/uploads/**/*',
-      './public/**/*',
-      './node_modules/@mediapipe/**/*',
-      './node_modules/three/**/*'
+      'public/**/*',
+      'public/uploads/**/*',
+      'public/uploads/utilities/**/*',
+      'public/gazette/**/*',
+      '.next/cache/**/*',
+      'node_modules/@mediapipe/**/*',
+      'node_modules/three/**/*',
+      'node_modules/@tsparticles/**/*'
     ],
   },
   images: {
