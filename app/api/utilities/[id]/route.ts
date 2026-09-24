@@ -15,7 +15,7 @@ async function deleteResourceRecursive(id: string) {
       await deleteResourceRecursive(String(child._id))
     }
 
-    if (resource.filePath && resource.filePath.startsWith('/uploads/utilities/')) {
+    if (process.env.NODE_ENV === 'development' && resource.filePath && resource.filePath.startsWith('/uploads/utilities/')) {
       const fullPath = path.join(process.cwd(), 'public', resource.filePath.replace(/^\//, '').replace(/\//g, path.sep))
       try {
         await fs.rm(fullPath, { recursive: true, force: true })
@@ -24,8 +24,8 @@ async function deleteResourceRecursive(id: string) {
       }
     }
   } else {
-    // Try deleting physical file if it exists in local uploads directory
-    if (resource.filePath && resource.filePath.startsWith('/uploads/utilities/')) {
+    // Try deleting physical file if in local development
+    if (process.env.NODE_ENV === 'development' && resource.filePath && resource.filePath.startsWith('/uploads/utilities/')) {
       const fullPath = path.join(process.cwd(), 'public', resource.filePath.replace(/^\//, '').replace(/\//g, path.sep))
       try {
         await fs.unlink(fullPath)

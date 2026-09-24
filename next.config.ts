@@ -1,8 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // reactStrictMode: true, // Temporarily disabled to debug auth
   compress: true,
+  outputFileTracingExcludes: {
+    '*': [
+      './public/uploads/**/*',
+      './public/**/*',
+      './node_modules/@mediapipe/**/*',
+      './node_modules/three/**/*'
+    ],
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
